@@ -1,0 +1,155 @@
+---
+import Header from '../../components/Header_shop.astro';
+import Theme1 from '../../components/scarf_theme/theme1.astro';
+import MarqueeBanner from '../../components/MarqueeBanner.astro';
+import MarqueeBanner2 from '../../components/MarqueeBanner2.astro';
+import Footer from '../../components/Footer.astro';
+
+
+
+import theme1Data from '../../../public/data/theme1_DB.json';
+import theme2Data from '../../../public/data/theme2_DB.json';
+import theme3Data from '../../../public/data/theme3_DB.json';
+import theme4Data from '../../../public/data/theme4_DB.json';
+import theme5Data from '../../../public/data/theme5_DB.json';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Break House | Shop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Abel&family=Aldrich&family=Changa:wght@200..800&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <Header />
+    <div id="set1">
+      <!-- <MarqueeBanner /> -->
+      <Theme1 productsData={theme1Data} setTitle={"Threads of Mind"} />
+      <div class="image-container_new">
+        <img src="./images/poster/poster1.png" alt="Image Space" draggable="false">
+      </div>
+      <Theme1 productsData={theme3Data} setTitle={"Geometric Rhythms"} />
+    </div>
+
+    <div id="set2" style="display: none;">
+      <MarqueeBanner />
+      <Theme1 productsData={theme2Data} setTitle={"Raw Manifesto"} />
+      <div class="image-container_new">
+        <img src="./images/poster/poster2.png" alt="Image Space" draggable="false" >
+      </div>
+      <Theme1 productsData={theme5Data} setTitle={"Celestial Wave"} />
+    </div>
+
+    <div id="set3" style="display: none;">
+      <MarqueeBanner2 />
+      <Theme1 productsData={theme4Data} setTitle={"Visions in Motions"} />
+    </div>
+    
+    <div id="page_changer_container">
+      <img src="./images/icon/next.webp" alt="back button" id="back_button" class="page_button" draggable="false">
+      <p id="pageno">1</p>
+      <img src="./images/icon/next.webp" alt="next button" id="next_button" class="page_button" draggable="false">
+    </div>
+    <Footer />
+  </body>
+
+  <script>
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    document.addEventListener("DOMContentLoaded", () => {    
+      let pageNumber = 1;
+      const backButton = document.getElementById('back_button')!;
+      const nextButton = document.getElementById('next_button')!;
+      const pageNoElement = document.getElementById('pageno')!;
+
+      const set1 = document.getElementById('set1')!;
+      const set2 = document.getElementById('set2')!;
+      const set3 = document.getElementById('set3')!;
+
+      if (!backButton || !nextButton || !pageNoElement || !set1 || !set2 || !set3) {
+        console.error('One or more required elements not found');
+        return;
+      }
+
+      backButton.addEventListener('click', () => {
+        if (pageNumber > 1) {
+          pageNumber--;
+          updatePageDisplay();
+        }
+      });
+
+      nextButton.addEventListener('click', () => {
+        if (pageNumber < 3) {
+          pageNumber++;
+          updatePageDisplay();
+        }
+      });
+
+      function updatePageDisplay() {
+        pageNoElement.textContent = pageNumber.toString();
+        
+        set1.style.display = pageNumber === 1 ? 'block' : 'none';
+        set2.style.display = pageNumber === 2 ? 'block' : 'none';
+        set3.style.display = pageNumber === 3 ? 'block' : 'none';
+        
+        backButton.style.opacity = pageNumber === 1 ? '0' : '1';
+        nextButton.style.opacity = pageNumber === 3 ? '0' : '1';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      updatePageDisplay();
+    });
+  </script>
+
+  <style>
+    body {
+      background-color: #1e4941;
+      margin: 0;
+    }
+    .image-container_new {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 100%;
+      margin: 40px auto;
+      background-color: #e3bcae;
+    }
+
+    .image-container_new img {
+      width: 25%;
+      height: auto;
+      object-fit: contain; 
+      display: block;
+    }
+    
+    #back_button {
+      transform: rotate(180deg);
+      cursor: pointer;
+    }
+    
+    .page_button {
+      width: 50px;
+      padding: 20px;
+      cursor: pointer;
+    }
+    
+    #page_changer_container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-bottom: 50px;
+    }
+    
+    #pageno {
+      color: #e3bcae;
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+      margin: 0 20px;
+      font-size: 18px;
+    }
+  </style>
+</html>

@@ -1,0 +1,1182 @@
+---
+// pages/shop/[product].astro
+import Header from '../../components/Header_shop.astro';
+import Footer from '../../components/Footer.astro';
+
+export async function getStaticPaths() {
+  const theme1Data = await import('../../../public/data/theme1_DB.json');
+  const theme2Data = await import('../../../public/data/theme2_DB.json');
+  const theme3Data = await import('../../../public/data/theme3_DB.json');
+  const theme4Data = await import('../../../public/data/theme4_DB.json');
+  const theme5Data = await import('../../../public/data/theme5_DB.json');
+
+  const allProducts = [
+    ...theme1Data.default,
+    ...theme2Data.default,
+    ...theme3Data.default,
+    ...theme4Data.default,
+    ...theme5Data.default,
+  ];
+
+  const slugify = (str: string) => str.toLowerCase().replace(/\s+/g, '-');
+  
+  const paths = allProducts.map((product) => ({
+    params: { 
+      product: slugify(product.scarf_name) 
+    },
+    props: {
+      productData: product
+    }
+  }));
+
+  return paths;
+}
+
+const slugify = (str: string) => str.toLowerCase().replace(/\s+/g, '-');
+
+const { productData } = Astro.props;
+
+// Function to check word count and truncate if needed
+const getDescription = (description: string) => {
+  const words = description.split(' ');
+  if (words.length > 30) {
+    return {
+      truncated: words.slice(0, 30).join(' ') + '...',
+      full: description,
+      isLong: true
+    };
+  }
+  return {
+    truncated: description,
+    full: description,
+    isLong: false
+  };
+};
+
+const desc = getDescription(productData.product_description);
+
+// Get all available product images
+const productImages = [
+  productData.product_image,
+  productData.product_image2,
+  productData.product_image3,
+  productData.product_image4,
+  productData.product_image5
+].filter(Boolean); // Remove any undefined/null images
+---
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{productData.scarf_name} | Break House</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Abel&family=Aldrich&family=Changa:wght@200..800&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div 
+    data-product={JSON.stringify(productData)} 
+    style="display: none;"
+  ></div>
+    <Header />
+    <div class="product-page">
+      <div class="product-container">
+        <div class="product-image-section">
+          <!-- Slideshow Container -->
+          <div class="slideshow-container">
+            <!-- Main Image Display -->
+            <div class="slideshow-main">
+              <div class="slide active">
+                <img 
+                  src={productImages[0]} 
+                  alt={`${productData.scarf_name} - Image 1`} 
+                  class="product-main-image" 
+                />
+              </div>
+              {productImages.slice(1).map((image, index) => (
+                <div class="slide">
+                  <img 
+                    src={image} 
+                    alt={`${productData.scarf_name} - Image ${index + 2}`} 
+                    class="product-main-image" 
+                  />
+                </div>
+              ))}
+              
+              <!-- Navigation Arrows -->
+              <button class="slideshow-nav prev" aria-label="Previous Image">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M15 18L9 12L15 6" stroke="#e3bcae" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <button class="slideshow-nav next" aria-label="Next Image">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 18L15 12L9 6" stroke="#e3bcae" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+            
+            <!-- Thumbnail Gallery -->
+            <div class="thumbnail-gallery">
+              {productImages.map((image, index) => (
+                <div 
+                  class={`thumbnail ${index === 0 ? 'active' : ''}`}
+                  data-index={index}
+                >
+                  <img 
+                    src={image} 
+                    alt={`${productData.scarf_name} - Thumbnail ${index + 1}`} 
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        
+        <div class="product-details">
+          <h1 class="product-title">{productData.scarf_name}</h1>
+          <p id="product-theme">{productData.theme_name}</p>
+          
+          <div class="price-quantity-container">
+            <div class="product-price">₹1000</div>
+            <div class="quantity-section">
+              <div class="quantity-heading">Quantity</div>
+              <div class="quantity-selector">
+                <button class="quantity-btn minus" aria-label="Decrease quantity">-</button>
+                <span class="quantity-display">1</span>
+                <button class="quantity-btn plus" aria-label="Increase quantity">+</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="size-remaining-container">
+            <p id="product-size">48cm x 48cm</p>
+            <p id="remaining_number">5 Remaining</p>
+          </div>
+          
+          <button class="add-to-cart-btn">Add to Cart</button>
+          <button class="buy-now-btn">Buy Now</button>
+
+          
+          <!-- About Dropdown -->
+           <br>
+          <div class="about-container">
+            <div class="about-header">
+              <div class="about-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#e3bcae" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#e3bcae" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 16V12" stroke="#e3bcae" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 8H12.01" stroke="#e3bcae" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="about-title">About</span>
+              <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 9L12 15L18 9" stroke="#e3bcae" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="about-content">
+              <div id="product-description-container">
+                <p id="product-description">
+                  <span 
+                    id="product-description-text"
+                    data-truncated={desc.truncated}
+                    data-full={desc.full}
+                    data-expanded="false"
+                  >
+                    {desc.truncated}
+                  </span>
+                  {desc.isLong && (
+                    <span 
+                      id="toggle-desc-span" 
+                      class="see-more-text"
+                    >
+                      See More
+                    </span>
+                  )}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Highlights Dropdown -->
+          <div class="highlights-container">
+            <div class="highlights-header">
+              <div class="highlight-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#e3bcae" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="#e3bcae" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="highlights-title">Highlights</span>
+              <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 9L12 15L18 9" stroke="#e3bcae" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="highlights-content">
+              <ul class="highlights-list">
+                {productData.highlights_1 && <li>{productData.highlights_1}</li>}
+                {productData.highlights_2 && <li>{productData.highlights_2}</li>}
+                {productData.highlights_3 && <li>{productData.highlights_3}</li>}
+                {productData.highlights_4 && <li>{productData.highlights_4}</li>}
+              </ul>
+              <p class="magnetic-ease">Magnetic Ease: Built-in magnets at the scarf's ends ensure a secure, comfortable, and customizable fit.</p>
+            </div>
+          </div>
+
+          <!-- Product Details Dropdown -->
+          <div class="product-details-container">
+            <div class="product-details-header">
+              <div class="product-details-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#e3bcae" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="#e3bcae" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M14 2V8H20" stroke="#e3bcae" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M16 13H8" stroke="#e3bcae" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M16 17H8" stroke="#e3bcae" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M10 9H9H8" stroke="#e3bcae" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="product-details-title">Product Details</span>
+              <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 9L12 15L18 9" stroke="#e3bcae" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="product-details-content">
+              <ul class="details-list">
+                <li>This scarf is made from Ecotech plant fabric, blending softness with natural fibers</li>
+                <li>Size: 48x48cm</li>
+                <li>Made in India</li>
+                <li>The dimensions of this item may vary slightly due to hemming process.</li>
+                <li>Colour tones may appear slightly different in person due to screen variations.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Material & Care Dropdown -->
+          <div class="material-care-container">
+            <div class="material-care-header">
+              <div class="material-care-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#e3bcae" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 3L20 7.5V16.5L12 21L4 16.5V7.5L12 3Z" stroke="#e3bcae" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 12L20 7.5" stroke="#e3bcae" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 12V21" stroke="#e3bcae" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 12L4 7.5" stroke="#e3bcae" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M16 5.25L8 9.75" stroke="#e3bcae" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="material-care-title">Material & Care</span>
+              <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 9L12 15L18 9" stroke="#e3bcae" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="material-care-content">
+              <ul class="care-list">
+                <li>Tagbreak products are manufactured by experienced Indian artisans with carefully selected materials of the highest quality.</li>
+                <li>Please handle with care , I have trust issues with washing machine .</li>
+                <li>Press lightly on the back of the product with a cool iron.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+  // @ts-nocheck
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get product data from data attributes
+    const productElement = document.querySelector('[data-product]');
+    const productData = productElement ? JSON.parse(productElement.dataset.product) : null;
+    
+    // Type assertions for DOM elements
+    const aboutHeader = document.querySelector('.about-header');
+    const aboutContent = document.querySelector('.about-content');
+    const highlightsHeader = document.querySelector('.highlights-header');
+    const highlightsContent = document.querySelector('.highlights-content');
+    const productDetailsHeader = document.querySelector('.product-details-header');
+    const productDetailsContent = document.querySelector('.product-details-content');
+    const materialCareHeader = document.querySelector('.material-care-header');
+    const materialCareContent = document.querySelector('.material-care-content');
+    const toggleSpan = document.getElementById('toggle-desc-span');
+    const descElement = document.getElementById('product-description-text');
+    const slides = document.querySelectorAll('.slide');
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    const prevButton = document.querySelector('.slideshow-nav.prev');
+    const nextButton = document.querySelector('.slideshow-nav.next');
+    const quantityDisplay = document.querySelector('.quantity-display');
+    const minusBtn = document.querySelector('.quantity-btn.minus');
+    const plusBtn = document.querySelector('.quantity-btn.plus');
+
+    // About dropdown functionality
+    if (aboutHeader && aboutContent) {
+      aboutHeader.addEventListener('click', function() {
+        const isExpanded = aboutContent.classList.contains('active');
+        const dropdownArrow = aboutHeader.querySelector('.dropdown-arrow');
+        
+        if (!isExpanded) {
+          aboutContent.classList.add('active');
+          if (dropdownArrow) {
+            dropdownArrow.style.transform = 'rotate(180deg)';
+          }
+        } else {
+          aboutContent.classList.remove('active');
+          if (dropdownArrow) {
+            dropdownArrow.style.transform = 'rotate(0deg)';
+          }
+        }
+      });
+    }
+
+    // Description toggle functionality (inside About dropdown)
+    if (toggleSpan && descElement) {
+      toggleSpan.addEventListener('click', function(e) {
+        e.stopPropagation(); // Prevent triggering the About dropdown toggle
+        const isExpanded = descElement.getAttribute('data-expanded') === 'true';
+        const truncatedText = descElement.getAttribute('data-truncated');
+        const fullText = descElement.getAttribute('data-full');
+        
+        if (!isExpanded && fullText) {
+          descElement.textContent = fullText;
+          toggleSpan.textContent = ' See Less';
+          descElement.setAttribute('data-expanded', 'true');
+        } else if (truncatedText) {
+          descElement.textContent = truncatedText;
+          toggleSpan.textContent = ' See More';
+          descElement.setAttribute('data-expanded', 'false');
+        }
+      });
+    }
+
+    // Highlights dropdown functionality
+    if (highlightsHeader && highlightsContent) {
+      highlightsHeader.addEventListener('click', function() {
+        const isExpanded = highlightsContent.classList.contains('active');
+        const dropdownArrow = highlightsHeader.querySelector('.dropdown-arrow');
+        
+        if (!isExpanded) {
+          highlightsContent.classList.add('active');
+          if (dropdownArrow) {
+            dropdownArrow.style.transform = 'rotate(180deg)';
+          }
+        } else {
+          highlightsContent.classList.remove('active');
+          if (dropdownArrow) {
+            dropdownArrow.style.transform = 'rotate(0deg)';
+          }
+        }
+      });
+    }
+
+    // Product Details dropdown functionality
+    if (productDetailsHeader && productDetailsContent) {
+      productDetailsHeader.addEventListener('click', function() {
+        const isExpanded = productDetailsContent.classList.contains('active');
+        const dropdownArrow = productDetailsHeader.querySelector('.dropdown-arrow');
+        
+        if (!isExpanded) {
+          productDetailsContent.classList.add('active');
+          if (dropdownArrow) {
+            dropdownArrow.style.transform = 'rotate(180deg)';
+          }
+        } else {
+          productDetailsContent.classList.remove('active');
+          if (dropdownArrow) {
+            dropdownArrow.style.transform = 'rotate(0deg)';
+          }
+        }
+      });
+    }
+
+    // Material & Care dropdown functionality
+    if (materialCareHeader && materialCareContent) {
+      materialCareHeader.addEventListener('click', function() {
+        const isExpanded = materialCareContent.classList.contains('active');
+        const dropdownArrow = materialCareHeader.querySelector('.dropdown-arrow');
+        
+        if (!isExpanded) {
+          materialCareContent.classList.add('active');
+          if (dropdownArrow) {
+            dropdownArrow.style.transform = 'rotate(180deg)';
+          }
+        } else {
+          materialCareContent.classList.remove('active');
+          if (dropdownArrow) {
+            dropdownArrow.style.transform = 'rotate(0deg)';
+          }
+        }
+      });
+    }
+
+    // Slideshow functionality
+    let currentSlide = 0;
+
+    function showSlide(index) {
+      // Hide all slides
+      slides.forEach((slide) => slide.classList.remove('active'));
+      thumbnails.forEach((thumb) => thumb.classList.remove('active'));
+      
+      // Show the selected slide
+      slides[index].classList.add('active');
+      thumbnails[index].classList.add('active');
+      currentSlide = index;
+    }
+
+    function nextSlide() {
+      let nextIndex = currentSlide + 1;
+      if (nextIndex >= slides.length) {
+        nextIndex = 0;
+      }
+      showSlide(nextIndex);
+    }
+
+    function prevSlide() {
+      let prevIndex = currentSlide - 1;
+      if (prevIndex < 0) {
+        prevIndex = slides.length - 1;
+      }
+      showSlide(prevIndex);
+    }
+
+    // Event listeners for navigation buttons
+    if (prevButton && nextButton) {
+      prevButton.addEventListener('click', prevSlide);
+      nextButton.addEventListener('click', nextSlide);
+    }
+
+    // Event listeners for thumbnails
+    thumbnails.forEach((thumbnail, index) => {
+      thumbnail.addEventListener('click', () => {
+        showSlide(index);
+      });
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        prevSlide();
+      } else if (e.key === 'ArrowRight') {
+        nextSlide();
+      }
+    });
+
+    // Quantity selector functionality
+    if (quantityDisplay && minusBtn && plusBtn) {
+      let quantity = 1;
+      
+      function updateQuantity() {
+        quantityDisplay.textContent = quantity.toString();
+        minusBtn.disabled = quantity <= 1;
+      }
+      
+      minusBtn.addEventListener('click', function() {
+        if (quantity > 1) {
+          quantity--;
+          updateQuantity();
+        }
+      });
+      
+      plusBtn.addEventListener('click', function() {
+        quantity++;
+        updateQuantity();
+      });
+      
+      // Initialize
+      updateQuantity();
+    }
+
+    // Cart functionality
+    const addToCartBtn = document.querySelector('.add-to-cart-btn');
+    const buyNowBtn = document.querySelector('.buy-now-btn');
+    
+    function getCurrentProductData() {
+      if (!productData) {
+        console.error('Product data not available');
+        return null;
+      }
+      
+      return {
+        id: slugify(productData.scarf_name),
+        name: productData.scarf_name,
+        image: productData.product_image,
+        price: 1000, // You might want to get this from productData if available
+        quantity: parseInt(quantityDisplay.textContent) || 1,
+        theme: productData.theme_name
+      };
+    }
+    
+    function addToCart() {
+      const product = getCurrentProductData();
+      if (!product) return;
+      
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      
+      // Check if product already exists in cart
+      const existingProductIndex = cart.findIndex(item => item.id === product.id);
+      
+      if (existingProductIndex > -1) {
+        // Update quantity if product exists
+        cart[existingProductIndex].quantity += product.quantity;
+      } else {
+        // Add new product to cart
+        cart.push(product);
+      }
+      
+      // Save to localStorage
+      localStorage.setItem('cart', JSON.stringify(cart));
+      
+      // Optional: Show confirmation message
+      showCartMessage('Product added to cart!');
+    }
+    
+    function buyNow() {
+      addToCart(); // Add to cart first
+      // Redirect to cart page
+      window.location.href = '/cart'; // Adjust the path if needed
+    }
+    
+    function showCartMessage(message) {
+      // Create and show a temporary message
+      const messageEl = document.createElement('div');
+      messageEl.textContent = message;
+      messageEl.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        background: #1e4941;
+        color: #e3bcae;
+        border: 1px solid #e3bcae;
+        padding: 1rem 2rem;
+        border-radius: 4px;
+        z-index: 1000;
+        font-family: 'Aldrich', sans-serif;
+      `;
+      document.body.appendChild(messageEl);
+      
+      // Remove message after 3 seconds
+      setTimeout(() => {
+        if (document.body.contains(messageEl)) {
+          document.body.removeChild(messageEl);
+        }
+      }, 3000);
+    }
+    
+    // Event listeners for cart buttons
+    if (addToCartBtn) {
+      addToCartBtn.addEventListener('click', addToCart);
+    }
+    
+    if (buyNowBtn) {
+      buyNowBtn.addEventListener('click', buyNow);
+    }
+    
+    // Helper function to slugify
+    function slugify(str) {
+      return str.toLowerCase().replace(/\s+/g, '-');
+    }
+  });
+</script>
+
+    <style>
+  body{
+    background-color: #1e4941;
+    color: #e3bcae;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+  }
+  .product-page {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: 'Aldrich', sans-serif;
+  }
+
+  .product-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    margin-top: 2rem;
+    align-items: start;
+  }
+
+  .product-image-section {
+    background: #1e4941;
+    border-radius: 1px;
+    overflow: hidden;
+    order: 1; /* Always first on left */
+  }
+
+  .product-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    order: 2; /* Always second on right */
+  }
+
+  /* Slideshow Styles */
+  .slideshow-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .slideshow-main {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+    border-radius: 4px;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .slide.active {
+    opacity: 1;
+  }
+
+  .product-main-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .slideshow-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(30, 73, 65, 0.7);
+    border: 1px solid #e3bcae;
+    color: #e3bcae;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+  }
+
+  .slideshow-nav:hover {
+    background: #1e4941;
+  }
+
+  .slideshow-nav.prev {
+    left: 15px;
+  }
+
+  .slideshow-nav.next {
+    right: 15px;
+  }
+
+  /* Thumbnail Gallery Styles */
+  .thumbnail-gallery {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .thumbnail {
+    width: 80px;
+    height: 80px;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+  }
+
+  .thumbnail:hover {
+    opacity: 1;
+  }
+
+  .thumbnail.active {
+    border-color: #e3bcae;
+    opacity: 1;
+  }
+
+  .thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .product-title {
+    font-family: 'Changa', sans-serif;
+    font-size: 2.5rem;
+    margin-bottom: -0.5rem;
+    margin-top: 0rem;
+    font-weight: 400;
+  }
+
+  /* Price and Quantity Styles */
+  .price-quantity-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    margin-bottom: 0.2rem;
+    gap: 2rem;
+  }
+
+  .product-price {
+    font-size: 1.5rem;
+    color: #e3bcae;
+    margin: 0;
+    flex: 1;
+  }
+
+  .quantity-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+    flex: 1;
+  }
+
+  .quantity-heading {
+    font-size: 0.9rem;
+    color: #e3bcae;
+    font-weight: 400;
+    margin: 0;
+    text-align: left;
+  }
+
+  .quantity-selector {
+    display: flex;
+    align-items: center;
+    border: 1px solid #e3bcae;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .quantity-btn {
+    background: transparent;
+    border: none;
+    color: #e3bcae;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: 300;
+    transition: all 0.3s ease;
+  }
+
+  .quantity-btn:hover:not(:disabled) {
+    background: rgba(227, 188, 174, 0.1);
+  }
+
+  .quantity-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .quantity-display {
+    padding: 0 1rem;
+    min-width: 40px;
+    text-align: center;
+    font-weight: 400;
+  }
+
+  /* Size and Remaining Styles */
+  .size-remaining-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 3rem;
+  }
+
+  #product-size {
+    border: 1px solid #e3bcae;
+    display: inline-block;
+    padding: 0.3rem 1rem;
+    border-radius: 30px;
+    margin: 0;
+    font-size: 0.8rem;
+  }
+
+  #remaining_number {
+    font-size: 0.8rem;
+    margin: 0;
+    opacity: 0.8;
+  }
+
+  .add-to-cart-btn,
+  .buy-now-btn {
+    display: inline-block;
+    width: 100%;
+    max-width: 300px;
+    background: transparent;
+    color: #e3bcae;
+    border: 1px solid #e3bcae;
+    padding: 1rem 0;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Aldrich', sans-serif;
+    font-size: 1rem;
+    transition: background 0.3s ease, color 0.3s ease;
+    margin-bottom: 1rem;
+  }
+
+  .add-to-cart-btn:hover {
+    background: #e3bcae;
+    color: #1e4941;
+  }
+
+  .buy-now-btn {
+    background: #e3bcae;
+    color: #1e4941;
+  }
+
+  .buy-now-btn:hover {
+    background: #1e4941;
+    color: #e3bcae;
+  }
+
+  .see-more-text {
+    color: #e3bcae;
+    cursor: pointer;
+    text-decoration: underline;
+    font-weight: 400;
+    margin-left: 4px;
+    transition: opacity 0.3s ease;
+  }
+
+  .see-more-text:hover {
+    opacity: 0.8;
+  }
+
+  #product-theme{
+    margin-top: 0;
+    margin-bottom: 2rem;
+    font-style: italic;
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+
+  #product-description{
+    text-align: justify;
+    font-size: 0.8rem;
+    font-weight: 200;
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+  }
+
+  #product-description-container {
+    width: 100%;
+  }
+
+  /* About Container Styles */
+  .about-container {
+    width: 100%;
+    border-bottom: 1px solid #e3bcae;
+    margin-bottom: 2rem;
+  }
+
+  .about-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 0;
+    cursor: pointer;
+    user-select: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .about-header:hover {
+    opacity: 0.8;
+  }
+
+  .about-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .about-title {
+    font-size: 1.2rem;
+    font-weight: 400;
+    flex: 1;
+  }
+
+  /* Highlights Container Styles */
+  .highlights-container {
+    width: 100%;
+    border-bottom: 1px solid #e3bcae;
+    margin-bottom: 2rem;
+  }
+
+  .highlights-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 0;
+    cursor: pointer;
+    user-select: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .highlights-header:hover {
+    opacity: 0.8;
+  }
+
+  .highlight-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .highlights-title {
+    font-size: 1.2rem;
+    font-weight: 400;
+    flex: 1;
+  }
+
+  /* Product Details Container Styles */
+  .product-details-container {
+    width: 100%;
+    border-bottom: 1px solid #e3bcae;
+    margin-bottom: 2rem;
+  }
+
+  .product-details-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 0;
+    cursor: pointer;
+    user-select: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .product-details-header:hover {
+    opacity: 0.8;
+  }
+
+  .product-details-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .product-details-title {
+    font-size: 1.2rem;
+    font-weight: 400;
+    flex: 1;
+  }
+
+  /* Material & Care Container Styles */
+  .material-care-container {
+    width: 100%;
+    border-bottom: 1px solid #e3bcae;
+    margin-bottom: 2rem;
+  }
+
+  .material-care-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 0;
+    cursor: pointer;
+    user-select: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .material-care-header:hover {
+    opacity: 0.8;
+  }
+
+  .material-care-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .material-care-title {
+    font-size: 1.2rem;
+    font-weight: 400;
+    flex: 1;
+  }
+
+  .dropdown-arrow {
+    transition: transform 0.3s ease;
+  }
+
+  .about-content,
+  .highlights-content,
+  .product-details-content,
+  .material-care-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .about-content.active,
+  .highlights-content.active,
+  .product-details-content.active,
+  .material-care-content.active {
+    max-height: 500px;
+  }
+
+  .highlights-list,
+  .details-list,
+  .care-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem 0;
+  }
+
+  .highlights-list li,
+  .details-list li,
+  .care-list li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .highlights-list li:before,
+  .details-list li:before,
+  .care-list li:before {
+    content: "•";
+    color: #e3bcae;
+    position: absolute;
+    left: 0.5rem;
+    font-size: 1.2rem;
+  }
+
+  .magnetic-ease {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin: 0;
+    padding: 0.5rem 0;
+    border-top: 1px solid rgba(227, 188, 174, 0.3);
+    font-style: italic;
+  }
+
+  @media (max-width: 768px) {
+    .product-container {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+
+    .product-image-section {
+      order: 1; /* Image first on mobile */
+    }
+
+    .product-details {
+      order: 2; /* Details second on mobile */
+    }
+    
+    .product-title {
+      font-size: 2rem;
+    }
+    
+    .add-to-cart-btn,
+    .buy-now-btn {
+      width: 100%;
+      max-width: none; 
+    }
+    
+    .slideshow-main {
+      height: 400px;
+    }
+    
+    .thumbnail {
+      width: 60px;
+      height: 60px;
+    }
+
+    /* UPDATED: Keep price and quantity side by side on mobile */
+    .price-quantity-container {
+      flex-direction: row; /* Changed from column to row */
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .quantity-section {
+      align-items: flex-end;
+      width: auto;
+    }
+
+    .quantity-heading {
+      text-align: right;
+    }
+    
+    .size-remaining-container {
+      flex-direction: row;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .quantity-selector {
+      align-self: auto;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .product-page {
+      padding: 1rem;
+    }
+    
+    .slideshow-main {
+      height: 300px;
+    }
+    
+    .thumbnail {
+      width: 35px;
+      height: 35px;
+    }
+    
+    .slideshow-nav {
+      width: 35px;
+      height: 35px;
+    }
+    
+    .product-title {
+      margin-top: 1rem;
+    }
+
+    .quantity-btn {
+      width: 30px;
+      height: 30px;
+      font-size: 1rem;
+    }
+    
+    .quantity-display {
+      padding: 0 0.8rem;
+      min-width: 35px;
+    }
+
+    .price-quantity-container {
+      gap: 1rem;
+    }
+
+    .product-price {
+      font-size: 1.3rem; 
+    }
+
+    .quantity-section {
+      min-width: 120px; 
+    }
+  }
+</style>
+    <Footer />
+  </body>
+</html>

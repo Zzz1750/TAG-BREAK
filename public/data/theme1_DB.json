@@ -1,0 +1,78 @@
+[{
+  "product_ID": "TAG011203",
+  "scarf_name": "The Architect Within",
+  "theme_name":"Threads 0f Mind",
+  "product_image2":"../images/placeholder.png",
+  "product_image3":"../images/placeholder.png",
+  "product_image4":"../images/placeholder.png",
+  "product_image5":"../images/placeholder.png",
+  "product_image": "../scarf/threads_of_mind/The_Architect_Within.webp",
+  "product_description": "The “the architect within” Scarf fuses art, science, and philosophy into a striking wearable statement. At the center, a lone figure with a laptop walks across a network of neural pathways, symbolizing thought, coding, and glitchy chromatic accents, the design feels futuristic yet deeply human.",
+  "highlights_1": "Central artwork of neural pathways and a lone figure with laptop",
+  "highlights_2": "Secondary phrase emphasizing self-discipline and control",
+  "highlights_3": "Neural-inspired patterned border with glitchy accents",
+  "highlights_4": ""
+},
+{
+  "product_ID": "TAG012415",
+  "scarf_name": "Dream's Weight",
+  "theme_name":"Threads 0f Mind",
+  "product_image2":"../images/placeholder.png",
+  "product_image3":"../images/placeholder.png",
+  "product_image4":"../images/placeholder.png",
+  "product_image5":"../images/placeholder.png",
+  "product_image": "../scarf/threads_of_mind/Dream_s_Weight.webp",
+  "product_description": "The “dream's weight” Scarf is a raw expression of ambition and grit. Featuring a blurred portrait with a glitch-inspired overlay and vivid, distorted typography.",
+  "highlights_1":"Glitch-art inspired portrait design with bold typography",
+  "highlights_2":"Chromatic distortions for a futuristic, edgy look",
+  "highlights_3":"A statement piece celebrating ambition and resilience",
+  "highlights_4": ""
+},
+
+{
+  "product_ID": "TAG013627",
+  "scarf_name": "The Patient Flame",
+  "theme_name":"Threads 0f Mind",
+  "product_image2":"../images/placeholder.png",
+  "product_image3":"../images/placeholder.png",
+  "product_image4":"../images/placeholder.png",
+  "product_image5":"../images/placeholder.png",
+  "product_image": "../scarf/threads_of_mind/The_Patient_Flame.webp",
+  "product_description": "The “patient flame” Scarf is a bold reminder that true achievement takes time. Featuring ghostly, blurred silhouettes that move across the fabric in a dreamlike haze, the design captures the feeling of persistence and progress.",
+  "highlights_1":"Monochrome abstract silhouettes with a blurred effect",
+  "highlights_2":"Striking red border for strong visual framing",
+  "highlights_3":"A motivational piece of wearable art",
+  "highlights_4": ""
+},
+
+{
+  "product_ID": "TAG014839",
+  "scarf_name": "Falling Prisms",
+  "theme_name":"Threads 0f Mind",
+  "product_image2":"../images/placeholder.png",
+  "product_image3":"../images/placeholder.png",
+  "product_image4":"../images/placeholder.png",
+  "product_image5":"../images/placeholder.png",
+  "product_image": "../scarf/threads_of_mind/Falling_Prism.webp",
+  "product_description": "The “Falling Prism” Scarf captures the sensation of descent raw, dramatic, and surreal. Its repeating design shows a figure suspended in freefall, glowing in golden light as rainbow distortions ripple around them, like fragments of shattered reality. The stark black backdrop amplifies the motion, turning each fall into a luminous moment frozen in time.",
+  "highlights_1":"Striking motif of a glowing figure in freefall",
+  "highlights_2":"Surreal rainbow distortions evoking energy and fragmentation",
+  "highlights_3":"High-contrast palette of gold, rainbow, and black",
+  "highlights_4": ""
+},
+
+{
+  "product_ID": "TAG016051",
+  "scarf_name": "Mistakes in Flight",
+  "theme_name":"Threads 0f Mind",
+  "product_image2":"../images/placeholder.png",
+  "product_image3":"../images/placeholder.png",
+  "product_image4":"../images/placeholder.png",
+  "product_image5":"../images/placeholder.png",
+  "product_image": "../scarf/threads_of_mind/Mistake_In_Flight.webp",
+  "product_description": "The “Mistakes in Flight” Scarf blends vulnerability with surreal beauty, turning emotion into wearable art. At the center, a lone figure sits beneath a barren tree while dark birds scatter across the canvas, their motion layered with a glitch-like, chromatic effect. The scarf’s muted cream base contrasts with its bold black imagery and rainbow-distorted border, creating a dreamlike tension between fragility and strength. ",
+  "highlights_1":"Striking design featuring figure, birds, and barren tree",
+  "highlights_2":"Chromatic glitch-border effect for a surreal aesthetic",
+  "highlights_3":"A statement piece blending art, vulnerability, and style",
+  "highlights_4": ""
+}]

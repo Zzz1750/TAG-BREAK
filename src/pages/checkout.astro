@@ -1,0 +1,424 @@
+---
+import Header from '../components/Header_shop.astro';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Tag Out</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Abel&family=Aldrich&family=Changa:wght@200..800&display=swap" rel="stylesheet">
+  </head>
+  <style>
+    body {
+      background-color: #1e4941;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .error-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 60vh;
+      text-align: center;
+      padding: 20px;
+    }
+    
+    .error-title {
+      font-family: "Aldrich";
+      color: #e3bcae;
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+    
+    .error-message {
+      font-family: "Abel";
+      color: #e3bcae;
+      font-size: 1.2rem;
+      max-width: 500px;
+      line-height: 1.5;
+    }
+    
+    .error-link {
+      color: #e3bcae;
+      text-decoration: underline;
+      margin-top: 20px;
+      font-family: "Abel";
+      font-size: 1.1rem;
+    }
+    
+    .error-link:hover {
+      color: #d4a899;
+    }
+    
+    #heading {
+      margin-top: 60px;
+      font-family: "Aldrich";
+      color: #e3bcae;
+      font-weight: 400;
+      text-align: center;
+      font-size: 1.8rem;
+    } 
+    
+    #sub-heading {
+      margin-top: -10px;
+      color: #e3bcae;
+      font-family: "Abel";
+      text-align: center;
+      font-size: 1.1rem;
+      margin-bottom: 60px;
+    }
+    
+    /* Fix form container styles */
+    #form-container {
+      margin-top: 0;
+      display: flex;
+      flex-direction: column; 
+      align-items: center;
+      justify-content: center;
+      width: 30%;
+      padding: 10px;
+      font-weight: 400;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    
+    /* Fix label styles */
+    .form-group label {
+      color: #e3bcae;
+      font-family: "Abel";
+      margin-bottom: 8px;
+      width: 100%;
+    }
+    
+    /* Fix input and select styles */
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #e3bcae;
+      border-radius: 4px;
+      background-color: transparent;
+      color: #e3bcae;
+      font-family: "Abel";
+      box-sizing: border-box;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      box-shadow: 0 0 5px rgba(227, 188, 174, 0.5);
+    }
+    
+    .form-group select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23e3bcae' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 30px;
+    }
+    
+    /* Fix button styles */
+    #form-container button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 20px;
+      background-color: #e3bcae;
+      color: #1e4941;
+      border: none;
+      border-radius: 4px;
+      font-family: "Abel";
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    #form-container button:hover {
+      background-color: #d4a899;
+    }
+    
+    .conditional-field {
+      display: none;
+      width: 100%;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    span {
+      color: rgb(250, 96, 96);
+    }
+    
+    /* Initially hide everything until we check localStorage */
+    #content {
+      display: none;
+      width: 100%;
+      align-items: center;
+      flex-direction: column;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      #form-container {
+        width: 80%;
+      }
+      
+      .error-title {
+        font-size: 1.5rem;
+      }
+      
+      .error-message {
+        font-size: 1rem;
+      }
+    }
+  </style>
+  <body>
+    <Header />
+    
+    <!-- Error container (initially hidden) -->
+    <div id="error-container" class="error-container" style="display: none;">
+      <h1 class="error-title">Cart Empty</h1>
+      <p class="error-message">
+        Your cart is empty. Please add items to your cart before proceeding to checkout.
+      </p>
+      <a href="/shop" class="error-link">Return to Shop</a>
+    </div>
+    
+    <!-- Content container (initially hidden) -->
+    <div id="content">
+      <h1 id="heading">Finish the order. Start the Break.</h1>
+      <p id="sub-heading">You are one step away from placing your order!</p>
+      
+      <form id="form-container">
+        <div class="form-group">
+          <label for="name">Name: <span>*</span></label>
+          <input name="name" id="name" placeholder="Enter Name" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="address">Delivery Address: <span>*</span></label>
+          <input name="address" id="address" placeholder="Enter address" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email: <span>*</span></label>
+          <input name="email" id="email" placeholder="Enter email" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="contact">Contact Preference: <span>*</span></label>
+          <select id="contact" required>
+            <option value="">Select Preference</option>
+            <option value="whatsapp">Whatsapp</option>
+            <option value="instagram">Instagram</option>
+            <option value="email">Email</option>
+          </select>
+        </div>
+        
+        <div id="whatsapp-set" class="conditional-field form-group">
+          <label for="whatsapp-no">Whatsapp No:</label>
+          <input name="whatsapp-no" id="whatsapp-no" placeholder="Enter Number">
+        </div>
+
+        <div id="instagram-set" class="conditional-field form-group">
+          <label for="instagram-id">Instagram ID:</label>
+          <input name="instagram-id" id="instagram-id" placeholder="Enter ID">
+        </div>
+
+        <button type="submit">Send Request</button>
+      </form>
+    </div>
+
+    <script>
+      // @ts-nocheck
+
+      // Check localStorage on client side
+      document.addEventListener('DOMContentLoaded', function() {
+        const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+        const hasCart = cart && cart.length > 0;
+        
+        const errorContainer = document.getElementById('error-container');
+        const content = document.getElementById('content');
+        
+        if (hasCart) {
+          // Show content, hide error
+          content.style.display = 'flex';
+          errorContainer.style.display = 'none';
+          
+          // Initialize form functionality
+          initializeForm();
+        } else {
+          // Show error, hide content
+          content.style.display = 'none';
+          errorContainer.style.display = 'flex';
+        }
+      });
+
+      function initializeForm() {
+
+        const contact = document.getElementById("contact");
+        const whatsappSet = document.getElementById("whatsapp-set");
+        const instagramSet = document.getElementById("instagram-set");
+        const form = document.getElementById("form-container");
+
+        contact.addEventListener("change", function () {
+          const selected = this.value;
+
+          // Hide all conditional fields first
+          whatsappSet.style.display = 'none';
+          instagramSet.style.display = 'none';
+          
+          // Clear conditional field values when hidden
+          document.getElementById('whatsapp-no').value = '';
+          document.getElementById('instagram-id').value = '';
+
+          // Show relevant field based on selection
+          if (selected === "whatsapp") {
+            whatsappSet.style.display = 'block';
+          } else if (selected === "instagram") {
+            instagramSet.style.display = 'block';
+          }
+        });
+
+        // Email validation function
+        function isValidEmail(email) {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          return emailRegex.test(email);
+        }
+
+        // WhatsApp number validation function (basic international format)
+        function isValidWhatsAppNumber(number) {
+          // Allows numbers with optional country code, spaces, dashes, parentheses
+          // Minimum 10 digits, maximum 15 digits
+          const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+          // Remove all non-digit characters except + at start for validation
+          const cleanNumber = number.replace(/[^\d+]/g, '');
+          return phoneRegex.test(cleanNumber) && cleanNumber.replace('+', '').length >= 10;
+        }
+
+        // Form validation on submit
+        form.addEventListener('submit', function(event) {
+          event.preventDefault(); // Prevent form submission for validation
+          
+          const contactPreference = contact.value;
+          const email = document.getElementById('email').value.trim();
+          const whatsappNo = document.getElementById('whatsapp-no').value.trim();
+          const instagramID = document.getElementById('instagram-id').value.trim();
+          
+          let isValid = true;
+          let errorMessage = '';
+          
+          // Validate email (always required)
+          if (!email) {
+            errorMessage = 'Please enter your email address';
+            isValid = false;
+          } else if (!isValidEmail(email)) {
+            errorMessage = 'Please enter a valid email address';
+            isValid = false;
+          }
+          
+          // Validate based on contact preference
+          if (isValid) {
+            if (contactPreference === 'whatsapp') {
+              if (!whatsappNo) {
+                errorMessage = 'Please enter your WhatsApp number';
+                isValid = false;
+              } else if (!isValidWhatsAppNumber(whatsappNo)) {
+                errorMessage = 'Please enter a valid WhatsApp number (minimum 10 digits)';
+                isValid = false;
+              }
+            } else if (contactPreference === 'instagram') {
+              if (!instagramID) {
+                errorMessage = 'Please enter your Instagram ID';
+                isValid = false;
+              }
+            }
+          }
+          
+          // Show error message if validation fails
+          if (!isValid) {
+            alert(errorMessage);
+            return;
+          }
+          
+          // If validation passes, submit the form
+          if (isValid) {
+            // Get form values
+            var name = document.getElementById('name').value;
+            var address = document.getElementById('address').value;
+            var op_contact = document.getElementById('contact').value;
+            var email_final = document.getElementById('email').value;
+            var whatsapp_no = document.getElementById('whatsapp-no').value;
+            var instagram_id = document.getElementById('instagram-id').value;
+
+            // Log values to console
+            console.log('Name:', name);
+            console.log('Address:', address);
+            console.log('Email:', email_final);
+            console.log('Contact Preference:', op_contact);
+            console.log('WhatsApp No:', whatsapp_no);
+            console.log('Instagram ID:', instagram_id);
+
+            alert('Form submitted successfully!');
+            
+            async function AddData() {
+              const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+              const readableCart = cart
+                  .map(item => `${item.name} (${item.quantity})`)
+                  .join(", ");
+
+              const response = await fetch("https://sheetdb.io/api/v1/ns542fvf46sr1", {
+                  method: "POST",
+                  headers: {
+                      "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify({
+                      data: [
+                          {
+                              name: name,
+                              address: address,
+                              email: email_final,
+                              contact: op_contact,
+                              whatsapp: whatsapp_no,
+                              instagram: instagram_id,
+                              cart: readableCart
+                          }
+                      ]
+                  })
+              });
+
+              const result = await response.json();
+              console.log(result);
+
+              if (result.created) {
+                  localStorage.removeItem("cart");
+                  console.log("Cart cleared!");
+                  // Redirect to success page or show success message
+                  window.location.href = '/order-success';
+              }
+            }
+            AddData();
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

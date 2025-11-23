@@ -1,0 +1,68 @@
+---
+---
+<div class="marquee-container">
+  <div class="marquee-content">
+    <span class="marquee-item">WE DROP STATEMENTS NOT PRICES <img src="./images/banner_logo.webp" alt="Scarf Logo" class="logo" /></span>
+    <span class="marquee-item">WE DROP STATEMENTS NOT PRICES <img src="./images/banner_logo.webp" alt="Scarf Logo" class="logo" /></span>
+    <span class="marquee-item">WE DROP STATEMENTS NOT PRICES <img src="./images/banner_logo.webp" alt="Scarf Logo" class="logo" /></span>
+    <span class="marquee-item">WE DROP STATEMENTS NOT PRICES <img src="./images/banner_logo.webp" alt="Scarf Logo" class="logo" /></span>
+    <span class="marquee-item">WE DROP STATEMENTS NOT PRICES <img src="./images/banner_logo.webp" alt="Scarf Logo" class="logo" /></span>
+    <span class="marquee-item">WE DROP STATEMENTS NOT PRICES <img src="./images/banner_logo.webp" alt="Scarf Logo" class="logo" /></span>
+    <span class="marquee-item">WE DROP STATEMENTS NOT PRICES <img src="./images/banner_logo.webp" alt="Scarf Logo" class="logo" /></span>
+    <span class="marquee-item">WE DROP STATEMENTS NOT PRICES <img src="./images/banner_logo.webp" alt="Scarf Logo" class="logo" /></span>
+    <span class="marquee-item">WE DROP STATEMENTS NOT PRICES <img src="./images/banner_logo.webp" alt="Scarf Logo" class="logo" /></span>
+    <span class="marquee-item">WE DROP STATEMENTS NOT PRICES <img src="./images/banner_logo.webp" alt="Scarf Logo" class="logo" /></span>
+  </div>
+</div>
+
+<style>
+  .marquee-container {
+    font-family: "Abel", sans-serif;
+    font-weight: 400;
+    background-color: #000;
+    color: white;
+    width: 100%;
+    overflow: hidden;
+    padding-bottom: 10px;
+    position: relative;
+    bottom: 2px;
+  }
+
+  .marquee-content {
+    display: flex;
+    animation: marquee 20s linear infinite;
+    white-space: nowrap;
+    margin-top: 15px;
+  }
+
+  .marquee-item {
+    display: flex;
+    align-items: center;
+    margin-right: 0; 
+    padding: 0 15px;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    opacity: 0.8;
+  }
+
+  .logo {
+    margin-left: 15px;
+    height: 30px;
+    width: auto;
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%); 
+    }
+    
+  }
+  @media (max-width: 768px) {
+   .marquee-container {
+    bottom: 11px;
+   }
+  }
+</style>

@@ -1,0 +1,196 @@
+---
+// src/components/Footer.astro
+---
+
+<footer class="footer">
+  <div class="content-wrapper">
+    <div class="text-links">
+      <a href="/help" class="link">Contact</a>
+      <a href="/legal" class="link">Terms & Policy</a>
+      <a href="/services" class="link">Service</a>
+    </div>
+    
+    <div class="social-links">
+      <a href="https://www.instagram.com/tagbreak" aria-label="Instagram" target="_blank" class="social-link">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/instagram.svg" alt="Instagram" width="20" height="20" />
+      </a>
+      
+      <a href=" https://www.threads.com/@tagbreak?igshid=NTc4MTIwNjQ2YQ==" aria-label="Threads" target="_blank" class="social-link">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/threads.svg" alt="Threads" width="20" height="20" />
+      </a>
+      
+      <a href="https://pin.it/78dV5wAqJ" aria-label="Pinterest" target="_blank" class="social-link">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/pinterest.svg" alt="Pinterest" width="20" height="20" />
+      </a>
+
+      <a href="https://snapchat.com/t/ULCvGNXV" aria-label="Snapchat" target="_blank" class="social-link">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/snapchat.svg" alt="Snapchat" width="20" height="20" />
+      </a>
+    </div>
+    
+    <div class="copyright">
+      <span class="copyright-icon">©</span> 2025 tagbreak.
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: transparent;
+    padding: 2rem 1rem;
+    border-top: 1px solid rgba(227, 188, 174, 0.2);
+    font-family: "Aldrich", sans-serif;
+  }
+
+  .content-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+  }
+
+  .text-links {
+    display: flex;
+    gap: 3rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .link {
+    color: #e3bcae;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    transition: color 0.3s ease;
+    position: relative;
+  }
+
+  .link:hover {
+    color: #ffffff;
+  }
+
+  .link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -4px;
+    left: 50%;
+    background: #ffffff;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+  }
+
+  .link:hover::after {
+    width: 100%;
+  }
+
+  .social-links {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+  }
+
+  .social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1.5px solid #e3bcae;
+    border-radius: 50%;
+    color: #e3bcae;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    background: transparent;
+  }
+
+  .social-link:hover {
+    border-color: #ffffff;
+    background: rgba(227, 188, 174, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .social-link img {
+    filter: brightness(0) saturate(100%) invert(84%) sepia(15%) saturate(492%) hue-rotate(337deg) brightness(93%) contrast(89%);
+    transition: filter 0.3s ease;
+  }
+
+  .social-link:hover img {
+    filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(106%) contrast(101%);
+  }
+
+  .copyright {
+    color: #e3bcae;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .copyright-icon {
+    font-size: 1.1rem;
+  }
+
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .footer {
+      padding: 2.5rem 1.5rem;
+    }
+
+    .content-wrapper {
+      gap: 2rem;
+    }
+
+    .text-links {
+      gap: 2rem;
+    }
+
+    .social-links {
+      gap: 1.5rem;
+    }
+
+    .link {
+      font-size: 0.8rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .footer {
+      padding: 2rem 1rem;
+    }
+
+    .content-wrapper {
+      gap: 1.75rem;
+    }
+
+    .text-links {
+      gap: 1.5rem;
+    }
+
+    .social-links {
+      gap: 1.25rem;
+    }
+
+    .social-link {
+      width: 30px;
+      height: 30px;
+    }
+
+    .social-link img {
+      width: 14px;
+      height: 14px;
+    }
+
+    .copyright {
+      font-size: 0.7rem;
+    }
+    .copyright-icon{
+      font-size: 0.7rem;
+    }
+  }
+</style>

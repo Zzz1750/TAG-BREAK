@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed - TagBreak</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        
+        body {
+            background-color: #1e4941;
+            color: #e3bcae;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            padding: 40px 30px;
+            position: relative;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: rgba(227, 188, 174, 0.1);
+            border: 2px solid rgba(227, 188, 174, 0.3);
+        }
+        
+        .logo-placeholder {
+            font-size: 36px;
+            color: #e3bcae;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+            color: #f5d5c8;
+            letter-spacing: -0.5px;
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            color: #e3bcae;
+            font-weight: 500;
+        }
+        
+        .message-box {
+            background-color: rgba(227, 188, 174, 0.08);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            text-align: left;
+            border: 1px solid rgba(227, 188, 174, 0.15);
+        }
+        
+        .message-box p {
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+        
+        .message-box p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .highlight {
+            color: #f5d5c8;
+            font-weight: 600;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            font-size: 1rem;
+            color: #d4a798;
+        }
+        
+        .footer p {
+            margin-bottom: 8px;
+        }
+        
+        .brand {
+            font-weight: 600;
+            text-decoration: underline;
+            color: #f5d5c8;
+        }
+        
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(227, 188, 174, 0.3), transparent);
+            margin: 25px 0;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 1.9rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <div class="logo-placeholder">TB</div>
+        </div>
+        
+        <h1>Your Break Starts Now</h1>
+        <p class="subtitle">Order successfully placed!</p>
+        
+        <div class="divider"></div>
+        
+        <div class="message-box">
+            <p>Thank you for your purchase! Your order has been successfully requested and is being processed.</p>
+            <p>This is a <span class="highlight">once-only batch item</span>. We use a request-to-purchase step to ensure everything stays genuine and safe for each of our buyers.</p>
+            <p>You'll receive a confirmation email shortly with your order details.</p>
+        </div>
+        
+        <div class="footer">
+            <p>Have a wonderful day! :)</p>
+            <p>Team <span class="brand">TagBreak</span></p>
+        </div>
+    </div>
+</body>
+</html>

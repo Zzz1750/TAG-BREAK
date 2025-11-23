@@ -1,0 +1,219 @@
+---
+import Header from '../components/Header_cart.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TagCart</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Abel&family=Aldrich&family=Changa:wght@200..800&display=swap" rel="stylesheet">
+  </head>
+  <body style="background-color: #1e4941; font-family: 'Aldrich', sans-serif; color: #e3bcae; min-height: 100vh; margin: 0; padding: 0;">
+    <Header />
+    
+    <div id="empty_cart" style="display: none; flex-direction: column; justify-content: center; align-items: center; min-height: 65vh; text-align: center; padding: 2rem; box-sizing: border-box;">
+      <img src="/images/icon/empty-cart.webp" alt="Empty Cart" style="width: 100px; height: 100px; object-fit: contain; margin-bottom: 20px;">
+      <h1 style="margin-bottom: 40px; font-size: 1.25rem; font-weight: 400; padding: 0 1rem;">No tags to break yet.</h1>
+      <button onclick="window.location.href='/shop'" style="padding: 12px 24px; background-color: #1e4941; color: #e3bcae; border: 1px solid #e3bcae; border-radius: 8px; cursor: pointer; font-size: 16px; font-family: 'Aldrich', sans-serif;">Shop</button>
+    </div>
+    
+    <div id="cart_with_items" style="display: none; max-width: 1200px; margin: 0 auto; padding: 1rem; box-sizing: border-box;">
+      <h1 style="font-family: 'Changa', sans-serif; font-size: 2rem; font-weight: 400; color: #e3bcae; margin-bottom: 1.5rem; margin-top: 80px; text-align: center;">Your Cart</h1>
+      
+      <div style="display: grid; grid-template-columns: 1fr auto; padding: 1rem 0; border-bottom: 1px solid #e3bcae; margin-bottom: 1rem;">
+        <div style="font-size: 0.9rem; opacity: 0.9;">PRODUCT</div>
+        <div style="font-size: 0.9rem; text-align: right; padding-right: 5px">TOTAL</div>
+      </div>
+
+      <div id="cart_items_container" style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;">
+        <!-- Cart items will be dynamically inserted here -->
+      </div>
+
+      <div style="border-top: 1px solid #e3bcae; padding-top: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem;">
+        <div style="display: flex; flex-direction: column; gap: 0.5rem; text-align: center;">
+          <div style="font-size: 0.8rem; opacity: 0.8;">Tax and shipping cost included</div>
+          <div style="font-size: 1.25rem; font-family: 'Changa', sans-serif;">Total cost: ₹<span id="total_amount">0</span></div>
+        </div>
+        <button class="checkout-btn" style="background: #e3bcae; color: #1e4941; border: 1px solid #e3bcae; padding: 1rem 2rem; border-radius: 6px; cursor: pointer; font-size: 1.1rem; font-family: 'Aldrich', sans-serif; width: 100%; max-width: 300px; margin: 0 auto;">Checkout</button>
+
+        <p id="cart-policy" style="text-align: center; opacity: 0.9; margin-top: 1.5rem; font-size: 0.8rem; line-height: 1.4; padding: 0 0.5rem;">
+          By clicking on checkout, you agree to all the Terms and conditions and policies of Tagbreak. Read them in detail before proceeding from here
+        </p>
+      </div>
+    </div>
+   
+    <Footer />
+
+    <script>
+     // @ts-nocheck
+      document.addEventListener('DOMContentLoaded', function() {
+        const emptyCart = document.getElementById('empty_cart');
+        const cartWithItems = document.getElementById('cart_with_items');
+        const cartItemsContainer = document.getElementById('cart_items_container');
+        const totalAmountElement = document.getElementById('total_amount');
+        
+        function loadCart() {
+          const cart = JSON.parse(localStorage.getItem('cart')) || [];
+          
+          if (cart.length === 0) {
+            emptyCart.style.display = 'flex';
+            cartWithItems.style.display = 'none';
+            return;
+          }
+          
+          emptyCart.style.display = 'none';
+          cartWithItems.style.display = 'block';
+          cartItemsContainer.innerHTML = '';
+          
+          let totalAmount = 0;
+          
+          cart.forEach((item, index) => {
+            const itemTotal = item.price * item.quantity;
+            totalAmount += itemTotal;
+            
+            const cartItemElement = document.createElement('div');
+            cartItemElement.style.display = 'flex';
+            cartItemElement.style.flexDirection = 'column';
+            cartItemElement.style.gap = '1rem';
+            cartItemElement.style.padding = '1.2rem';
+            cartItemElement.style.background = 'rgba(227, 188, 174, 0.05)';
+            cartItemElement.style.borderRadius = '8px';
+            cartItemElement.style.position = 'relative';
+            cartItemElement.style.cursor = 'pointer'; // Add cursor pointer
+            
+            // Make the entire cart item clickable
+            cartItemElement.addEventListener('click', function(e) {
+              // Don't navigate if clicking on quantity buttons
+              if (!e.target.closest('.quantity-btn')) {
+                if (item.id) {
+                  window.location.href = `/shop/${item.id}`;
+                }
+              }
+            });
+            
+            cartItemElement.innerHTML = `
+              <div style="display: flex; gap: 1.2rem; align-items: flex-start;">
+                <div style="width: 100px; height: 100px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; background: rgba(255,255,255,0.05); border: 1px solid #e3bcae; border-radius: 6px;">
+                  <img src="${item.image}" alt="${item.name}" 
+                       style="width: 100%; height: 100%; object-fit: contain; display: block; padding: 5px;"
+                       onerror="this.style.display='none'">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.6rem; flex: 1;">
+                  <div style="font-family: 'Changa', sans-serif; font-size: 1.2rem; color: #e3bcae; line-height: 1.3;">${item.name}</div>
+                  <div style="font-size: 1.1rem; color: #e3bcae;">₹${item.price}</div>
+                  <div style="display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem;">
+                    <button class="quantity-btn minus" data-index="${index}" type="button" 
+                            style="background: transparent; border: 1px solid #e3bcae; color: #e3bcae; width: 32px; height: 32px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; font-family: 'Aldrich', sans-serif; font-weight: bold; transition: all 0.3s ease;">
+                      -
+                    </button>
+                    <span style="min-width: 35px; text-align: center; font-size: 1rem; color: #e3bcae;">
+                      ${item.quantity}
+                    </span>
+                    <button class="quantity-btn plus" data-index="${index}" type="button" 
+                            style="background: transparent; border: 1px solid #e3bcae; color: #e3bcae; width: 32px; height: 32px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; font-family: 'Aldrich', sans-serif; font-weight: bold; transition: all 0.3s ease;">
+                      +
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div style="font-size: 1.2rem; color: #e3bcae; text-align: right; font-family: 'Changa', sans-serif; border-top: 1px solid rgba(227, 188, 174, 0.3); padding-top: 0.8rem;">
+                ₹${itemTotal}
+              </div>
+            `;
+            
+            cartItemsContainer.appendChild(cartItemElement);
+          });
+          
+          totalAmountElement.textContent = totalAmount.toFixed(2);
+          attachCartEventListeners();
+          addButtonHoverEffects();
+        }
+        
+        // Rest of your existing functions remain the same...
+        function addButtonHoverEffects() {
+          document.querySelectorAll('.quantity-btn').forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+              this.style.background = '#e3bcae';
+              this.style.color = '#1e4941';
+            });
+            btn.addEventListener('mouseleave', function() {
+              this.style.background = 'transparent';
+              this.style.color = '#e3bcae';
+            });
+            
+            // Touch device support
+            btn.addEventListener('touchstart', function() {
+              this.style.background = '#e3bcae';
+              this.style.color = '#1e4941';
+            });
+            btn.addEventListener('touchend', function() {
+              this.style.background = 'transparent';
+              this.style.color = '#e3bcae';
+            });
+          });
+        }
+        
+        function attachCartEventListeners() {
+          document.querySelectorAll('.quantity-btn.minus').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+              e.stopPropagation(); // Prevent navigation when clicking buttons
+              const index = parseInt(this.getAttribute('data-index'));
+              updateQuantity(index, -1);
+            });
+          });
+          
+          document.querySelectorAll('.quantity-btn.plus').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+              e.stopPropagation(); // Prevent navigation when clicking buttons
+              const index = parseInt(this.getAttribute('data-index'));
+              updateQuantity(index, 1);
+            });
+          });
+        }
+        
+        function updateQuantity(index, change) {
+          const cart = JSON.parse(localStorage.getItem('cart')) || [];
+          if (cart[index]) {
+            cart[index].quantity += change;
+            if (cart[index].quantity <= 0) {
+              cart.splice(index, 1);
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCart();
+          }
+        }
+        
+        // Checkout button and other existing code remains the same...
+        const checkoutBtn = document.querySelector('.checkout-btn');
+        if (checkoutBtn) {
+          checkoutBtn.addEventListener('click', function() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart.length === 0) {
+              alert('Your cart is empty!');
+              return;
+            }
+            window.location.href='/checkout'
+          });
+        }
+        
+        // Handle window resize for better mobile experience
+        function handleResize() {
+          if (window.innerWidth < 768) {
+            document.body.style.fontSize = '14px';
+          } else {
+            document.body.style.fontSize = '16px';
+          }
+        }
+        
+        window.addEventListener('resize', handleResize);
+        handleResize();
+        
+        loadCart();
+      });
+    </script>
+  </body>
+</html>

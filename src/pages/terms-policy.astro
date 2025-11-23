@@ -1,0 +1,303 @@
+---
+import Header from '../components/Header_shop.astro';
+import Footer from '../components/Footer.astro'
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Terms & Policy</title>
+
+     <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Aldrich&family=Abel&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#1E4941;
+      --text:#E3BCAE;
+      --card-bg: rgba(255,255,255,0.03);
+      --card-border: rgba(255,255,255,0.06);
+      --muted: rgba(227,188,174,0.22);
+      --max-width:980px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0}
+    body{
+      font-family:'Abel',system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      background:var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.6;
+    }
+
+    /* Page title */
+    .page-title{max-width:var(--max-width);margin:0 auto 8px;text-align:center; margin-top: 60px;}
+    .page-title h1{font-family:'Aldrich';font-size:32px;margin:0;color:var(--text);letter-spacing:0.4px}
+    .page-title .updated{font-size:13px;color:var(--muted);margin-top:6px}
+
+    .wrap{max-width:var(--max-width);margin:16px auto; padding: 20px 10px;}
+
+    /* Card */
+    .card{
+      background:var(--card-bg);
+      border-radius:12px;
+      border:1px solid var(--card-border);
+      padding:18px;
+      margin-bottom:14px;
+      cursor:pointer;
+      overflow:hidden;
+      transition:box-shadow 220ms ease, transform 220ms ease;
+    }
+    .card:hover{transform:translateY(-2px)}
+    .card.open{box-shadow:0 10px 30px rgba(0,0,0,0.45), 0 0 18px rgba(227,188,174,0.06); border-color: rgba(227,188,174,0.14)}
+    .card-head {display:block}
+    .card-head h2{margin:0;font-family:'Aldrich';font-size:22px;color:var(--text);text-align:left}
+
+    /* Body content hidden until expanded */
+    .card-body{
+      max-height:0;
+      overflow:hidden;
+      transition:max-height 420ms ease, padding 220ms ease;
+      padding-top:0;
+    }
+    .card.open .card-body{padding-top:14px}
+
+    /* text sizes per your request */
+    p, li { font-size:18px; color:var(--text); margin:8px 0; }
+    ul { padding-left:20px; margin:6px 0; }
+
+    .muted { color:var(--muted); font-size:13px; margin:0 0 8px 0; }
+
+    @media (max-width:700px){
+      .page-title h1{font-size:26px}
+      .card { padding:14px }
+      .card-head h2 { font-size:20px }
+      p, li { font-size:15px }
+    }
+  </style>
+  </head>
+  <body>
+    <Header />
+    
+    <div class="page-title">
+    <h1>Terms & Conditions</h1>
+    <div class="updated">Last Updated: December 2025</div>
+  </div>
+
+  <main class="wrap" role="main" aria-live="polite">
+    <!-- 1. Terms & Conditions (opens by default) -->
+    <section class="card" id="terms" tabindex="0" aria-expanded="false" aria-controls="terms-body">
+      <div class="card-head"><h2>Terms & Conditions</h2></div>
+      <div class="card-body" id="terms-body">
+        <p class="muted"><strong>Last Updated:</strong> December 2025</p>
+        <p>Welcome to Tagbreak (“we,” “our,” “us”). By accessing or using our website (the “Site”) and our services (collectively, the “Services”), you agree to comply with and be bound by the following Terms and Conditions (“Terms”). If you do not agree with these Terms, please do not use our Site or Services.</p>
+
+        <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">1. Use of the Website</h3>
+        <ul>
+          <li>● You must be at least 13 years old to use our Services.</li>
+          <li>● You agree to use our website only for lawful purposes and in a manner that does not infringe the rights of or restrict the use and enjoyment of the Site by any third party.</li>
+          <li>● We reserve the right to suspend or terminate access to anyone who violates these Terms.</li>
+        </ul>
+
+        <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">2. Intellectual Property</h3>
+        <ul>
+          <li>● All content on this website including logos, visuals, text, graphics, and creative materials is the property of Tagbreak unless otherwise stated.</li>
+          <li>● You may not reproduce, distribute, or modify any material without prior written consent from Tagbreak.</li>
+        </ul>
+
+        <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">3. User Content</h3>
+        <ul>
+          <li>● If you submit, upload, or tag any content (including photos, videos, reviews, or feedback) to Tagbreak, you grant us a non-exclusive, royalty-free, worldwide license to use, reproduce, and display that content for marketing or promotional purposes.</li>
+          <li>● You represent that you own the rights to any content you share with us.</li>
+        </ul>
+
+        <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">4. Purchases & Payments</h3>
+        <ul>
+          <li>● All transactions made through Tagbreak’s platform are processed securely.</li>
+          <li>● By making a purchase, you agree to provide accurate payment and shipping information.</li>
+          <li>● Prices and availability of products are subject to change without notice.</li>
+        </ul>
+
+        <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">5. Third-Party Links</h3>
+        <ul>
+          <li>● Our website may include links to third-party websites or services not controlled by Tagbreak.</li>
+          <li>● We are not responsible for the content or privacy practices of these external sites.</li>
+        </ul>
+
+        <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">6. Limitation of Liability</h3>
+        <ul>
+          <li>● Tagbreak will not be liable for any indirect, incidental, or consequential damages resulting from the use or inability to use our Services.</li>
+          <li>● We do not guarantee that our Site will always be available, secure, or error-free.</li>
+        </ul>
+
+        <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">7. Changes to Terms</h3>
+        <p>● We may update these Terms periodically. Any changes will be reflected on this page, and continued use of the Site constitutes acceptance of the revised Terms.</p>
+      </div>
+    </section>
+
+    <!-- 2. Privacy Policy -->
+    <section class="card" id="privacy" tabindex="0" aria-expanded="false" aria-controls="privacy-body">
+      <div class="card-head"><h2>Privacy Policy</h2></div>
+      <div class="card-body" id="privacy-body">
+        <p class="muted"><strong>Effective Date:</strong> December 2025</p>
+        <p>At Tagbreak, your privacy is our priority. This Privacy Policy explains how we collect, use, and protect your personal information.</p>
+
+        <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">1. Information We Collect</h3>
+        <ul>
+          <li>● Personal details: name, email address, phone number, etc.</li>
+          <li>● Usage data: pages visited, clicks, device type, IP address, browser type.</li>
+          <li>● Transactional data: billing, shipping, and payment details (processed via secure third-party gateways).</li>
+        </ul>
+
+        <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">2. How We Use Your Information</h3>
+        <p>We use the information to:</p>
+        <ul>
+          <li>● Process orders and provide services.</li>
+          <li>● Improve user experience and website performance.</li>
+          <li>● Send updates, offers, or newsletters</li>
+          <li>● Detect and prevent fraud or security issues.</li>
+        </ul>
+
+        <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">3. Cookies</h3>
+        <p>Tagbreak uses cookies and similar technologies to enhance your browsing experience. You can choose to disable cookies via your browser settings, but this may affect certain site functionalities.</p>
+
+        <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">4. Data Security</h3>
+        <p>We implement strict security protocols to protect your data against unauthorized access or disclosure. However, no online platform can guarantee 100% security.</p>
+
+        <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">5. Sharing Information</h3>
+        <p>We do not sell or rent your personal information. We may share data only with trusted service providers who help us operate our business.</p>
+
+        <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">6. Your Rights</h3>
+        <ul>
+          <li>● Access, correct, or delete your personal data.</li>
+          <li>● Withdraw consent for marketing communications.</li>
+          <li>● Request a copy of the data we hold about you.</li>
+        </ul>
+
+        <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">7. Updates to Policy</h3>
+        <p>● This Privacy Policy may be updated occasionally. The revised version will always be posted here with a new effective date.</p>
+
+        <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">8. Contact Us</h3>
+        <p>● If you have questions or concerns about these Terms or our Privacy Policy, reach out at:</p>
+        <ul>
+          <li>● tagbreak.trust@gmail.com</li>
+          <li>● www.tagbreak.in</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 3. Return & Refund Policy -->
+    <section class="card" id="return-refund" tabindex="0" aria-expanded="false" aria-controls="return-body">
+      <div class="card-head"><h2>Return & Refund Policy</h2></div>
+      <div class="card-body" id="return-body">
+        <p>All sales are final unless the item received is defective or incorrect. To initiate a claim for a damaged or defective product, you must provide a clear, uncut video of the unboxing showing the package from all angles before opening and the issue clearly visible. Claims without such proof will not be eligible for review.</p>
+      </div>
+    </section>
+
+    <!-- 4. Shipping & Delivery Policy -->
+    <section class="card" id="shipping" tabindex="0" aria-expanded="false" aria-controls="shipping-body">
+      <div class="card-head"><h2>Shipping & Delivery Policy</h2></div>
+      <div class="card-body" id="shipping-body">
+        <p>Tagbreak is not responsible for delays caused by courier partners or customs processes.</p>
+      </div>
+    </section>
+
+    <!-- 5. Product Representation -->
+    <section class="card" id="product-representation" tabindex="0" aria-expanded="false" aria-controls="product-body">
+      <div class="card-head"><h2>Product Representation</h2></div>
+      <div class="card-body" id="product-body">
+        <p>Product colors may slightly vary due to photographic lighting or screen settings.</p>
+      </div>
+    </section>
+
+    <!-- 6. Governing Law / Jurisdiction -->
+    <section class="card" id="governing" tabindex="0" aria-expanded="false" aria-controls="governing-body">
+      <div class="card-head"><h2>Governing Law / Jurisdiction</h2></div>
+      <div class="card-body" id="governing-body">
+        <p>These Terms are governed by and construed in accordance with the laws of India. Any disputes shall be subject to the exclusive jurisdiction of the courts in Bengaluru, Karnataka, India.</p>
+      </div>
+    </section>
+
+    <!-- 7. NFT (Digital Ownership) -->
+    <section class="card" id="nft" tabindex="0" aria-expanded="false" aria-controls="nft-body">
+      <div class="card-head"><h2>NFT (Digital Ownership)</h2></div>
+      <div class="card-body" id="nft-body">
+        <p>For digital collectibles linked with physical products, ownership is verified via blockchain records. Tagbreak is not responsible for loss of access due to user error, lost wallets, or third-party platform issues.</p>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+  <script>
+          // @ts-nocheck
+
+    // Accordion behavior: one card open at a time
+    (function(){
+      const cards = Array.from(document.querySelectorAll('.card'));
+
+      function closeAll(except){
+        cards.forEach(c=>{
+          if(c !== except){
+            c.classList.remove('open');
+            c.setAttribute('aria-expanded','false');
+            const body = c.querySelector('.card-body');
+            body.style.maxHeight = null;
+          }
+        });
+      }
+
+      function openCard(card){
+        const body = card.querySelector('.card-body');
+        closeAll(card);
+        card.classList.add('open');
+        card.setAttribute('aria-expanded','true');
+        // ensure body has correct maxHeight for smooth slide
+        body.style.maxHeight = body.scrollHeight + 'px';
+      }
+
+      function closeCard(card){
+        const body = card.querySelector('.card-body');
+        card.classList.remove('open');
+        card.setAttribute('aria-expanded','false');
+        body.style.maxHeight = null;
+      }
+
+      // attach events
+      cards.forEach((card, idx) => {
+        const body = card.querySelector('.card-body');
+        // clicking card toggles it
+        card.addEventListener('click', (e) => {
+          // ignore clicks on links inside
+          if (e.target.tagName.toLowerCase() === 'a') return;
+          if (card.classList.contains('open')) closeCard(card);
+          else openCard(card);
+        });
+
+        // keyboard support (Enter/Space)
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            if (card.classList.contains('open')) closeCard(card);
+            else openCard(card);
+          }
+        });
+      });
+
+      // recalc heights on resize for open card
+      window.addEventListener('resize', () => {
+        cards.forEach(c => {
+          if (c.classList.contains('open')) {
+            const b = c.querySelector('.card-body');
+            b.style.maxHeight = b.scrollHeight + 'px';
+          }
+        });
+      });
+    })();
+  </script>
+
+
+  </body>
+</html>

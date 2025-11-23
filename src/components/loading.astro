@@ -1,0 +1,45 @@
+<div id="loading_container">
+    <img id="logo1" src="./images/pink_logo.webp" draggable="false" alt="logo1">
+    <img id="logo2" src="./images/logo2.png" draggable="false" alt="logo2">
+</div>
+<script>
+  const logos = [document.getElementById('logo1')!, document.getElementById('logo2')!];
+  let index = 0;
+
+  logos.forEach((img, i) => img.style.display = i === 0 ? 'block' : 'none');
+
+  setInterval(() => {
+    logos[index].style.display = 'none';
+    index = (index + 1) % logos.length;
+    logos[index].style.display = 'block';
+  }, 1000);
+</script>
+<style>
+  #loading_container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #1e4941;
+    z-index: 999999;      
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #logo1{
+    position: absolute;
+    width: 40%;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+  }
+  #logo2{
+    position: absolute;
+    width: 6%;
+    rotate: -45deg;
+    top: 40%;
+    left: 52%;
+    transform: translate(-50%,-50%);
+  }
+</style>

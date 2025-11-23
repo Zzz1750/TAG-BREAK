@@ -1,0 +1,27 @@
+---
+--- 
+<a-scene xr-mode-ui="enabled: false" > 
+  
+  <a-sky color="#ECECEC"></a-sky>
+  <a-entity camera look-controls position="0 1.6 0"></a-entity>
+ 
+  <!-- Towel 1 -->
+  <a-entity 
+        gltf-model="url(/3D-models/1.glb)" 
+        position="0 1.5 -3" 
+        scale="1 1 1" 
+        rotation="0 0 0" draco="true">
+    </a-entity>
+
+	<!-- Towel 2 -->
+	<a-entity gltf-model="/3D-models/2.glb" position="2 1.5 -4" rotation="0 45 0" draco="true"></a-entity>
+
+	<!-- Towel 3 -->
+	<a-entity gltf-model="/3D-models/3.glb" position="-2 1.5 -4" rotation="0 135 0" draco="true"></a-entity>
+
+	
+</a-scene>
+   
+<!-- A-Frame script -->
+<script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+
