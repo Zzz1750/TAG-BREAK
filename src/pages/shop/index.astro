@@ -1,17 +1,15 @@
 ---
 import Header from '../../components/Header_shop.astro';
 import Theme1 from '../../components/scarf_theme/theme1.astro';
-import MarqueeBanner from '../../components/MarqueeBanner.astro';
-import MarqueeBanner2 from '../../components/MarqueeBanner2.astro';
 import Footer from '../../components/Footer.astro';
 
 
 
-import theme1Data from '../../../public/data/theme1_DB.json';
-import theme2Data from '../../../public/data/theme2_DB.json';
-import theme3Data from '../../../public/data/theme3_DB.json';
-import theme4Data from '../../../public/data/theme4_DB.json';
-import theme5Data from '../../../public/data/theme5_DB.json';
+import theme1Data from '../../../public/TAG-BREAK/data/theme1_DB.json';
+import theme2Data from '../../../public/TAG-BREAK/data/theme2_DB.json';
+import theme3Data from '../../../public/TAG-BREAK/data/theme3_DB.json';
+import theme4Data from '../../../public/TAG-BREAK/data/theme4_DB.json';
+import theme5Data from '../../../public/TAG-BREAK/data/theme5_DB.json';
 ---
 
 <html lang="en">
@@ -27,32 +25,29 @@ import theme5Data from '../../../public/data/theme5_DB.json';
   <body>
     <Header />
     <div id="set1">
-      <!-- <MarqueeBanner /> -->
       <Theme1 productsData={theme1Data} setTitle={"Threads of Mind"} />
       <div class="image-container_new">
-        <img src="./images/poster/poster1.png" alt="Image Space" draggable="false">
+        <img src="/TAG-BREAK//images/poster/poster1.png" alt="Image Space" draggable="false">
       </div>
       <Theme1 productsData={theme3Data} setTitle={"Geometric Rhythms"} />
     </div>
 
     <div id="set2" style="display: none;">
-      <MarqueeBanner />
       <Theme1 productsData={theme2Data} setTitle={"Raw Manifesto"} />
       <div class="image-container_new">
-        <img src="./images/poster/poster2.png" alt="Image Space" draggable="false" >
+        <img src="/TAG-BREAK//images/poster/poster2.png" alt="Image Space" draggable="false" >
       </div>
       <Theme1 productsData={theme5Data} setTitle={"Celestial Wave"} />
     </div>
 
     <div id="set3" style="display: none;">
-      <MarqueeBanner2 />
       <Theme1 productsData={theme4Data} setTitle={"Visions in Motions"} />
     </div>
     
     <div id="page_changer_container">
-      <img src="./images/icon/next.webp" alt="back button" id="back_button" class="page_button" draggable="false">
+      <img src="/TAG-BREAK//images/icon/next.webp" alt="back button" id="back_button" class="page_button" draggable="false">
       <p id="pageno">1</p>
-      <img src="./images/icon/next.webp" alt="next button" id="next_button" class="page_button" draggable="false">
+      <img src="/TAG-BREAK//images/icon/next.webp" alt="next button" id="next_button" class="page_button" draggable="false">
     </div>
     <Footer />
   </body>

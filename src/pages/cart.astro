@@ -16,9 +16,9 @@ import Footer from '../components/Footer.astro';
     <Header />
     
     <div id="empty_cart" style="display: none; flex-direction: column; justify-content: center; align-items: center; min-height: 65vh; text-align: center; padding: 2rem; box-sizing: border-box;">
-      <img src="/images/icon/empty-cart.webp" alt="Empty Cart" style="width: 100px; height: 100px; object-fit: contain; margin-bottom: 20px;">
+      <img src="./images/icon/empty-cart.webp" alt="Empty Cart" style="width: 100px; height: 100px; object-fit: contain; margin-bottom: 20px;">
       <h1 style="margin-bottom: 40px; font-size: 1.25rem; font-weight: 400; padding: 0 1rem;">No tags to break yet.</h1>
-      <button onclick="window.location.href='/shop'" style="padding: 12px 24px; background-color: #1e4941; color: #e3bcae; border: 1px solid #e3bcae; border-radius: 8px; cursor: pointer; font-size: 16px; font-family: 'Aldrich', sans-serif;">Shop</button>
+      <button onclick="window.location.href='./shop'" style="padding: 12px 24px; background-color: #1e4941; color: #e3bcae; border: 1px solid #e3bcae; border-radius: 8px; cursor: pointer; font-size: 16px; font-family: 'Aldrich', sans-serif;">Shop</button>
     </div>
     
     <div id="cart_with_items" style="display: none; max-width: 1200px; margin: 0 auto; padding: 1rem; box-sizing: border-box;">
@@ -90,7 +90,7 @@ import Footer from '../components/Footer.astro';
               // Don't navigate if clicking on quantity buttons
               if (!e.target.closest('.quantity-btn')) {
                 if (item.id) {
-                  window.location.href = `/shop/${item.id}`;
+                  window.location.href = `./shop/${item.id}`;
                 }
               }
             });
@@ -196,7 +196,7 @@ import Footer from '../components/Footer.astro';
               alert('Your cart is empty!');
               return;
             }
-            window.location.href='/checkout'
+            window.location.href='/TAG-BREAK/checkout'
           });
         }
         

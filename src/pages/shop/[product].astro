@@ -4,11 +4,11 @@ import Header from '../../components/Header_shop.astro';
 import Footer from '../../components/Footer.astro';
 
 export async function getStaticPaths() {
-  const theme1Data = await import('../../../public/data/theme1_DB.json');
-  const theme2Data = await import('../../../public/data/theme2_DB.json');
-  const theme3Data = await import('../../../public/data/theme3_DB.json');
-  const theme4Data = await import('../../../public/data/theme4_DB.json');
-  const theme5Data = await import('../../../public/data/theme5_DB.json');
+  const theme1Data = await import('../../../public/TAG-BREAK/data/theme1_DB.json');
+  const theme2Data = await import('../../../public/TAG-BREAK/data/theme2_DB.json');
+  const theme3Data = await import('../../../public/TAG-BREAK/data/theme3_DB.json');
+  const theme4Data = await import('../../../public/TAG-BREAK/data/theme4_DB.json');
+  const theme5Data = await import('../../../public/TAG-BREAK/data/theme5_DB.json');
 
   const allProducts = [
     ...theme1Data.default,
@@ -529,7 +529,7 @@ const productImages = [
     function buyNow() {
       addToCart(); // Add to cart first
       // Redirect to cart page
-      window.location.href = '/cart'; // Adjust the path if needed
+      window.location.href = '/TAG-BREAK/cart'; // Adjust the path if needed
     }
     
     function showCartMessage(message) {

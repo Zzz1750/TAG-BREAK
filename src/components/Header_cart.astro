@@ -15,20 +15,20 @@
           &times;
         </button>
         <nav class="mobile-nav">
-          <a href="/" class="nav-link">Home</a>
-          <a href="/shop" class="nav-link">BreakShop</a>
-          <a href="/gallery" class="nav-link">BreakGallery</a>
-          <a href="/collabs" class="nav-link">Collabs</a>
-          <a href="/contact" class="nav-link">Contact</a>
-          <a href="/policy" class="nav-link">Terms & Policy</a>
+          <a href="./" class="nav-link">Home</a>
+          <a href="./shop" class="nav-link">BreakShop</a>
+          <a href="./gallery" class="nav-link">BreakGallery</a>
+          <a href="./collabs" class="nav-link">Collabs</a>
+          <a href="./contact" class="nav-link">Contact</a>
+          <a href="./terms-policy" class="nav-link">Terms & Policy</a>
         </nav>
       </div>
     </div>
   </div>
 
   <div class="header-center">
-    <a href="/" class="logo">
-      <img src="/images/logo_green.webp" alt="Logo" class="logo-image" />
+    <a href="./" class="logo">
+      <img src="./images/logo_green.webp" alt="Logo" class="logo-image" />
     </a>
   </div>
 
@@ -235,7 +235,6 @@
     const menuButton = document.getElementById('menuButton');
     const closeButton = document.getElementById('closeButton');
     const mobileMenu = document.getElementById('mobileMenu');
-    const cartButton = document.getElementById('cartButton');
 
     if (menuButton && mobileMenu) {
       menuButton.addEventListener('click', () => {
@@ -266,11 +265,5 @@
         document.body.style.overflow = '';
       }
     });
-
-    if (cartButton) {
-      cartButton.addEventListener('click', () => {
-        window.location.href = '/cart';
-      });
-    }
   });
 </script>

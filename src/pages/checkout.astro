@@ -198,7 +198,7 @@ import Header from '../components/Header_shop.astro';
       <p class="error-message">
         Your cart is empty. Please add items to your cart before proceeding to checkout.
       </p>
-      <a href="/shop" class="error-link">Return to Shop</a>
+      <a href="./shop" class="error-link">Return to Shop</a>
     </div>
     
     <!-- Content container (initially hidden) -->
@@ -412,7 +412,7 @@ import Header from '../components/Header_shop.astro';
                   localStorage.removeItem("cart");
                   console.log("Cart cleared!");
                   // Redirect to success page or show success message
-                  window.location.href = '/order-success';
+                  window.location.href = '/TAG-BREAK/order-success';
               }
             }
             AddData();
