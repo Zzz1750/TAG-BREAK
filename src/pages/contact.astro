@@ -1,0 +1,134 @@
+---
+import Header from '../components/Header_shop.astro';
+import Footer from '../components/Footer.astro';
+
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Contact</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Abel&family=Aldrich&family=Changa:wght@200..800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/TAG-BREAK/images/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/TAG-BREAK/images/favicon.svg" />
+   <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'abel', sans-serif;
+            font-weight: 200;
+        }
+
+        body {
+            background: #1e4941;
+            color: #e3bcae;
+        }
+
+        .contact-section {
+            margin-top: 80px;
+            padding: 60px 10%;
+        }
+
+        .contact-info h1 {
+            font-family: 'aldrich';
+            font-size: 44px;
+            margin-bottom: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .contact-info p {
+            margin: 5px 0;
+            font-size: 17px;
+        }
+
+        .note {
+            font-size: 14px;
+            opacity: 0.65;
+        }
+
+        .contact-form {
+            margin-top: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #444;
+            background: #d7d7d7;
+            font-size: 16px;
+            outline: none;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        button {
+            width: 180px;
+            padding: 12px;
+            background: #111;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s ease;
+        }
+
+        button:hover {
+            background: #333;
+        }
+
+        @media(max-width: 768px) {
+            .row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<Header />
+<section class="contact-section">
+    <div class="contact-info">
+        <h1>Contact Tagbreak</h1>
+        
+        <p><strong>Email - </strong><a href="mailto:tagbreak.trust@gmail.com" style="color: white; text-decoration: underline;">tagbreak.trust@gmail.com</a></p>
+        <p><strong>Instagram - </strong><a href="https://www.instagram.com/tagbreak"></a> @tagbreak.in</p>
+        <p><strong>Whatsapp Support:</strong> +91 80 6892 5249 <br>
+            <span class="note">(If you have already placed your order)</span></p>
+    </div>
+
+    <form class="contact-form">
+        <div class="row">
+            <input type="text" placeholder="Name *" required>
+            <input type="email" placeholder="Email *" required>
+        </div>
+
+        <input type="text" placeholder="Phone number">
+
+        <textarea rows="5" placeholder="Comment"></textarea>
+
+        <button type="submit">Send</button>
+    </form>
+
+</section>
+    <Footer />
+</body>
+</html>
