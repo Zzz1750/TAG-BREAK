@@ -277,31 +277,45 @@
 
       var scarf_main_name = document.getElementById('scarf_main_name');
       var sidebar_image = document.getElementById('sidebar_image');
+      var button_location ='';
+      var sidebar_container = document.getElementById('sidebar_container');
 
+      document.getElementById('view_product_button').addEventListener('click', ()=>{
+        window.location.href = button_location;
+      })
+
+      document.getElementById('sidebar_close').addEventListener('click', ()=>{
+        sidebar_container.style.display='none'
+      })
+      
       document.getElementById('scarf1_plane').addEventListener('click', ()=>{
-        change_sidebar('High Stakes', '/TAG-BREAK/TAG-BREAK/scarf/Visions_in_Motions/High_Stakes.webp')
+        change_sidebar('High Stakes', '/TAG-BREAK/TAG-BREAK/scarf/Visions_in_Motions/High_Stakes_.jpg')
+        button_location = '/TAG-BREAK/shop/high-stakes'
       })
 
       document.getElementById('scarf2_plane').addEventListener('click', ()=>{
-        change_sidebar('Blue Reverie', '/TAG-BREAK/TAG-BREAK/scarf/Visions_in_Motions/Blue_Reverie.webp')
+        change_sidebar('Blue Reverie', '/TAG-BREAK/TAG-BREAK/scarf/Visions_in_Motions/Blue_Reverie.jpg')
+        button_location = '/TAG-BREAK/shop/blue-reverie'
       })
 
       document.getElementById('scarf3_plane').addEventListener('click', ()=>{
-        change_sidebar('Future Gaze', '/TAG-BREAK/TAG-BREAK/scarf/Visions_in_Motions/Future_Gaze.webp')
+        change_sidebar('Future Gaze', '/TAG-BREAK/TAG-BREAK/scarf/Visions_in_Motions/Future_Gaze.jpg')
+        button_location = '/TAG-BREAK/shop/future-gaze'
       })
 
       document.getElementById('scarf4_plane').addEventListener('click', ()=>{
-        change_sidebar('Thanos Veil','/TAG-BREAK/TAG-BREAK/scarf/Visions_in_Motions/Thanos_Veil.webp')
+        change_sidebar('Thanos Veil','/TAG-BREAK/TAG-BREAK/scarf/Visions_in_Motions/Thanos_Veil.jpg')
+        button_location = '/TAG-BREAK/shop/thanos-veil'
       })
 
       document.getElementById('scarf5_plane').addEventListener('click', ()=>{
-        change_sidebar('Ignite WIthin', '/TAG-BREAK/TAG-BREAK/scarf/Visions_in_Motions/Ignite_Within.webp')
+        change_sidebar('Ignite WIthin', '/TAG-BREAK/TAG-BREAK/scarf/Visions_in_Motions/Ignite_Within.jpg')
+        button_location = '/TAG-BREAK/shop/ignite-within'
       })
 
       function change_sidebar(new_name, new_img_loc){
 
-        
-
+        sidebar_container.style.display='block'
         scarf_main_name.innerHTML=new_name;
         sidebar_image.setAttribute('src', new_img_loc)
       }
@@ -660,285 +674,277 @@
     }
 
     /* =========================
-   SIDEBAR CLEAN REDESIGN
-========================= */
-#sidebar_container {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 400px;
-    height: 100vh;
-    background: #ffffff;
-    z-index: 101;
-    font-family: 'Aldrich', sans-serif;
-    display: flex;
-    flex-direction: column;
-    padding: 0;
-    border-left: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: -2px 0 20px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
-}
-
-/* Close button */
-#sidebar_close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 32px;
-    height: 32px;
-    background: transparent;
-    border: none;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 102;
-    padding: 0;
-}
-
-#sidebar_close::before,
-#sidebar_close::after {
-    content: '';
-    position: absolute;
-    width: 16px;
-    height: 2px;
-    background: rgba(0, 0, 0, 0.7);
-    border-radius: 1px;
-}
-
-#sidebar_close::before {
-    transform: rotate(45deg);
-}
-
-#sidebar_close::after {
-    transform: rotate(-45deg);
-}
-
-#sidebar_close:hover::before,
-#sidebar_close:hover::after {
-    background: rgba(0, 0, 0, 0.9);
-}
-
-/* Sidebar content - NO SCROLL */
-#sidebar_content {
-    padding: 40px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Image section */
-#sidebar_image_wrapper {
-    width: 100%;
-    position: relative;
-    margin-bottom: 35px;
-
-    border-radius: 0;
-    overflow: visible;
-    border: none;
-}
-
-#sidebar_image {
-    width: 100%;
-    height: auto;          
-    object-fit: contain;  
-    display: block;
-}
-
-/* Text content */
-#sidebar_text_container {
-    width: 100%;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Product name */
-#scarf_main_name {
-    font-size: 2rem;
-    margin: 0 0 8px 0;
-    line-height: 1.1;
-    color: #000000;
-    font-weight: 700;
-    letter-spacing: -0.3px;
-}
-
-/* Theme name */
-#scarf_theme_name {
-    font-size: 1rem;
-    color: rgba(0, 0, 0, 0.65);
-    margin: 0 0 25px 0;
-    font-style: italic;
-    font-weight: normal;
-    position: relative;
-    display: inline-block;
-    padding-bottom: 8px;
-}
-
-#scarf_theme_name::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 35px;
-    height: 1.5px;
-    background: rgba(0, 0, 0, 0.4);
-}
-
-/* Product info - simple layout */
-.product-info {
-    margin: 25px 0 30px 0;
-    padding: 0;
-}
-
-.info-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-.info-row:last-child {
-    border-bottom: none;
-}
-
-.info-label {
-    font-size: 0.85rem;
-    color: rgba(0, 0, 0, 0.55);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.info-value {
-    font-size: 1rem;
-    color: #000000;
-    font-weight: 500;
-}
-
-.info-value.price {
-    font-size: 1.4rem;
-    font-weight: 700;
-}
-
-/* Description */
-#scarf_description {
-    line-height: 1.6;
-    color: rgba(0, 0, 0, 0.8);
-    font-size: 0.95rem;
-    margin: 0 0 35px 0;
-    padding: 0;
-    flex: 1;
-}
-
-/* Single action button */
-#view_product_button {
-    width: 100%;
-    padding: 16px;
-    background: transparent;
-    border: 2px solid #000000;
-    font-family: 'Aldrich', sans-serif;
-    font-size: 0.9rem;
-    cursor: pointer;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: bold;
-    color: #000000;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    transition: all 0.2s ease;
-    margin-top: auto;
-}
-
-#view_product_button:hover {
-    background: #000000;
-    color: #ffffff;
-}
-
-#view_product_button:active {
-    transform: translateY(1px);
-}
-
-#view_product_button svg {
-    width: 18px;
-    height: 18px;
-}
-
-/* Mobile responsive */
-@media (max-width: 768px) {
+      SIDEBAR CLEAN REDESIGN
+    ========================= */
     #sidebar_container {
-        width: 100%;
-        height: auto;
-        max-height: 90vh;
-        bottom: 0;
-        top: auto;
-        border-left: none;
-        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 400px;
+        height: 100vh;
+        background: #ffffff;
+        z-index: 101;
+        font-family: 'Aldrich', sans-serif;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+        border-left: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: -2px 0 20px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
     }
-    
+
+    /* Close button */
     #sidebar_close {
-        top: 20px;
-        right: 20px;
-        width: 28px;
-        height: 28px;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 32px;
+        height: 32px;
+        background: transparent;
+        border: none;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 102;
+        padding: 0;
     }
-    
+
+    #sidebar_close::before,
+    #sidebar_close::after {
+        content: '';
+        position: absolute;
+        width: 16px;
+        height: 2px;
+        background: rgba(0, 0, 0, 0.7);
+        border-radius: 1px;
+    }
+
+    #sidebar_close::before {
+        transform: rotate(45deg);
+    }
+
+    #sidebar_close::after {
+        transform: rotate(-45deg);
+    }
+
+    #sidebar_close:hover::before,
+    #sidebar_close:hover::after {
+        background: rgba(0, 0, 0, 0.9);
+    }
+
+    /* Sidebar content - NO SCROLL */
     #sidebar_content {
-        padding: 30px 25px;
-        max-height: 80vh;
+        padding: 40px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
     }
-    
+
+    /* Image section */
+    #sidebar_image_wrapper {
+        width: 100%;
+        position: relative;
+        margin-bottom: 35px;
+
+        border-radius: 0;
+        overflow: visible;
+        border: none;
+    }
+
     #sidebar_image {
-        height: 200px;
+        width: 100%;
+        height: auto;          
+        object-fit: contain;  
+        display: block;
     }
-    
+
+    /* Text content */
+    #sidebar_text_container {
+        width: 100%;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Product name */
     #scarf_main_name {
-        font-size: 1.8rem;
+        font-size: 2rem;
+        margin: 0 0 8px 0;
+        line-height: 1.1;
+        color: #000000;
+        font-weight: 700;
+        letter-spacing: -0.3px;
     }
-    
+
+    /* Theme name */
+    #scarf_theme_name {
+        font-size: 1rem;
+        color: rgba(0, 0, 0, 0.65);
+        margin: 0 0 25px 0;
+        font-style: italic;
+        font-weight: normal;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 8px;
+    }
+
+    #scarf_theme_name::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 35px;
+        height: 1.5px;
+        background: rgba(0, 0, 0, 0.4);
+    }
+
+    /* Product info - simple layout */
+    .product-info {
+        margin: 25px 0 30px 0;
+        padding: 0;
+    }
+
     .info-row {
-        padding: 10px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     }
-    
-    #view_product_button {
-        padding: 14px;
+
+    .info-row:last-child {
+        border-bottom: none;
+    }
+
+    .info-label {
         font-size: 0.85rem;
+        color: rgba(0, 0, 0, 0.55);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
-}
 
-/* Tablet responsive */
-@media (max-width: 1024px) and (min-width: 769px) {
-    #sidebar_container {
-        width: 380px;
+    .info-value {
+        font-size: 1rem;
+        color: #000000;
+        font-weight: 500;
     }
-    
-    #sidebar_content {
-        padding: 35px 30px;
-    }
-}
 
-    </style>
+    .info-value.price {
+        font-size: 1.4rem;
+        font-weight: 700;
+    }
+
+
+
+    /* Single action button */
+    #view_product_button {
+        width: 100%;
+        padding: 16px;
+        background: transparent;
+        border: 2px solid #000000;
+        font-family: 'Aldrich', sans-serif;
+        font-size: 0.9rem;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: bold;
+        color: #000000;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: all 0.2s ease;
+        margin-top: 100px;
+    }
+
+    #view_product_button:hover {
+        background: #000000;
+        color: #ffffff;
+    }
+
+    #view_product_button:active {
+        transform: translateY(1px);
+    }
+
+    #view_product_button svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+        #sidebar_container {
+            width: 100%;
+            height: auto;
+            max-height: 90vh;
+            bottom: 0;
+            top: auto;
+            border-left: none;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        #sidebar_close {
+            top: 20px;
+            right: 20px;
+            width: 28px;
+            height: 28px;
+        }
+        
+        #sidebar_content {
+            padding: 30px 25px;
+            max-height: 80vh;
+        }
+        
+        #sidebar_image {
+            height: 200px;
+        }
+        
+        #scarf_main_name {
+            font-size: 1.8rem;
+        }
+        
+        .info-row {
+            padding: 10px 0;
+        }
+        
+        #view_product_button {
+            padding: 14px;
+            font-size: 0.85rem;
+        }
+    }
+
+    /* Tablet responsive */
+    @media (max-width: 1024px) and (min-width: 769px) {
+        #sidebar_container {
+            width: 380px;
+        }
+        
+        #sidebar_content {
+            padding: 35px 30px;
+        }
+    }
+
+  </style>
 </head>
 <body>
-  <div id="sidebar_container">
+  <div id="sidebar_container" style="display: none;">
     <!-- Close button -->
     <button id="sidebar_close" aria-label="Close sidebar"></button>
     
     <div id="sidebar_content">
         <!-- Image section -->
         <div id="sidebar_image_wrapper">
-            <img src="/TAG-BREAK/TAG-BREAK/scarf/Visions_in_Motions/High_Stakes.webp" 
+            <img src="" 
                  id="sidebar_image" 
-                 alt="High Stakes Scarf">
+                 alt="overload">
         </div>
 
         <!-- Text content -->
         <div id="sidebar_text_container">
-            <h1 id="scarf_main_name">High Stakes</h1>
+            <h1 id="scarf_main_name"></h1>
             <p id="scarf_theme_name"><i>Visions in Motion</i></p>
             
             <!-- Product info -->
@@ -948,21 +954,14 @@
                     <span class="info-value">48cm × 48cm</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">Material</span>
-                    <span class="info-value">Silk Blend</span>
+                    <span class="info-label">Fabric</span>
+                    <span class="info-value">Plant-Eco tech</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Price</span>
                     <span class="info-value price">₹1,000</span>
                 </div>
             </div>
-            
-            <!-- Description
-            <p id="scarf_description">
-                The "High Stakes" scarf brings the thrill of the poker table to wearable art. 
-                Its centerpiece design features a bold illustration of players seated around a 
-                card game, rendered in sharp black, white, and muted green tones.
-            </p> -->
             
             <!-- Single action button -->
             <button id="view_product_button">
