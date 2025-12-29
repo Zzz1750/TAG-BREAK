@@ -1,0 +1,1086 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Visions in Motion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aldrich&family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
+    <script is:inline src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script is:inline src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
+
+    <script is:inline>
+    /* =========================
+       MEMORY MONITORING
+    ========================= */
+    const memory = {
+      used: 0,
+      limit: 1200, // MB (safe mobile threshold)
+      warned: false
+    };
+
+    function checkMemory() {
+      if (!performance.memory) return;
+
+      memory.used = Math.round(
+        performance.memory.usedJSHeapSize / 1048576
+      );
+
+      if (memory.used > memory.limit && !memory.warned) {
+        memory.warned = true;
+        console.warn("⚠️ High memory usage:", memory.used, "MB");
+        forceCleanup();
+      }
+    }
+
+    /* =========================
+       FORCED CLEANUP
+    ========================= */
+    function forceCleanup() {
+      console.warn("🧹 Forcing cleanup...");
+
+      // Stop all A-Frame animations
+      document
+        .querySelectorAll("[animation], [animation__*]")
+        .forEach(el => {
+          Object.keys(el.components)
+            .filter(c => c.startsWith("animation"))
+            .forEach(c => el.removeAttribute(c));
+        });
+
+      document
+        .querySelectorAll(".dynamic, .temp")
+        .forEach(el => el.remove());
+
+      if (AFRAME?.THREE) {
+        AFRAME.THREE.Cache.clear();
+      }
+
+      if (window.gc) window.gc();
+    }
+
+    /* =========================
+       MONITOR LOOP
+    ========================= */
+    setInterval(checkMemory, 5000);
+
+    /* =========================
+       CAMERA SLIDER
+    ========================= */
+    document.addEventListener('DOMContentLoaded', function() {
+
+      document.getElementById('shop_button').addEventListener('click', ()=>{
+        window.location.href = '/TAG-BREAK/shop';
+      });
+
+      // Camera movement variables
+      const camRig = document.getElementById('camrig');
+      const cameraSlider = document.getElementById('camera_slider');
+      const cameraSliderBtn = document.getElementById('camera_slider_btn');
+      
+      // Camera position limits - START FROM LEFT (0 is left position)
+      const LEFT_POSITION = 0;    // Starting position (left)
+      const RIGHT_LIMIT = 8.0;    // Max right movement from left position
+      
+      // Current camera X position - start at left (0)
+      let currentCameraX = LEFT_POSITION;
+      
+      // Slider dimensions
+      let sliderWidth = 300;
+      let sliderLeft = 0;
+      
+      // Update slider dimensions
+      function updateSliderDimensions() {
+        if (cameraSlider) {
+          const rect = cameraSlider.getBoundingClientRect();
+          sliderWidth = rect.width - 10;
+          sliderLeft = rect.left + 20;
+        }
+      }
+      
+      // Initialize slider position to left (default)
+      function initializeSlider() {
+        updateSliderDimensions();
+        // Start at left position (0)
+        currentCameraX = LEFT_POSITION;
+        updateCameraPosition();
+        updateSliderButtonPosition();
+      }
+      
+      // Update camera position
+      function updateCameraPosition() {
+        if (camRig) {
+          const currentPos = camRig.getAttribute('position');
+          camRig.setAttribute('position', {
+            x: currentCameraX,
+            y: currentPos.y,
+            z: currentPos.z
+          });
+        }
+      }
+      
+      // Update slider button position based on camera X
+      function updateSliderButtonPosition() {
+        if (!cameraSliderBtn) return;
+        
+        // Convert camera X position to slider percentage
+        const percentage = currentCameraX / RIGHT_LIMIT;
+        
+        // Position button along slider track
+        const buttonPos = percentage * sliderWidth;
+        cameraSliderBtn.style.left = `${buttonPos}px`;
+      }
+      
+      // Move camera by a specific amount
+      function moveCamera(amount) {
+        const newX = currentCameraX + amount;
+        // Clamp between LEFT_POSITION (0) and RIGHT_LIMIT (2)
+        currentCameraX = Math.max(LEFT_POSITION, Math.min(RIGHT_LIMIT, newX));
+        updateCameraPosition();
+        updateSliderButtonPosition();
+      }
+      
+      // Set camera to specific position (0-100%)
+      function setCameraPosition(percentage) {
+        const clampedPercentage = Math.max(0, Math.min(1, percentage));
+        // Map percentage to position: 0% = 0 (left), 100% = 2 (right)
+        currentCameraX = clampedPercentage * RIGHT_LIMIT;
+        updateCameraPosition();
+        updateSliderButtonPosition();
+      }
+      
+      // Mouse/touch drag functionality
+      let isDragging = false;
+      
+      function startDrag(e) {
+        isDragging = true;
+        e.preventDefault();
+        document.addEventListener('mousemove', doDrag);
+        document.addEventListener('touchmove', doDrag);
+        document.addEventListener('mouseup', stopDrag);
+        document.addEventListener('touchend', stopDrag);
+      }
+      
+      function doDrag(e) {
+        if (!isDragging || !cameraSlider) return;
+        
+        updateSliderDimensions();
+        
+        // Get client X from mouse or touch
+        let clientX;
+        if (e.type.includes('touch')) {
+          clientX = e.touches[0].clientX;
+        } else {
+          clientX = e.clientX;
+        }
+        
+        // Calculate new button position
+        let newPosition = clientX - sliderLeft;
+        newPosition = Math.max(0, Math.min(sliderWidth, newPosition));
+        
+        // Update button position
+        cameraSliderBtn.style.left = `${newPosition}px`;
+        
+        // Calculate and update camera position
+        const percentage = newPosition / sliderWidth;
+        setCameraPosition(percentage);
+      }
+      
+      function stopDrag() {
+        isDragging = false;
+        document.removeEventListener('mousemove', doDrag);
+        document.removeEventListener('touchmove', doDrag);
+        document.removeEventListener('mouseup', stopDrag);
+        document.removeEventListener('touchend', stopDrag);
+      }
+      
+      // Set up event listeners
+      if (cameraSliderBtn) {
+        // Mouse events
+        cameraSliderBtn.addEventListener('mousedown', startDrag);
+        cameraSliderBtn.addEventListener('touchstart', startDrag);
+        
+        // Click on slider track to jump
+        cameraSlider.addEventListener('click', function(e) {
+          updateSliderDimensions();
+          const rect = this.getBoundingClientRect();
+          const clickX = e.clientX - rect.left;
+          const percentage = (clickX - 20) / sliderWidth;
+          setCameraPosition(percentage);
+        });
+        
+        // Touch support for slider track
+        cameraSlider.addEventListener('touchstart', function(e) {
+          updateSliderDimensions();
+          const rect = this.getBoundingClientRect();
+          const touchX = e.touches[0].clientX - rect.left;
+          const percentage = (touchX - 20) / sliderWidth;
+          setCameraPosition(percentage);
+        });
+      }
+      
+      // Initialize on load
+      window.addEventListener('load', initializeSlider);
+      window.addEventListener('resize', initializeSlider);
+      
+      // Expose for debugging
+      window.cameraControls = {
+        moveLeft: () => moveCamera(-0.5),
+        moveRight: () => moveCamera(0.5),
+        reset: () => {
+          currentCameraX = LEFT_POSITION;
+          updateCameraPosition();
+          updateSliderButtonPosition();
+        },
+        getPosition: () => currentCameraX
+      };
+    });
+
+    /* =========================
+       FORCE REMOVE VR BUTTON
+    ========================= */
+    document.addEventListener('DOMContentLoaded', function() {
+      // Remove immediately
+      removeVRButton();
+      
+      // Remove again after scene loads
+      document.querySelector('a-scene').addEventListener('loaded', function() {
+        setTimeout(removeVRButton, 100);
+        setTimeout(removeVRButton, 500);
+      });
+      
+      // Keep checking to ensure it stays removed
+      setInterval(removeVRButton, 1000);
+    });
+
+    function removeVRButton() {
+      // Remove VR button elements
+      const vrElements = document.querySelectorAll(
+        '.a-enter-vr, .a-enter-vr-button, .a-enter-ar-button, .vr-mode-ui, [data-awe-vr-mode-ui]'
+      );
+      vrElements.forEach(el => {
+        el.style.display = 'none';
+        el.style.visibility = 'hidden';
+        el.style.opacity = '0';
+        el.style.pointerEvents = 'none';
+        if (el.parentNode) el.parentNode.removeChild(el);
+      });
+      
+      // Remove AR button if present
+      const arButton = document.querySelector('[ar-button]');
+      if (arButton) arButton.remove();
+    }
+
+
+    document.addEventListener('DOMContentLoaded', function(){
+
+      var scarf_main_name = document.getElementById('scarf_main_name');
+      var sidebar_image = document.getElementById('sidebar_image');
+
+      document.getElementById('scarf1_plane').addEventListener('click', ()=>{
+        change_sidebar('High Stakes', '/TAG-BREAK/TAG-BREAK/scarf/Visions_in_Motions/High_Stakes.webp')
+      })
+
+      document.getElementById('scarf2_plane').addEventListener('click', ()=>{
+        change_sidebar('Blue Reverie', '/TAG-BREAK/TAG-BREAK/scarf/Visions_in_Motions/Blue_Reverie.webp')
+      })
+
+      document.getElementById('scarf3_plane').addEventListener('click', ()=>{
+        change_sidebar('Future Gaze', '/TAG-BREAK/TAG-BREAK/scarf/Visions_in_Motions/Future_Gaze.webp')
+      })
+
+      document.getElementById('scarf4_plane').addEventListener('click', ()=>{
+        change_sidebar('Thanos Veil','/TAG-BREAK/TAG-BREAK/scarf/Visions_in_Motions/Thanos_Veil.webp')
+      })
+
+      document.getElementById('scarf5_plane').addEventListener('click', ()=>{
+        change_sidebar('Ignite WIthin', '/TAG-BREAK/TAG-BREAK/scarf/Visions_in_Motions/Ignite_Within.webp')
+      })
+
+      function change_sidebar(new_name, new_img_loc){
+
+        
+
+        scarf_main_name.innerHTML=new_name;
+        sidebar_image.setAttribute('src', new_img_loc)
+      }
+      
+    });
+
+
+
+    </script>
+    
+    <style>
+    /* Remove all focus outlines globally */
+    *:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+    
+    /* REMOVE VR BUTTON COMPLETELY */
+    .a-enter-vr, 
+    .a-enter-vr-button, 
+    .a-enter-ar-button,
+    .vr-mode-ui,
+    [data-awe-vr-mode-ui] {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+
+    /* Remove any AR/VR related elements */
+    .a-enter-vr-modal {
+        display: none !important;
+    }
+
+    /* Remove the VR button container */
+    .a-orientation-modal {
+        display: none !important;
+    }
+    
+    /* Specifically target interactive elements */
+    .common_arrow:focus {
+        outline: none !important;
+        border-color: rgba(0, 0, 0, 0.6) !important;
+        background-color: transparent !important;
+        box-shadow: none !important;
+    }
+
+    /* Remove tap highlight on mobile */
+    button, img[class*="common"] {
+        -webkit-tap-highlight-color: transparent !important;
+        -webkit-focus-ring-color: transparent !important;
+    }
+
+    /* Remove blue highlight on image click */
+    img {
+        -webkit-user-select: none;
+        -webkit-user-drag: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Remove selection highlight */
+    *::selection {
+        background-color: transparent;
+    }
+
+    *::-moz-selection {
+        background-color: transparent;
+    }
+
+    /* For the entire document */
+    html, body {
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    /* Remove any active state styling from A-Frame */
+    a-entity:focus,
+    a-camera:focus,
+    a-scene:focus {
+        outline: none !important;
+    }
+
+  #theme_container {
+    z-index: 100;
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    pointer-events: none;
+  }
+
+  #theme_head, #theme_name {
+    margin: 0;
+    padding: 0;
+    font-family: 'Aldrich', sans-serif;
+    color: rgb(0, 0, 0);
+    pointer-events: none;
+    font-weight: 200;
+  }
+
+  #theme_head {
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+    position: relative; 
+  }
+
+  #theme_head::after {
+    content: '';
+    position: absolute;
+    left: 0px;
+    bottom: -7px; 
+    width: 48px; 
+    height: 1.5px; 
+    background-color: rgba(0, 0, 0, 0.7); 
+  }
+
+  #theme_name {
+    font-size: 1.2rem;
+    margin-top: 15px; 
+  }
+
+  #shop_button{
+    color: rgba(0, 0, 0, 0.6);
+    z-index: 100;
+    position: absolute;
+    top: 3%;
+    right: 3%;
+    transform: translate(-50%, -50%);
+    font-size: 1rem;
+    font-family: 'aldrich';
+    font-weight: 400;
+    cursor: pointer;
+  }
+  #shop_button::after {
+    content: '';
+    position: absolute;
+    left: 0px;
+    bottom: -3px; 
+    width: 42px; 
+    height: 1px; 
+    background-color: rgba(0, 0, 0, 0.7); 
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    #theme_container {
+      top: 25px;
+      left: 25px;
+    }
+    
+    #theme_head {
+      font-size: 0.9rem;
+    }
+    
+    #theme_head::after {
+      width: 45px;
+      bottom: -5px;
+    }
+    
+    #theme_name {
+      font-size: 1.2rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    #theme_container {
+      top: 20px;
+      left: 20px;
+    }
+    
+    #theme_head {
+      font-size: 0.8rem;
+    }
+    
+    #theme_head::after {
+      width: 40px;
+      height: 0.8px;
+      bottom: -4px;
+    }
+    
+    #theme_name {
+      font-size: 1rem;
+    }
+  }
+
+    /* =========================
+       CAMERA SLIDER STYLES
+    ========================= */
+    #camera_slider_container {
+      z-index: 100;
+      position: absolute;
+      bottom: 120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 400px;
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    /* Arrow styles */
+    .slider-arrow {
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: opacity 0.2s ease;
+      user-select: none;
+    }
+
+    .slider-arrow:hover {
+      opacity: 0.8;
+    }
+
+    .slider-arrow img {
+      width: 100%;
+      object-fit: contain;
+    }
+
+    #left_arrow {
+      transform: rotate(180deg);
+    }
+
+    #slider_wrapper {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      max-width: 300px;
+    }
+
+    #camera_slider {
+      z-index: 100;
+      position: relative;
+      width: 100%;
+      height: 0px;
+      background: rgba(255, 255, 255, 0);
+      border-radius: 5px;
+      border: 1px solid rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      overflow: visible;
+      flex: 1;
+    }
+
+    #camera_slider_btn {
+      z-index: 100;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translate(-50%, -50%);
+      width: 20px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0);
+      border: 2px solid rgba(0, 0, 0, 1);
+      border-radius: 50%;
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+    }
+
+    #camera_slider_btn:active {
+      cursor: grabbing;
+    }
+
+    #camera_slider_label {
+      z-index: 100;
+      position: absolute;
+      bottom: -35px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(0, 0, 0, 0.8);
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      font-weight: bold;
+      text-align: center;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    /* Slider track indicators */
+    #camera_slider::before,
+    #camera_slider::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 2px;
+      height: 15px;
+      background: rgba(0, 0, 0, 0);
+      transform: translateY(-50%);
+      border-radius: 2px;
+    }
+
+    #camera_slider::before {
+      left: 10px;
+    }
+
+    #camera_slider::after {
+      right: 10px;
+    }
+
+    /* =========================
+       RESPONSIVE STYLES
+    ========================= */
+    @media (max-width: 768px) {
+    
+      #camera_slider_container {
+        bottom: 60px;
+        max-width: 320px; 
+        gap: 15px;
+      }
+      
+      #slider_wrapper {
+        max-width: 220px;
+      }
+      
+      #camera_slider_btn {
+        width: 20px;
+        height: 20px;
+      }
+
+      .slider-arrow {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #camera_slider_container {
+        bottom: 80px;
+        max-width: 280px;
+        gap: 10px;
+      }
+      
+      #slider_wrapper {
+        max-width: 180px;
+      }
+      
+      #camera_slider_btn {
+        width: 15px;
+        height: 15px;
+      }
+
+      .slider-arrow {
+        width: 18px;
+        height: 18px;
+      }
+    }
+
+    /* =========================
+   SIDEBAR CLEAN REDESIGN
+========================= */
+#sidebar_container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 400px;
+    height: 100vh;
+    background: #ffffff;
+    z-index: 101;
+    font-family: 'Aldrich', sans-serif;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: -2px 0 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+/* Close button */
+#sidebar_close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 102;
+    padding: 0;
+}
+
+#sidebar_close::before,
+#sidebar_close::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 2px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 1px;
+}
+
+#sidebar_close::before {
+    transform: rotate(45deg);
+}
+
+#sidebar_close::after {
+    transform: rotate(-45deg);
+}
+
+#sidebar_close:hover::before,
+#sidebar_close:hover::after {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+/* Sidebar content - NO SCROLL */
+#sidebar_content {
+    padding: 40px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Image section */
+#sidebar_image_wrapper {
+    width: 100%;
+    position: relative;
+    margin-bottom: 35px;
+
+    border-radius: 0;
+    overflow: visible;
+    border: none;
+}
+
+#sidebar_image {
+    width: 100%;
+    height: auto;          
+    object-fit: contain;  
+    display: block;
+}
+
+/* Text content */
+#sidebar_text_container {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Product name */
+#scarf_main_name {
+    font-size: 2rem;
+    margin: 0 0 8px 0;
+    line-height: 1.1;
+    color: #000000;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+}
+
+/* Theme name */
+#scarf_theme_name {
+    font-size: 1rem;
+    color: rgba(0, 0, 0, 0.65);
+    margin: 0 0 25px 0;
+    font-style: italic;
+    font-weight: normal;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 8px;
+}
+
+#scarf_theme_name::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 35px;
+    height: 1.5px;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+/* Product info - simple layout */
+.product-info {
+    margin: 25px 0 30px 0;
+    padding: 0;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-size: 0.85rem;
+    color: rgba(0, 0, 0, 0.55);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-value {
+    font-size: 1rem;
+    color: #000000;
+    font-weight: 500;
+}
+
+.info-value.price {
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+/* Description */
+#scarf_description {
+    line-height: 1.6;
+    color: rgba(0, 0, 0, 0.8);
+    font-size: 0.95rem;
+    margin: 0 0 35px 0;
+    padding: 0;
+    flex: 1;
+}
+
+/* Single action button */
+#view_product_button {
+    width: 100%;
+    padding: 16px;
+    background: transparent;
+    border: 2px solid #000000;
+    font-family: 'Aldrich', sans-serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+    color: #000000;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.2s ease;
+    margin-top: auto;
+}
+
+#view_product_button:hover {
+    background: #000000;
+    color: #ffffff;
+}
+
+#view_product_button:active {
+    transform: translateY(1px);
+}
+
+#view_product_button svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    #sidebar_container {
+        width: 100%;
+        height: auto;
+        max-height: 90vh;
+        bottom: 0;
+        top: auto;
+        border-left: none;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    #sidebar_close {
+        top: 20px;
+        right: 20px;
+        width: 28px;
+        height: 28px;
+    }
+    
+    #sidebar_content {
+        padding: 30px 25px;
+        max-height: 80vh;
+    }
+    
+    #sidebar_image {
+        height: 200px;
+    }
+    
+    #scarf_main_name {
+        font-size: 1.8rem;
+    }
+    
+    .info-row {
+        padding: 10px 0;
+    }
+    
+    #view_product_button {
+        padding: 14px;
+        font-size: 0.85rem;
+    }
+}
+
+/* Tablet responsive */
+@media (max-width: 1024px) and (min-width: 769px) {
+    #sidebar_container {
+        width: 380px;
+    }
+    
+    #sidebar_content {
+        padding: 35px 30px;
+    }
+}
+
+    </style>
+</head>
+<body>
+  <div id="sidebar_container">
+    <!-- Close button -->
+    <button id="sidebar_close" aria-label="Close sidebar"></button>
+    
+    <div id="sidebar_content">
+        <!-- Image section -->
+        <div id="sidebar_image_wrapper">
+            <img src="/TAG-BREAK/TAG-BREAK/scarf/Visions_in_Motions/High_Stakes.webp" 
+                 id="sidebar_image" 
+                 alt="High Stakes Scarf">
+        </div>
+
+        <!-- Text content -->
+        <div id="sidebar_text_container">
+            <h1 id="scarf_main_name">High Stakes</h1>
+            <p id="scarf_theme_name"><i>Visions in Motion</i></p>
+            
+            <!-- Product info -->
+            <div class="product-info">
+                <div class="info-row">
+                    <span class="info-label">Size</span>
+                    <span class="info-value">48cm × 48cm</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Material</span>
+                    <span class="info-value">Silk Blend</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Price</span>
+                    <span class="info-value price">₹1,000</span>
+                </div>
+            </div>
+            
+            <!-- Description
+            <p id="scarf_description">
+                The "High Stakes" scarf brings the thrill of the poker table to wearable art. 
+                Its centerpiece design features a bold illustration of players seated around a 
+                card game, rendered in sharp black, white, and muted green tones.
+            </p> -->
+            
+            <!-- Single action button -->
+            <button id="view_product_button">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                View Product
+            </button>
+        </div>
+    </div>
+</div>
+    <div id="theme_container">
+      <h1 id="theme_head">THEME</h1>
+      <h1 id="theme_name">Visions in Motion</h1>
+    </div>
+    <h1 id="shop_button">Shop</h1>
+
+    <!-- Camera Slider with Arrows -->
+    <div id="camera_slider_container">
+      <!-- Left Arrow -->
+      <div id="left_arrow" class="slider-arrow">
+        <img src="/TAG-BREAK/images/icon/arrow2.png" alt="Left Arrow">
+      </div>
+      
+      <!-- Slider Wrapper -->
+      <div id="slider_wrapper">
+        <div id="camera_slider">
+          <div id="camera_slider_btn"></div>
+          <div id="camera_slider_label">Drag to move left/right</div>
+        </div>
+      </div>
+      
+      <!-- Right Arrow -->
+      <div id="right_arrow" class="slider-arrow">
+        <img src="/TAG-BREAK/images/icon/arrow2.png" alt="Right Arrow">
+      </div>
+    </div>
+
+    <a-scene background="color: #d6d6d6" vr-mode-ui="enabled: false">
+        <a-entity light="type: ambient; intensity: 0.55"></a-entity>
+        <a-entity a-entity light="intensity: 1.3" position="-2 7.30212 2.52619"></a-entity>
+        <a-entity light="intensity: 0.9" position="0 7.60557 -1.05818"></a-entity>
+        <a-entity light="type: spot; intensity: 0.4; angle: 80; distance: 0" position="-1.31538 7.79688 3.76431" rotation="-26.317670403744103 0 0"></a-entity>
+      
+        <a-entity id="camrig">
+            <a-camera  
+                position="0 3.2 3" rotation="10 0 0"
+                look-controls="enabled: false"
+                wasd-controls="enabled: false"
+                fov="70">
+          </a-camera>
+        </a-entity>
+      
+         <a-entity
+          cursor="rayOrigin: mouse"
+          raycaster="objects: .clickable">
+        </a-entity>
+
+        <!-- Assets -->
+        <a-assets>
+            <a-asset-item id="scarf1" src="/TAG-BREAK/3D-models/VIM/Ignite_Within.glb"></a-asset-item>
+            <a-asset-item id="scarf2" src="/TAG-BREAK/3D-models/VIM/future_gaze.glb"></a-asset-item>
+            <a-asset-item id="scarf3" src="/TAG-BREAK/3D-models/VIM/Blue_Reverie.glb"></a-asset-item>
+            <a-asset-item id="scarf4" src="/TAG-BREAK/3D-models/VIM/High_Stakes_.glb"></a-asset-item>
+            <a-asset-item id="scarf5" src="/TAG-BREAK/3D-models/VIM/Thanos_Veil.glb"></a-asset-item>
+        </a-assets>
+
+        <a-entity id="scarf_main_rig" position="0 1 -6" auto-rotate> 
+            
+            <!-- SCARF 1  -->
+            <a-entity id="scarf1_container" position="6.6 -0.5 4.3">
+                <a-entity id="scarf1" gltf-model="#scarf5" rotation="10 -5 -7" position="0 3 0" scale="1.5 1.5 1.5" animation-mixer="clip: *; loop: repeat; timeScale: 0.8">
+                    <a-image src="/TAG-BREAK//3D-models/shadow.png" position="0 -1.71397 -0.05" width="2.3" height="1" material="transparent: true; opacity: 0.4" geometry="" rotation="90 0 0"></a-image>    
+                </a-entity>
+            </a-entity>
+
+            <!-- SCARF 2  -->
+            <a-entity id="scarf2_container" position="4 0.2 8.5">
+                <a-entity position="0 0 -4">
+                    <a-entity id="scarf2" gltf-model="#scarf2" position="0 3 0" scale="1.5 1.5 1.5" animation-mixer="clip: *; loop: repeat; timeScale: 0.8" rotation="10 0 -10">
+                    </a-entity>
+                </a-entity>
+            </a-entity>
+
+            <!-- SCARF 3 -->
+            <a-entity id="scarf3_container" position="9 0 8.2">
+                <a-entity position="0 0 -4">
+                    <a-entity id="scarf3" gltf-model="#scarf1" position="0 3 0" scale="1.5 1.5 1.5" animation-mixer="clip: *; loop: repeat; timeScale: 0.2" rotation="10 0 10">
+                        <a-image src="/TAG-BREAK//3D-models/shadow.png" position="0 -1.71397 -0.05" width="2.3" height="1" material="transparent: true; opacity: 0.4" geometry="" rotation="90 0 0"></a-image>    
+                    </a-entity>
+                </a-entity>
+            </a-entity>
+
+            <!-- SCARF 4  -->
+            <a-entity id="scarf4_container" position="1.5 0 8">
+                <a-entity position="0 0 -4">
+                    <a-entity id="scarf4" gltf-model="#scarf3" position="0 3 0" scale="1.5 1.5 1.5" animation-mixer="clip: *; loop: repeat; timeScale: 0.8" rotation="10 0 10">
+                    <a-image src="/TAG-BREAK//3D-models/shadow.png" position="0.04428 -1.46287 -0.09496" width="2.3" height="1" material="opacity: 0.4" geometry="" rotation="74.94402551870193 -45.604002745642745 -64.64625506681566"></a-image>                    </a-entity>
+                </a-entity>
+            </a-entity>
+
+            <!-- SCARF 5 - Left Back (-144° or 216°) -->
+            <a-entity id="scarf5_container" position="-1 0.5 7.9">
+                <a-entity position="0 0 -4">
+                    <a-entity id="scarf5" gltf-model="#scarf4" position="0 3 0" scale="1.5 1.5 1.5" animation-mixer="clip: *; loop: repeat; timeScale: 0.8" rotation="10 10 0">
+                        <a-image src="/TAG-BREAK//3D-models/shadow.png" position="0 -1.71397 -0.05" width="2.3" height="1" material="transparent: true; opacity: 0.4" geometry="" rotation="90 0 0"></a-image>    
+                    </a-entity>
+                </a-entity>
+            </a-entity>
+        </a-entity>
+
+        <!-- Clickable planes for scarves -->
+        <a-plane id="scarf1_plane" class="clickable" color="white" material="transparent: true; opacity: 0.8" geometry="" position="-0.94566 4.5552 -1.9065" rotation="5.140004380118615 8.120530830389157 0.7247916108404914" scale="3 3 1"></a-plane>
+        <a-plane id="scarf2_plane" class="clickable" color="white" material="transparent: true; opacity: 0.8" geometry="" position="1.508 4.027 -1.764" rotation="6.0200000000000005 -2.409 10" scale="3 3 1"></a-plane>
+        <a-plane id="scarf3_plane" class="clickable" color="white" material="transparent: true; opacity: 0.8" geometry="" position="4.01598 4.21473 -1.28804" rotation="6.0200000000000005 1.2 -10" scale="3 3 1"></a-plane>      
+        <a-plane id="scarf4_plane" class="clickable" color="white" material="transparent: true; opacity: 0.8" geometry="" position="6.61391 3.54129 -1.5693" rotation="6.0200000000000005 -3.94 -5" scale="3 3 1"></a-plane>
+        <a-plane id="scarf5_plane" class="clickable" color="white" material="transparent: true; opacity: 0.8" geometry="" position="8.945 4.085 -1.70403" rotation="8.86 -3.94 10" scale="3 3 1"></a-plane>
+    </a-scene>
+</body>
+</html>
