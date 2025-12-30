@@ -1,3 +1,8 @@
+---
+import Loader from '../components/loading.astro'
+---
+
+
 <script is:inline src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
 <script is:inline src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
 
@@ -426,6 +431,192 @@ async function call_set3() {
     forceCleanup();
   });
 
+  document.addEventListener('DOMContentLoaded', function(){
+    const img1 = document.getElementById('loading_asset1');
+    const img2 = document.getElementById('loading_asset2');
+    
+    let showFirst = true;
+
+    setInterval(() => {
+      if (showFirst) {
+        img1.style.display = "none";
+        img2.style.display = "block";
+      } else {
+        img1.style.display = "block";
+        img2.style.display = "none";
+      }
+      showFirst = !showFirst;
+    }, 1000);
+    });
+
+
+
+    // Wait for A-Frame scene and all components to load
+function waitForAFrame() {
+  return new Promise((resolve) => {
+    const scene = document.querySelector('a-scene');
+    
+    if (!scene) {
+      console.error('A-Frame scene not found');
+      resolve();
+      return;
+    }
+
+    // Check if scene has loaded
+    if (scene.hasLoaded) {
+      console.log('A-Frame scene already loaded');
+      resolve();
+      return;
+    }
+
+    // Wait for scene to load
+    scene.addEventListener('loaded', () => {
+      console.log('A-Frame scene loaded');
+      
+      // Additional check for GLTF models
+      checkModelsLoaded().then(resolve);
+    });
+
+    // Fallback timeout
+    setTimeout(() => {
+      console.warn('A-Frame loading timeout - proceeding anyway');
+      resolve();
+    }, 10000); // 10 second timeout
+  });
+}
+
+// Check if all GLTF models are loaded
+function checkModelsLoaded() {
+  return new Promise((resolve) => {
+    const models = document.querySelectorAll('[gltf-model]');
+    let loadedCount = 0;
+    
+    if (models.length === 0) {
+      resolve();
+      return;
+    }
+
+    models.forEach(model => {
+      model.addEventListener('model-loaded', () => {
+        loadedCount++;
+        console.log(`Model loaded: ${model.getAttribute('gltf-model')} (${loadedCount}/${models.length})`);
+        
+        if (loadedCount === models.length) {
+          console.log('All models loaded');
+          resolve();
+        }
+      });
+    });
+
+    // Fallback - check for model readiness
+    const checkInterval = setInterval(() => {
+      const allReady = Array.from(models).every(model => {
+        const mesh = model.getObject3D('mesh');
+        return mesh && mesh.children.length > 0;
+      });
+      
+      if (allReady) {
+        clearInterval(checkInterval);
+        console.log('All models ready via fallback check');
+        resolve();
+      }
+    }, 500);
+
+    // Fallback timeout
+    setTimeout(() => {
+      clearInterval(checkInterval);
+      console.warn('Model loading timeout - proceeding anyway');
+      resolve();
+    }, 8000);
+  });
+}
+
+// Check for A-Frame extras and other components
+function checkComponents() {
+  return new Promise((resolve) => {
+    // Check if A-Frame is loaded
+    if (typeof AFRAME === 'undefined') {
+      console.error('A-Frame not loaded');
+      resolve();
+      return;
+    }
+
+    // Check for required components
+    const requiredComponents = [
+      'animation-mixer',  // From A-Frame extras
+      'auto-rotate'       // Custom component
+    ];
+
+    let missingComponents = [];
+    
+    requiredComponents.forEach(componentName => {
+      if (!AFRAME.components[componentName]) {
+        missingComponents.push(componentName);
+      }
+    });
+
+    if (missingComponents.length > 0) {
+      console.warn(`Missing components: ${missingComponents.join(', ')}`);
+    } else {
+      console.log('All required components loaded');
+    }
+
+    resolve();
+  });
+}
+
+// Main initialization
+async function initializeApp() {
+  console.log('Starting app initialization...');
+  
+  // Wait for DOM to be ready
+  if (document.readyState === 'loading') {
+    await new Promise(resolve => {
+      document.addEventListener('DOMContentLoaded', resolve);
+    });
+  }
+  
+  // Wait for A-Frame and components
+  await waitForAFrame();
+  await checkComponents();
+  
+  // Ensure everything is working
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  
+  // Remove loading screen with fade animation
+  const loadingScreen = document.getElementById('loading_screen');
+  if (loadingScreen) {
+    loadingScreen.style.transition = 'opacity 800ms ease';
+    loadingScreen.style.opacity = '0';
+    
+    setTimeout(() => {
+      loadingScreen.style.display = 'none';
+      console.log('Loading screen removed');
+      
+      // Show the A-Frame scene
+      const scene = document.querySelector('a-scene');
+      if (scene) {
+        scene.style.display = 'block';
+      }
+      
+      // Now initialize your existing gallery code
+      if (typeof initGallery !== 'undefined') {
+        // Your existing initialization will happen from DOMContentLoaded
+        console.log('App fully initialized');
+      }
+    }, 800);
+  } else {
+    console.log('Loading screen not found, proceeding anyway');
+  }
+}
+
+// Start initialization when everything is ready
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+  initializeApp();
+} else {
+  window.addEventListener('load', initializeApp);
+}
+
 </script>
 <style>
   /* Remove all focus outlines globally */
@@ -718,9 +909,37 @@ a-scene:focus {
       font-size: 0.7rem;
     }
   }
+
+  #loading_screen {
+    background-color: #1e4941;
+    position: fixed;
+    inset: 0; 
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+  }
+  #loading_asset1{
+    position: absolute;
+    width: 50px;
+    top: 43%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+  #loading_asset2{
+    position: absolute;
+    top: 43%;
+    left: 50%;
+    width: 300px;
+    transform: translate(-50%, -50%);
+    display: none;
+  }
 </style>
 
 <body>
+  <div id="loading_screen">
+    <img src="/TAG-BREAK//images/logo3.png" id="loading_asset1" alt="">
+    <img src="/TAG-BREAK//images/pink_logo.webp" id="loading_asset2" alt="">
+  </div>
   <div id="set2">
     <div id="shifter_div"></div>
     <div id="set2_first_liner">
@@ -737,7 +956,7 @@ a-scene:focus {
     <button id="set3_button">See Theme</button>
   </div>
 
-  <a-scene background="color: #d6d6d6">
+  <a-scene background="color: #d6d6d6" display="none">
     <a-entity light="type: ambient; intensity: 0.55"></a-entity>
     <a-entity a-entity light="intensity: 1.3" position="2 7.30212 2.52619"></a-entity>
     <a-entity light="intensity: 0.9" position="0 7.60557 -1.05818"></a-entity>
