@@ -451,8 +451,8 @@ async function call_set3() {
 
 
 
-    // Wait for A-Frame scene and all components to load
-function waitForAFrame() {
+    // Wait for A-Frame to be fully ready (scene, assets, renderer)
+function waitForAFrameComplete() {
   return new Promise((resolve) => {
     const scene = document.querySelector('a-scene');
     
@@ -462,132 +462,207 @@ function waitForAFrame() {
       return;
     }
 
-    // Check if scene has loaded
-    if (scene.hasLoaded) {
-      console.log('A-Frame scene already loaded');
-      resolve();
-      return;
-    }
+    // Array to track all promises
+    const promises = [];
 
-    // Wait for scene to load
-    scene.addEventListener('loaded', () => {
-      console.log('A-Frame scene loaded');
-      
-      // Additional check for GLTF models
-      checkModelsLoaded().then(resolve);
-    });
+    // 1. Wait for scene to initialize
+    promises.push(new Promise(resolveScene => {
+      if (scene.hasLoaded) {
+        resolveScene();
+        return;
+      }
+      scene.addEventListener('loaded', resolveScene);
+    }));
 
-    // Fallback timeout
-    setTimeout(() => {
-      console.warn('A-Frame loading timeout - proceeding anyway');
-      resolve();
-    }, 10000); // 10 second timeout
-  });
-}
-
-// Check if all GLTF models are loaded
-function checkModelsLoaded() {
-  return new Promise((resolve) => {
-    const models = document.querySelectorAll('[gltf-model]');
-    let loadedCount = 0;
-    
-    if (models.length === 0) {
-      resolve();
-      return;
-    }
-
-    models.forEach(model => {
-      model.addEventListener('model-loaded', () => {
-        loadedCount++;
-        console.log(`Model loaded: ${model.getAttribute('gltf-model')} (${loadedCount}/${models.length})`);
-        
-        if (loadedCount === models.length) {
-          console.log('All models loaded');
-          resolve();
+    // 2. Wait for renderer to be ready
+    promises.push(new Promise(resolveRenderer => {
+      const checkRenderer = () => {
+        if (scene.renderer && scene.renderer.getContext()) {
+          console.log('WebGL renderer ready');
+          resolveRenderer();
+        } else {
+          setTimeout(checkRenderer, 100);
         }
-      });
-    });
+      };
+      checkRenderer();
+    }));
 
-    // Fallback - check for model readiness
-    const checkInterval = setInterval(() => {
-      const allReady = Array.from(models).every(model => {
-        const mesh = model.getObject3D('mesh');
-        return mesh && mesh.children.length > 0;
-      });
-      
-      if (allReady) {
-        clearInterval(checkInterval);
-        console.log('All models ready via fallback check');
-        resolve();
+    // 3. Wait for all assets to load
+    promises.push(new Promise(resolveAssets => {
+      const assets = scene.querySelector('a-assets');
+      if (!assets) {
+        resolveAssets();
+        return;
       }
-    }, 500);
 
-    // Fallback timeout
+      assets.addEventListener('loaded', resolveAssets);
+      
+      // Also check if already loaded
+      if (assets.hasAttribute('timeout') || assets.children.length === 0) {
+        resolveAssets();
+      }
+    }));
+
+    // 4. Wait for all GLTF models
+    promises.push(new Promise(resolveModels => {
+      const models = document.querySelectorAll('[gltf-model]');
+      let modelsToLoad = models.length;
+      
+      if (modelsToLoad === 0) {
+        resolveModels();
+        return;
+      }
+
+      console.log(`Waiting for ${modelsToLoad} models to load...`);
+      
+      models.forEach(model => {
+        model.addEventListener('model-loaded', () => {
+          modelsToLoad--;
+          console.log(`Model loaded, ${modelsToLoad} remaining`);
+          
+          if (modelsToLoad === 0) {
+            console.log('All models loaded');
+            resolveModels();
+          }
+        });
+        
+        // Fallback: Check mesh directly
+        const checkModel = setInterval(() => {
+          const mesh = model.getObject3D('mesh');
+          if (mesh && mesh.children.length > 0) {
+            modelsToLoad--;
+            clearInterval(checkModel);
+            
+            if (modelsToLoad === 0) {
+              console.log('All models ready via direct check');
+              resolveModels();
+            }
+          }
+        }, 500);
+      });
+    }));
+
+    // 5. Wait for animation mixer and other components
+    promises.push(new Promise(resolveComponents => {
+      if (typeof AFRAME === 'undefined') {
+        resolveComponents();
+        return;
+      }
+
+      // Check for animation-mixer component
+      const checkComponents = setInterval(() => {
+        const modelsWithAnim = document.querySelectorAll('[animation-mixer]');
+        let allAnimationsReady = true;
+        
+        if (modelsWithAnim.length === 0) {
+          clearInterval(checkComponents);
+          resolveComponents();
+          return;
+        }
+
+        modelsWithAnim.forEach(model => {
+          const mixer = model.components['animation-mixer'];
+          if (!mixer || !mixer.mixer) {
+            allAnimationsReady = false;
+          }
+        });
+
+        if (allAnimationsReady) {
+          clearInterval(checkComponents);
+          console.log('All animation components ready');
+          resolveComponents();
+        }
+      }, 200);
+    }));
+
+    // Wait for ALL promises
+    Promise.all(promises)
+      .then(() => {
+        console.log('A-Frame completely ready');
+        resolve();
+      })
+      .catch(error => {
+        console.warn('Error in A-Frame loading:', error);
+        resolve(); // Resolve anyway to prevent blocking
+      });
+
+    // Absolute timeout
     setTimeout(() => {
-      clearInterval(checkInterval);
-      console.warn('Model loading timeout - proceeding anyway');
+      console.warn('A-Frame loading timeout - forcing proceed');
       resolve();
-    }, 8000);
+    }, 15000); // 15 second maximum
   });
 }
 
-// Check for A-Frame extras and other components
-function checkComponents() {
-  return new Promise((resolve) => {
-    // Check if A-Frame is loaded
-    if (typeof AFRAME === 'undefined') {
-      console.error('A-Frame not loaded');
-      resolve();
-      return;
-    }
-
-    // Check for required components
-    const requiredComponents = [
-      'animation-mixer',  // From A-Frame extras
-      'auto-rotate'       // Custom component
-    ];
-
-    let missingComponents = [];
-    
-    requiredComponents.forEach(componentName => {
-      if (!AFRAME.components[componentName]) {
-        missingComponents.push(componentName);
+// Hide A-Frame's built-in loader immediately
+function hideAFrameLoader() {
+  // Try multiple ways to hide A-Frame's loader
+  const selectors = [
+    '.a-loader',
+    '.a-canvas',
+    'canvas[data-aframe-canvas]',
+    'canvas'
+  ];
+  
+  selectors.forEach(selector => {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach(el => {
+      if (el.classList && el.classList.contains('a-loader')) {
+        el.style.display = 'none';
+        el.style.visibility = 'hidden';
       }
     });
-
-    if (missingComponents.length > 0) {
-      console.warn(`Missing components: ${missingComponents.join(', ')}`);
-    } else {
-      console.log('All required components loaded');
-    }
-
-    resolve();
   });
+  
+  // Also try to access scene's loader
+  const scene = document.querySelector('a-scene');
+  if (scene && scene.loader) {
+    scene.loader.style.display = 'none';
+  }
 }
 
 // Main initialization
 async function initializeApp() {
   console.log('Starting app initialization...');
   
-  // Wait for DOM to be ready
-  if (document.readyState === 'loading') {
-    await new Promise(resolve => {
-      document.addEventListener('DOMContentLoaded', resolve);
-    });
-  }
+  // Stop the loading animation immediately
+  const loadingInterval = window.setInterval(() => {
+    // Stop the logo switching animation
+    const img1 = document.getElementById('loading_asset1');
+    const img2 = document.getElementById('loading_asset2');
+    
+    if (img1) img1.style.display = "block";
+    if (img2) img2.style.display = "none";
+  }, 1000);
   
-  // Wait for A-Frame and components
-  await waitForAFrame();
-  await checkComponents();
+  // Clear the interval immediately
+  clearInterval(loadingInterval);
   
-  // Ensure everything is working
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  // Hide A-Frame's loader immediately
+  hideAFrameLoader();
   
-  // Remove loading screen with fade animation
+  // Wait for A-Frame to be completely ready
+  await waitForAFrameComplete();
+  
+  // Ensure WebGL context is ready
+  await new Promise(resolve => {
+    const scene = document.querySelector('a-scene');
+    if (scene && scene.renderer && scene.renderer.getContext()) {
+      console.log('WebGL context confirmed');
+      resolve();
+    } else {
+      setTimeout(resolve, 500);
+    }
+  });
+  
+  // Remove loading screen with smooth fade
   const loadingScreen = document.getElementById('loading_screen');
   if (loadingScreen) {
-    loadingScreen.style.transition = 'opacity 800ms ease';
+    console.log('Removing loading screen...');
+    
+    loadingScreen.style.transition = 'opacity 1000ms ease, visibility 1000ms ease';
     loadingScreen.style.opacity = '0';
+    loadingScreen.style.visibility = 'hidden';
     
     setTimeout(() => {
       loadingScreen.style.display = 'none';
@@ -597,21 +672,26 @@ async function initializeApp() {
       const scene = document.querySelector('a-scene');
       if (scene) {
         scene.style.display = 'block';
+        scene.style.visibility = 'visible';
+        scene.style.opacity = '1';
       }
       
-      // Now initialize your existing gallery code
-      if (typeof initGallery !== 'undefined') {
-        // Your existing initialization will happen from DOMContentLoaded
-        console.log('App fully initialized');
+      // Force a render to ensure everything displays
+      if (scene && scene.render) {
+        setTimeout(() => {
+          scene.render();
+        }, 100);
       }
-    }, 800);
-  } else {
-    console.log('Loading screen not found, proceeding anyway');
+      
+      // Start your app
+      console.log('App ready - all assets loaded');
+      
+    }, 1000);
   }
 }
 
-// Start initialization when everything is ready
-if (document.readyState === 'complete' || document.readyState === 'interactive') {
+// Start when everything is ready
+if (document.readyState === 'complete') {
   initializeApp();
 } else {
   window.addEventListener('load', initializeApp);
