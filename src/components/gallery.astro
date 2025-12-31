@@ -903,7 +903,7 @@ a-scene:focus {
     cursor: pointer;
     font-size: 0.8rem;
     transition: all 300ms ease;
-    font-family: 'abel';
+    font-family: 'aldrich';
     pointer-events: auto;
   }
   
@@ -1014,6 +1014,19 @@ a-scene:focus {
     transform: translate(-50%, -50%);
     display: none;
   }
+  #vignette {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 50;
+
+    background: radial-gradient(
+      ellipse at center,
+      rgba(0,0,0,0) 55%,
+      rgba(0,0,0,0.2) 100%
+    );
+  }
+
 </style>
 
 <body>
@@ -1036,6 +1049,7 @@ a-scene:focus {
     <h2 id="set3_theme"></h2>
     <button id="set3_button">See Theme</button>
   </div>
+  <div id="vignette"></div>
 
   <a-scene background="color: #d6d6d6" display="none">
     <a-entity light="type: ambient; intensity: 0.55"></a-entity>

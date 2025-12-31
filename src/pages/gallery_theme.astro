@@ -81,7 +81,7 @@
       
       // Camera position limits - START FROM LEFT (0 is left position)
       const LEFT_POSITION = 0;    // Starting position (left)
-      const RIGHT_LIMIT = 8.0;    // Max right movement from left position
+      const RIGHT_LIMIT = 15.0;    // Max right movement from left position
       
       // Current camera X position - start at left (0)
       let currentCameraX = LEFT_POSITION;
@@ -927,6 +927,19 @@
         }
     }
 
+    #vignette {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 50; /* below UI, above a-scene */
+
+      background: radial-gradient(
+        ellipse at center,
+        rgba(0,0,0,0) 55%,
+        rgba(0,0,0,0.3) 100%
+      );
+    }
+
   </style>
 </head>
 <body>
@@ -991,7 +1004,7 @@
       <div id="slider_wrapper">
         <div id="camera_slider">
           <div id="camera_slider_btn"></div>
-          <div id="camera_slider_label">Drag to move left/right</div>
+          <div id="camera_slider_label"></div>
         </div>
       </div>
       
@@ -1000,6 +1013,9 @@
         <img src="/TAG-BREAK/images/icon/arrow2.png" alt="Right Arrow">
       </div>
     </div>
+
+    <div id="vignette"></div>
+
 
     <a-scene background="color: #d6d6d6" vr-mode-ui="enabled: false">
         <a-entity light="type: ambient; intensity: 0.55"></a-entity>
@@ -1033,42 +1049,47 @@
         <a-entity id="scarf_main_rig" position="0 1 -6" auto-rotate> 
             
             <!-- SCARF 1  -->
-            <a-entity id="scarf1_container" position="6.6 -0.5 4.3">
+            <a-entity id="scarf1_container" position="12 -0.5 4.3">
                 <a-entity id="scarf1" gltf-model="#scarf5" rotation="10 -5 -7" position="0 3 0" scale="1.5 1.5 1.5" animation-mixer="clip: *; loop: repeat; timeScale: 0.8">
                     <a-image src="/TAG-BREAK//3D-models/shadow.png" position="0 -1.71397 -0.05" width="2.3" height="1" material="transparent: true; opacity: 0.4" geometry="" rotation="90 0 0"></a-image>    
                 </a-entity>
             </a-entity>
 
             <!-- SCARF 2  -->
-            <a-entity id="scarf2_container" position="4 0.2 8.5">
+            <a-entity id="scarf2_container" position="7.5 0.2 8.5">
                 <a-entity position="0 0 -4">
-                    <a-entity id="scarf2" gltf-model="#scarf2" position="0 3 0" scale="1.5 1.5 1.5" animation-mixer="clip: *; loop: repeat; timeScale: 0.8" rotation="10 0 -10">
+                    <a-entity id="scarf2" gltf-model="#scarf2" position="0 3 0" scale="1.5 1.5 1.5" animation-mixer="clip: *; loop: repeat; timeScale: 0.8" rotation="10 5 10">
+                    <a-image src="/TAG-BREAK//3D-models/shadow.png" position="-0.12077 -1.69459 -0.06054" width="2.3" height="1" material="transparent: true; opacity: 0.4" geometry="" rotation="78 -48 -44.76175478680044"></a-image>    
                     </a-entity>
+                    
                 </a-entity>
             </a-entity>
 
             <!-- SCARF 3 -->
-            <a-entity id="scarf3_container" position="9 0 8.2">
+            <a-entity id="scarf3_container" position="17 0.5 8.2">
                 <a-entity position="0 0 -4">
                     <a-entity id="scarf3" gltf-model="#scarf1" position="0 3 0" scale="1.5 1.5 1.5" animation-mixer="clip: *; loop: repeat; timeScale: 0.2" rotation="10 0 10">
-                        <a-image src="/TAG-BREAK//3D-models/shadow.png" position="0 -1.71397 -0.05" width="2.3" height="1" material="transparent: true; opacity: 0.4" geometry="" rotation="90 0 0"></a-image>    
+                        <a-image src="/TAG-BREAK//3D-models/shadow.png" position="0 -1.9 -0.05" width="2.3" height="1" material="transparent: true; opacity: 0.4" geometry="" rotation="75 -44 -43"></a-image>    
                     </a-entity>
                 </a-entity>
             </a-entity>
 
             <!-- SCARF 4  -->
-            <a-entity id="scarf4_container" position="1.5 0 8">
+            <a-entity id="scarf4_container" position="3 1.5 8.2">
                 <a-entity position="0 0 -4">
-                    <a-entity id="scarf4" gltf-model="#scarf3" position="0 3 0" scale="1.5 1.5 1.5" animation-mixer="clip: *; loop: repeat; timeScale: 0.8" rotation="10 0 10">
-                    <a-image src="/TAG-BREAK//3D-models/shadow.png" position="0.04428 -1.46287 -0.09496" width="2.3" height="1" material="opacity: 0.4" geometry="" rotation="74.94402551870193 -45.604002745642745 -64.64625506681566"></a-image>                    </a-entity>
+                    <a-entity id="scarf4" gltf-model="#scarf3" position="0 3 0" scale="1.5 1.5 1.5" animation-mixer="clip: *; loop: repeat; timeScale: 0.8" rotation="-4 0 0">
+                    <a-image src="/TAG-BREAK//3D-models/shadow.png" position="0.044 -2.6 -0.30382" width="2.3" height="1.8" material="opacity: 0.4" geometry="" rotation="95 11 13.02455"></a-image>                    
+                  </a-entity>
                 </a-entity>
             </a-entity>
 
-            <!-- SCARF 5 - Left Back (-144° or 216°) -->
+            
+
+            <!-- SCARF 5 -->
             <a-entity id="scarf5_container" position="-1 0.5 7.9">
-                <a-entity position="0 0 -4">
-                    <a-entity id="scarf5" gltf-model="#scarf4" position="0 3 0" scale="1.5 1.5 1.5" animation-mixer="clip: *; loop: repeat; timeScale: 0.8" rotation="10 10 0">
-                        <a-image src="/TAG-BREAK//3D-models/shadow.png" position="0 -1.71397 -0.05" width="2.3" height="1" material="transparent: true; opacity: 0.4" geometry="" rotation="90 0 0"></a-image>    
+                <a-entity position="0 -0.8 -4">
+                    <a-entity id="scarf5" gltf-model="#scarf4" position="0 3 0" scale="1.5 1.5 1.5" animation-mixer="clip: *; loop: repeat; timeScale: 0.8" rotation="10 -10 0">
+                        <a-image src="/TAG-BREAK//3D-models/shadow.png" position="0 -1.6 -0.05" width="2.3" height="1" material="transparent: true; opacity: 0.4" geometry="" rotation="90 0 0"></a-image>    
                     </a-entity>
                 </a-entity>
             </a-entity>
