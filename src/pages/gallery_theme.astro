@@ -343,196 +343,158 @@
 
 
 
-    /* =========================
-        FAST LOADING SCREEN LOGIC
-      ========================= */
+    let loadingComplete = false;
 
-      let loadingComplete = false;
+function hideAFrameLoader() {
+    const loaders = document.querySelectorAll('.a-loader');
+    loaders.forEach(loader => loader.remove());
+    
+    const scene = document.querySelector('a-scene');
+    if (scene && scene.loader) scene.loader.style.display = 'none';
+    
+    const canvases = document.querySelectorAll('canvas');
+    canvases.forEach(canvas => {
+        if (canvas.classList && canvas.classList.contains('a-canvas')) {
+            canvas.style.visibility = 'visible';
+            canvas.style.opacity = '1';
+        }
+    });
+}
 
-      // Hide A-Frame's built-in loader immediately
-      function hideAFrameLoader() {
-          const loaders = document.querySelectorAll('.a-loader');
-          loaders.forEach(loader => {
-              loader.style.display = 'none';
-              loader.style.visibility = 'hidden';
-          });
-      }
+function stopLogoAnimation() {
+    const img1 = document.getElementById('loading_asset1');
+    const img2 = document.getElementById('loading_asset2');
+    if (img1) img1.style.display = 'block';
+    if (img2) img2.style.display = 'none';
+    
+    if (window.loadingInterval) {
+        clearInterval(window.loadingInterval);
+    }
+}
 
-      // Quick check - minimal waiting
-      function quickLoadCheck() {
-          return new Promise((resolve) => {
-              const scene = document.querySelector('a-scene');
-              
-              if (!scene) {
-                  resolve();
-                  return;
-              }
-              
-              // Strategy 1: Wait for scene to at least initialize
-              if (scene.hasLoaded) {
-                  console.log('Scene already loaded');
-                  resolve();
-                  return;
-              }
-              
-              // Quick timeout - don't wait long
-              setTimeout(resolve, 1500); // Only wait 1.5 seconds max
-              
-              // Listen for scene load
-              scene.addEventListener('loaded', resolve);
-              
-              // Also check if WebGL context exists
-              const checkWebGL = setInterval(() => {
-                  if (scene.renderer && scene.renderer.getContext()) {
-                      clearInterval(checkWebGL);
-                      resolve();
-                  }
-              }, 100);
-          });
-      }
+function waitForEverything() {
+    return new Promise((resolve) => {
+        const scene = document.querySelector('a-scene');
+        if (!scene) {
+            resolve();
+            return;
+        }
 
-      // Fast model check - don't wait for all models
-      function quickModelCheck() {
-          return new Promise((resolve) => {
-              const models = document.querySelectorAll('[gltf-model]');
-              
-              if (models.length === 0) {
-                  resolve();
-                  return;
-              }
-              
-              // Don't wait for all models - just wait a bit
-              let modelsLoaded = 0;
-              
-              // Quick timeout
-              setTimeout(() => {
-                  console.log('Quick model check complete: ' + modelsLoaded + '/' + models.length + ' models');
-                  resolve();
-              }, 2000); // Only wait 2 seconds for models
-              
-              // Count models as they load, but don't wait for all
-              models.forEach(model => {
-                  model.addEventListener('model-loaded', () => {
-                      modelsLoaded++;
-                  });
-              });
-          });
-      }
+        let sceneLoaded = false;
+        let assetsLoaded = false;
+        let modelsLoaded = 0;
+        const totalModels = document.querySelectorAll('[gltf-model]').length;
+        
+        const checkComplete = () => {
+            if (sceneLoaded && assetsLoaded && modelsLoaded >= totalModels) {
+                console.log('Everything loaded');
+                resolve();
+            }
+        };
 
-      // Fast loading sequence
-      async function fastLoad() {
-          console.log('Starting fast loading...');
-          
-          // 1. Hide A-Frame loader immediately
-          hideAFrameLoader();
-          
-          // 2. Stop the logo animation
-          const img1 = document.getElementById('loading_asset1');
-          const img2 = document.getElementById('loading_asset2');
-          if (img1) img1.style.display = 'block';
-          if (img2) img2.style.display = 'none';
-          
-          // Clear any existing interval
-          if (window.loadingInterval) {
-              clearInterval(window.loadingInterval);
-          }
-          
-          // 3. Quick parallel checks (don't wait for everything)
-          await Promise.race([
-              Promise.all([
-                  quickLoadCheck(),
-                  quickModelCheck()
-              ]),
-              // Max 3 second timeout total
-              new Promise(resolve => setTimeout(resolve, 3000))
-          ]);
-          
-          // 4. Show the scene quickly
-          showScene();
-      }
+        if (scene.hasLoaded) {
+            sceneLoaded = true;
+        } else {
+            scene.addEventListener('loaded', () => {
+                sceneLoaded = true;
+                checkComplete();
+            });
+        }
 
-      // Show the scene immediately
-      function showScene() {
-          if (loadingComplete) return;
-          loadingComplete = true;
-          
-          console.log('Showing scene...');
-          
-          const loadingScreen = document.getElementById('loading_screen');
-          const scene = document.querySelector('a-scene');
-          
-          if (!loadingScreen) {
-              console.log('No loading screen found');
-              return;
-          }
-          
-          // Quick fade out (500ms instead of 1000ms)
-          loadingScreen.style.transition = 'opacity 500ms ease';
-          loadingScreen.style.opacity = '0';
-          
-          // Show scene immediately
-          if (scene) {
-              scene.style.display = 'block';
-              scene.style.opacity = '1';
-              scene.style.visibility = 'visible';
-              
-              // Force a render
-              if (scene.render) {
-                  requestAnimationFrame(() => scene.render());
-              }
-          }
-          
-          // Remove loading screen after fade
-          setTimeout(() => {
-              loadingScreen.style.display = 'none';
-              console.log('Scene ready');
-          }, 500);
-      }
+        const assets = scene.querySelector('a-assets');
+        if (assets) {
+            assets.addEventListener('loaded', () => {
+                assetsLoaded = true;
+                checkComplete();
+            });
+        } else {
+            assetsLoaded = true;
+        }
 
-      // Fixed memory functions to avoid errors
-      function safeForceCleanup() {
-          try {
-              console.warn('Cleaning up...');
-              // Only clean up specific elements if they exist
-              document.querySelectorAll('.dynamic, .temp').forEach(el => el.remove());
-              if (AFRAME && AFRAME.THREE) {
-                  AFRAME.THREE.Cache.clear();
-              }
-          } catch (e) {
-              console.log('Cleanup error:', e);
-          }
-      }
+        if (totalModels === 0) {
+            modelsLoaded = 0;
+            checkComplete();
+        } else {
+            document.querySelectorAll('[gltf-model]').forEach(model => {
+                model.addEventListener('model-loaded', () => {
+                    modelsLoaded++;
+                    checkComplete();
+                });
+            });
+        }
 
-      function safeCheckMemory() {
-          if (performance && performance.memory) {
-              const used = Math.round(performance.memory.usedJSHeapSize / 1048576);
-              if (used > 1200) {
-                  console.warn('High memory: ' + used + 'MB');
-                  safeForceCleanup();
-              }
-          }
-      }
+        setTimeout(() => {
+            console.log('Loading timeout - proceeding');
+            resolve();
+        }, 10000);
+    });
+}
 
-      // Start immediately
-      if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', fastLoad);
-      } else {
-          fastLoad();
-      }
+async function loadEverything() {
+    console.log('Loading everything...');
+    
+    hideAFrameLoader();
+    stopLogoAnimation();
+    
+    await waitForEverything();
+    
+    const scene = document.querySelector('a-scene');
+    if (scene && scene.renderer && scene.renderer.getContext()) {
+        scene.render();
+    }
+    
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    showFinalScene();
+}
 
-      // Backup start on window load
-      window.addEventListener('load', () => {
-          if (!loadingComplete) {
-              setTimeout(fastLoad, 100);
-          }
-      });
+function showFinalScene() {
+    if (loadingComplete) return;
+    loadingComplete = true;
+    
+    const loadingScreen = document.getElementById('loading_screen');
+    const scene = document.querySelector('a-scene');
+    
+    if (!loadingScreen) return;
+    
+    loadingScreen.style.transition = 'opacity 600ms ease';
+    loadingScreen.style.opacity = '0';
+    
+    if (scene) {
+        scene.style.display = 'block';
+        scene.style.opacity = '1';
+        scene.style.visibility = 'visible';
+        
+        if (scene.render) {
+            requestAnimationFrame(() => scene.render());
+        }
+    }
+    
+    setTimeout(() => {
+        if (loadingScreen && loadingScreen.parentNode) {
+            loadingScreen.style.display = 'none';
+        }
+    }, 600);
+}
 
-      setTimeout(() => {
-          if (!loadingComplete) {
-              console.log('Ultra-fast fallback triggered');
-              showScene();
-          }
-      }, 5000);
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadEverything);
+} else {
+    loadEverything();
+}
+
+window.addEventListener('load', () => {
+    if (!loadingComplete) {
+        setTimeout(loadEverything, 100);
+    }
+});
+
+setTimeout(() => {
+    if (!loadingComplete) {
+        console.log('Final fallback');
+        showFinalScene();
+    }
+}, 15000);
     </script>
     
     <style>
