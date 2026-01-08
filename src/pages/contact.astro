@@ -125,10 +125,25 @@ import Footer from '../components/Footer.astro';
 
         <textarea rows="5" placeholder="Comment"></textarea>
 
-        <button type="submit">Send</button>
+        <button onclick="send_data()">Send</button>
     </form>
 
 </section>
     <Footer />
+
+    <script>
+
+        function generateTagId() {
+            const random6Digit = Math.floor(100000 + Math.random() * 900000);
+            return `TAG${random6Digit}`;
+        }
+
+        function send_data(){
+            var tagId = generateTagId();
+
+            
+        }
+
+    </script>
 </body>
 </html>
