@@ -16,7 +16,7 @@ import Header from '../components/Header_shop.astro';
   </head>
   <style>
     body {
-      background-color: #1e4941;
+      background-color: #f2f2f2;
       margin: 0;
       min-height: 100vh;
       display: flex;
@@ -36,21 +36,21 @@ import Header from '../components/Header_shop.astro';
     
     .error-title {
       font-family: "Aldrich";
-      color: #e3bcae;
+      color: black;
       font-size: 2rem;
       margin-bottom: 20px;
     }
     
     .error-message {
       font-family: "Abel";
-      color: #e3bcae;
+      color: black;
       font-size: 1.2rem;
       max-width: 500px;
       line-height: 1.5;
     }
     
     .error-link {
-      color: #e3bcae;
+      color: black;
       text-decoration: underline;
       margin-top: 20px;
       font-family: "Abel";
@@ -64,7 +64,7 @@ import Header from '../components/Header_shop.astro';
     #heading {
       margin-top: 60px;
       font-family: "Aldrich";
-      color: #e3bcae;
+      color: black;
       font-weight: 400;
       text-align: center;
       font-size: 1.8rem;
@@ -72,7 +72,7 @@ import Header from '../components/Header_shop.astro';
     
     #sub-heading {
       margin-top: -10px;
-      color: #e3bcae;
+      color: black;
       font-family: "Abel";
       text-align: center;
       font-size: 1.1rem;
@@ -100,7 +100,7 @@ import Header from '../components/Header_shop.astro';
     
     /* Fix label styles */
     .form-group label {
-      color: #e3bcae;
+      color: black;
       font-family: "Abel";
       margin-bottom: 8px;
       width: 100%;
@@ -111,10 +111,10 @@ import Header from '../components/Header_shop.astro';
     .form-group select {
       width: 100%;
       padding: 10px;
-      border: 1px solid #e3bcae;
+      border: 1px solid black;
       border-radius: 4px;
       background-color: transparent;
-      color: #e3bcae;
+      color: black;
       font-family: "Abel";
       box-sizing: border-box;
     }
@@ -122,7 +122,7 @@ import Header from '../components/Header_shop.astro';
     .form-group input:focus,
     .form-group select:focus {
       outline: none;
-      box-shadow: 0 0 5px rgba(227, 188, 174, 0.5);
+      box-shadow: 0 0 5px white;
     }
     
     .form-group select {
@@ -139,8 +139,8 @@ import Header from '../components/Header_shop.astro';
       width: 100%;
       padding: 12px;
       margin-top: 20px;
-      background-color: #e3bcae;
-      color: #1e4941;
+      background-color: black;
+      color: #f2f2f2;
       border: none;
       border-radius: 4px;
       font-family: "Abel";
@@ -150,7 +150,7 @@ import Header from '../components/Header_shop.astro';
     }
     
     #form-container button:hover {
-      background-color: #d4a899;
+      background-color: #4c4c4c;
     }
     
     .conditional-field {
@@ -388,7 +388,6 @@ function initializeForm() {
       console.log('WhatsApp No:', whatsapp_no);
       console.log('Instagram ID:', instagram_id);
 
-      alert('Form submitted successfully!');
       
       async function AddData() {
         const cart = JSON.parse(localStorage.getItem("cart")) || [];
