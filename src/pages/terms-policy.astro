@@ -16,11 +16,11 @@ import Footer from '../components/Footer.astro'
 
   <style>
     :root{
-      --bg:#1E4941;
-      --text:#E3BCAE;
+      --bg:#f2f2f2;
+      --text:#000000;
       --card-bg: rgba(255,255,255,0.03);
-      --card-border: rgba(255,255,255,0.06);
-      --muted: rgba(227,188,174,0.22);
+      --card-border: rgba(0, 0, 0, 0.121);
+      --muted: rgba(55, 55, 55, 0.693);
       --max-width:980px;
     }
     *{box-sizing:border-box}
@@ -53,9 +53,9 @@ import Footer from '../components/Footer.astro'
       transition:box-shadow 220ms ease, transform 220ms ease;
     }
     .card:hover{transform:translateY(-2px)}
-    .card.open{box-shadow:0 10px 30px rgba(0,0,0,0.45), 0 0 18px rgba(227,188,174,0.06); border-color: rgba(227,188,174,0.14)}
+    .card.open{box-shadow:0 1px 10px rgba(0, 0, 0, 0.242), 0 0 18px rgba(227,188,174,0.06); border-color: rgba(227,188,174,0.14)}
     .card-head {display:block}
-    .card-head h2{margin:0;font-family:'Aldrich';font-size:22px;color:var(--text);text-align:left}
+    .card-head h2{margin:0;font-family:'Aldrich';font-size:22px;color:var(--text);text-align:left; font-weight: 400;}
 
     /* Body content hidden until expanded */
     .card-body{
@@ -98,44 +98,44 @@ import Footer from '../components/Footer.astro'
 
         <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">1. Use of the Website</h3>
         <ul>
-          <li>● You must be at least 13 years old to use our Services.</li>
-          <li>● You agree to use our website only for lawful purposes and in a manner that does not infringe the rights of or restrict the use and enjoyment of the Site by any third party.</li>
-          <li>● We reserve the right to suspend or terminate access to anyone who violates these Terms.</li>
+          <li> You must be at least 13 years old to use our Services.</li>
+          <li>You agree to use our website only for lawful purposes and in a manner that does not infringe the rights of or restrict the use and enjoyment of the Site by any third party.</li>
+          <li>We reserve the right to suspend or terminate access to anyone who violates these Terms.</li>
         </ul>
 
         <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">2. Intellectual Property</h3>
         <ul>
-          <li>● All content on this website including logos, visuals, text, graphics, and creative materials is the property of Tagbreak unless otherwise stated.</li>
-          <li>● You may not reproduce, distribute, or modify any material without prior written consent from Tagbreak.</li>
+          <li>All content on this website including logos, visuals, text, graphics, and creative materials is the property of Tagbreak unless otherwise stated.</li>
+          <li>You may not reproduce, distribute, or modify any material without prior written consent from Tagbreak.</li>
         </ul>
 
         <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">3. User Content</h3>
         <ul>
-          <li>● If you submit, upload, or tag any content (including photos, videos, reviews, or feedback) to Tagbreak, you grant us a non-exclusive, royalty-free, worldwide license to use, reproduce, and display that content for marketing or promotional purposes.</li>
-          <li>● You represent that you own the rights to any content you share with us.</li>
+          <li>If you submit, upload, or tag any content (including photos, videos, reviews, or feedback) to Tagbreak, you grant us a non-exclusive, royalty-free, worldwide license to use, reproduce, and display that content for marketing or promotional purposes.</li>
+          <li>You represent that you own the rights to any content you share with us.</li>
         </ul>
 
         <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">4. Purchases & Payments</h3>
         <ul>
-          <li>● All transactions made through Tagbreak’s platform are processed securely.</li>
-          <li>● By making a purchase, you agree to provide accurate payment and shipping information.</li>
-          <li>● Prices and availability of products are subject to change without notice.</li>
+          <li>All transactions made through Tagbreak’s platform are processed securely.</li>
+          <li>By making a purchase, you agree to provide accurate payment and shipping information.</li>
+          <li>Prices and availability of products are subject to change without notice.</li>
         </ul>
 
         <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">5. Third-Party Links</h3>
         <ul>
-          <li>● Our website may include links to third-party websites or services not controlled by Tagbreak.</li>
-          <li>● We are not responsible for the content or privacy practices of these external sites.</li>
+          <li>Our website may include links to third-party websites or services not controlled by Tagbreak.</li>
+          <li>We are not responsible for the content or privacy practices of these external sites.</li>
         </ul>
 
         <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">6. Limitation of Liability</h3>
         <ul>
-          <li>● Tagbreak will not be liable for any indirect, incidental, or consequential damages resulting from the use or inability to use our Services.</li>
-          <li>● We do not guarantee that our Site will always be available, secure, or error-free.</li>
+          <li>Tagbreak will not be liable for any indirect, incidental, or consequential damages resulting from the use or inability to use our Services.</li>
+          <li>We do not guarantee that our Site will always be available, secure, or error-free.</li>
         </ul>
 
         <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">7. Changes to Terms</h3>
-        <p>● We may update these Terms periodically. Any changes will be reflected on this page, and continued use of the Site constitutes acceptance of the revised Terms.</p>
+        <p>We may update these Terms periodically. Any changes will be reflected on this page, and continued use of the Site constitutes acceptance of the revised Terms.</p>
       </div>
     </section>
 
@@ -148,18 +148,18 @@ import Footer from '../components/Footer.astro'
 
         <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">1. Information We Collect</h3>
         <ul>
-          <li>● Personal details: name, email address, phone number, etc.</li>
-          <li>● Usage data: pages visited, clicks, device type, IP address, browser type.</li>
-          <li>● Transactional data: billing, shipping, and payment details (processed via secure third-party gateways).</li>
+          <li>Personal details: name, email address, phone number, etc.</li>
+          <li>Usage data: pages visited, clicks, device type, IP address, browser type.</li>
+          <li>Transactional data: billing, shipping, and payment details (processed via secure third-party gateways).</li>
         </ul>
 
         <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">2. How We Use Your Information</h3>
         <p>We use the information to:</p>
         <ul>
-          <li>● Process orders and provide services.</li>
-          <li>● Improve user experience and website performance.</li>
-          <li>● Send updates, offers, or newsletters</li>
-          <li>● Detect and prevent fraud or security issues.</li>
+          <li>Process orders and provide services.</li>
+          <li>Improve user experience and website performance.</li>
+          <li>Send updates, offers, or newsletters</li>
+          <li>Detect and prevent fraud or security issues.</li>
         </ul>
 
         <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">3. Cookies</h3>
@@ -173,19 +173,19 @@ import Footer from '../components/Footer.astro'
 
         <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">6. Your Rights</h3>
         <ul>
-          <li>● Access, correct, or delete your personal data.</li>
-          <li>● Withdraw consent for marketing communications.</li>
-          <li>● Request a copy of the data we hold about you.</li>
+          <li>Access, correct, or delete your personal data.</li>
+          <li>Withdraw consent for marketing communications.</li>
+          <li>Request a copy of the data we hold about you.</li>
         </ul>
 
         <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">7. Updates to Policy</h3>
-        <p>● This Privacy Policy may be updated occasionally. The revised version will always be posted here with a new effective date.</p>
+        <p>This Privacy Policy may be updated occasionally. The revised version will always be posted here with a new effective date.</p>
 
         <h3 style="font-family:'Aldrich'; margin-top:10px; font-size:18px;">8. Contact Us</h3>
-        <p>● If you have questions or concerns about these Terms or our Privacy Policy, reach out at:</p>
+        <p>If you have questions or concerns about these Terms or our Privacy Policy, reach out at:</p>
         <ul>
-          <li>● tagbreak.trust@gmail.com</li>
-          <li>● www.tagbreak.in</li>
+          <li>tagbreak.trust@gmail.com</li>
+          <li>www.tagbreak.in</li>
         </ul>
       </div>
     </section>
