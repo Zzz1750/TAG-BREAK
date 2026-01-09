@@ -34,14 +34,54 @@
             position: relative;
         }
         
+        .logo-container {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 40px;
+        }
+        
+        .timer-circle {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .timer-circle-bg {
+            fill: none;
+            stroke: rgba(0, 0, 0, 0.08);
+            stroke-width: 1.5;
+        }
+        
+        .timer-circle-progress {
+            fill: none;
+            stroke: #000000;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.05s linear;
+        }
+        
         .logo {
-            margin: 0 auto 25px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
+            border-radius: 50%;
+            padding: 20px;
         }
-        .logo_placeholder{
-            width: 20%;
+        
+        .logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            transform: rotate(-55deg);
         }
         
         h1 {
@@ -83,7 +123,7 @@
         }
         
         .footer {
-            margin-top: 30px;
+            margin-top: 40px;
             font-size: 1rem;
             color: #000000;
         }
@@ -104,9 +144,28 @@
             margin: 25px 0;
         }
         
+        .redirecting {
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: #666;
+            font-style: italic;
+        }
+        
         @media (max-width: 600px) {
             .container {
                 padding: 30px 20px;
+            }
+            
+            .logo-container {
+                width: 110px;
+                height: 110px;
+                margin-bottom: 35px;
+            }
+            
+            .logo {
+                width: 85px;
+                height: 85px;
+                padding: 17px;
             }
             
             h1 {
@@ -121,8 +180,17 @@
 </head>
 <body>
     <div class="container">
-        <div class="logo">
-            <img class="logo_placeholder" src="/TAG-BREAK//images/logo3.png" alt="">
+        <div class="logo-container">
+            <svg class="timer-circle" viewBox="0 0 100 100">
+                <!-- Background circle -->
+                <circle class="timer-circle-bg" cx="50" cy="50" r="45"></circle>
+                <!-- Progress circle - will be animated via JavaScript -->
+                <circle class="timer-circle-progress" cx="50" cy="50" r="45"></circle>
+            </svg>
+            
+            <div class="logo">
+                <img src="/TAG-BREAK/images/logo3.png" alt="TagBreak Logo">
+            </div>
         </div>
         
         <h1>Your Break Starts Now</h1>
@@ -136,10 +204,71 @@
             <p>You'll receive a confirmation email shortly with your order details.</p>
         </div>
         
+        <div class="redirecting">You will be redirected shortly...</div>
+        
         <div class="footer">
             <p>Have a wonderful day! :)</p>
             <p>Team <span class="brand">TagBreak</span></p>
         </div>
     </div>
+
+    <script>
+              // @ts-nocheck
+
+        const progressCircle = document.querySelector('.timer-circle-progress');
+        const redirectUrl = '/TAG-BREAK/';
+        
+        // Calculate circle circumference
+        const radius = 45;
+        const circumference = 2 * Math.PI * radius;
+        
+        // Initialize the circle - starting from the top (12 o'clock position)
+        progressCircle.style.strokeDasharray = circumference;
+        progressCircle.style.strokeDashoffset = circumference;
+        
+        // Rotate the circle to start from top (default SVG starts from 3 o'clock)
+        // We rotate 90 degrees counter-clockwise to start from top
+        document.querySelector('.timer-circle').style.transform = 'rotate(-90deg)';
+        
+        let startTime;
+        const duration = 10000; // 10 seconds
+        
+        function animateCircle(timestamp) {
+            if (!startTime) startTime = timestamp;
+            
+            const elapsed = timestamp - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            // Animate from full to empty (stroke-dashoffset goes from circumference to 0)
+            const offset = circumference - (progress * circumference);
+            progressCircle.style.strokeDashoffset = offset;
+            
+            if (progress < 1) {
+                // Continue animation
+                requestAnimationFrame(animateCircle);
+            } else {
+                // Animation complete - redirect
+                setTimeout(() => {
+                    window.location.href = redirectUrl;
+                }, 50); // Small delay to ensure circle is fully visible
+            }
+        }
+        
+        // Start the animation when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Start the smooth animation
+            requestAnimationFrame(animateCircle);
+            
+            // Backup redirect after 10.1 seconds
+            setTimeout(function() {
+                window.location.href = redirectUrl;
+            }, 10100);
+        });
+        
+        // Allow manual click to redirect immediately
+        document.addEventListener('click', function() {
+            window.location.href = redirectUrl;
+        });
+    </script>
 </body>
 </html>

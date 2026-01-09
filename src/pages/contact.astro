@@ -1,7 +1,6 @@
 ---
 import Header from '../components/Header_shop.astro';
 import Footer from '../components/Footer.astro';
-
 ---
 
 <html lang="en">
@@ -15,7 +14,7 @@ import Footer from '../components/Footer.astro';
     <link href="https://fonts.googleapis.com/css2?family=Abel&family=Aldrich&family=Changa:wght@200..800&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="/TAG-BREAK/images/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/TAG-BREAK/images/favicon.svg" />
-   <style>
+    <style>
         * {
             margin: 0;
             padding: 0;
@@ -72,6 +71,28 @@ import Footer from '../components/Footer.astro';
             background: #ededed;
             font-size: 16px;
             outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #111;
+        }
+
+        input.invalid, textarea.invalid {
+            border-color: #ff4444;
+            background-color: #fff8f8;
+        }
+
+        .error-message {
+            color: #ff4444;
+            font-size: 14px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
         }
 
         textarea {
@@ -95,6 +116,92 @@ import Footer from '../components/Footer.astro';
             background: #333;
         }
 
+        button:disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
+
+        /* Alert Modal Styles */
+        .alert-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .alert-modal.show {
+            display: flex;
+        }
+
+        .alert-content {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .alert-content.success {
+            border-top: 4px solid #4CAF50;
+        }
+
+        .alert-content.error {
+            border-top: 4px solid #ff4444;
+        }
+
+        .alert-content h3 {
+            font-family: 'aldrich';
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .alert-content p {
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .alert-btn {
+            background: #111;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s ease;
+        }
+
+        .alert-btn:hover {
+            background: #333;
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #111;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        .loading-spinner.show {
+            display: block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         @media(max-width: 768px) {
             .row {
                 grid-template-columns: 1fr;
@@ -115,36 +222,237 @@ import Footer from '../components/Footer.astro';
             <span class="note">(If you have already placed your order)</span></p>
     </div>
 
-    <form class="contact-form">
+    <form class="contact-form" id="contactForm">
         <div class="row">
-            <input type="text" id="name" placeholder="Name *" required>
-            <input type="email" id="email" placeholder="Email *" required>
+            <div>
+                <input type="text" id="namey" placeholder="Name *" required>
+                <div class="error-message" id="nameError">Please enter your name</div>
+            </div>
+            <div>
+                <input type="email" id="emaily" placeholder="Email *" required>
+                <div class="error-message" id="emailError">Please enter a valid email address</div>
+            </div>
         </div>
 
-        <input type="text" id="phoneno" placeholder="Phone number">
+        <div>
+            <input type="text" id="phoneno" placeholder="Phone number">
+            <div class="error-message" id="phoneError">Please enter a valid 10-digit phone number</div>
+        </div>
 
-        <textarea rows="5" placeholder="Comment"></textarea>
+        <div>
+            <textarea rows="5" id="comment" placeholder="Comment" required></textarea>
+            <div class="error-message" id="commentError">Please enter your comment</div>
+        </div>
 
-        <button onclick="send_data()">Send</button>
+        <button type="button" id="sendBtn">
+            <span id="btnText">Send</span>
+            <div class="loading-spinner" id="loadingSpinner"></div>
+        </button>
     </form>
 
 </section>
-    <Footer />
 
-    <script>
+<!-- Alert Modal -->
+<div class="alert-modal" id="alertModal">
+    <div class="alert-content" id="alertContent">
+        <h3 id="alertTitle"></h3>
+        <p id="alertMessage"></p>
+        <button class="alert-btn" id="closeAlert">OK</button>
+    </div>
+</div>
 
-        function generateTagId() {
-            const random6Digit = Math.floor(100000 + Math.random() * 900000);
-            return `TAG${random6Digit}`;
+<Footer />
+
+<script is:inline>
+    // Generate unique TAG ID
+    function generateTagId() {
+        const random6Digit = Math.floor(100000 + Math.random() * 900000);
+        return `TAG${random6Digit}`;
+    }
+
+    // Validation functions
+    function validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    function validatePhone(phone) {
+        if (!phone) return true; // Phone is optional
+        const phoneRegex = /^\d{10}$/;
+        return phoneRegex.test(phone.replace(/\D/g, ''));
+    }
+
+    function validateForm() {
+        const name = document.getElementById('namey').value.trim();
+        const email = document.getElementById('emaily').value.trim();
+        const phone = document.getElementById('phoneno').value.trim();
+        const comment = document.getElementById('comment').value.trim();
+        
+        let isValid = true;
+
+        // Reset error states
+        document.querySelectorAll('.error-message').forEach(el => el.classList.remove('show'));
+        document.querySelectorAll('input, textarea').forEach(el => el.classList.remove('invalid'));
+
+        // Validate name
+        if (!name) {
+            document.getElementById('nameError').classList.add('show');
+            document.getElementById('namey').classList.add('invalid');
+            isValid = false;
         }
 
-        function send_data(){
-            var tagId = generateTagId();
- 
-            
-            
+        // Validate email
+        if (!email) {
+            document.getElementById('emailError').textContent = 'Please enter your email';
+            document.getElementById('emailError').classList.add('show');
+            document.getElementById('emaily').classList.add('invalid');
+            isValid = false;
+        } else if (!validateEmail(email)) {
+            document.getElementById('emailError').textContent = 'Please enter a valid email address';
+            document.getElementById('emailError').classList.add('show');
+            document.getElementById('emaily').classList.add('invalid');
+            isValid = false;
         }
 
-    </script>
+        // Validate phone (optional but must be valid if provided)
+        if (phone && !validatePhone(phone)) {
+            document.getElementById('phoneError').classList.add('show');
+            document.getElementById('phoneno').classList.add('invalid');
+            isValid = false;
+        }
+
+        // Validate comment
+        if (!comment) {
+            document.getElementById('commentError').classList.add('show');
+            document.getElementById('comment').classList.add('invalid');
+            isValid = false;
+        }
+
+        return { isValid, name, email, phone, comment };
+    }
+
+    // Show alert modal
+    function showAlert(type, title, message) {
+        const modal = document.getElementById('alertModal');
+        const content = document.getElementById('alertContent');
+        const alertTitle = document.getElementById('alertTitle');
+        const alertMessage = document.getElementById('alertMessage');
+        
+        content.className = `alert-content ${type}`;
+        alertTitle.textContent = title;
+        alertMessage.textContent = message;
+        modal.classList.add('show');
+    }
+
+    // Submit data to API
+    async function submitData(tagId, name, email, phone, comment) {
+        try {
+            const response = await fetch("https://sheetdb.io/api/v1/c6moorfhmbn3q", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    data: [{
+                        id: tagId,
+                        name: name,
+                        email: email,
+                        phoneno: phone,
+                        comment: comment,
+                        confirm: 'FALSE'
+                    }]
+                })
+            });
+
+            const result = await response.json();
+            
+            if (response.ok && result.created === 1) {
+                return { success: true, message: 'Your message has been sent successfully!' };
+            } else {
+                throw new Error('Failed to submit data');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            return { success: false, message: 'Failed to send message. Please try again.' };
+        }
+    }
+
+    // Event Listeners
+    document.addEventListener('DOMContentLoaded', function() {
+        const sendBtn = document.getElementById('sendBtn');
+        const closeAlertBtn = document.getElementById('closeAlert');
+        const alertModal = document.getElementById('alertModal');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const btnText = document.getElementById('btnText');
+        
+        // Send button click handler
+        sendBtn.addEventListener('click', async () => {
+            // Validate form
+            const validation = validateForm();
+            
+            if (!validation.isValid) {
+                showAlert('error', 'Validation Error', 'Please fill all required fields correctly.');
+                return;
+            }
+            
+            // Show loading state
+            sendBtn.disabled = true;
+            loadingSpinner.classList.add('show');
+            btnText.style.display = 'none';
+            
+            // Generate tag ID
+            const tagId = generateTagId();
+            
+            // Submit data
+            const result = await submitData(
+                tagId,
+                validation.name,
+                validation.email,
+                validation.phone,
+                validation.comment
+            );
+            
+            // Reset loading state
+            sendBtn.disabled = false;
+            loadingSpinner.classList.remove('show');
+            btnText.style.display = 'block';
+            
+            // Show result alert
+            if (result.success) {
+                showAlert('success', 'Success!', result.message);
+                // Clear form
+                document.getElementById('contactForm').reset();
+            } else {
+                showAlert('error', 'Error', result.message);
+            }
+        });
+        
+        // Close alert modal
+        closeAlertBtn.addEventListener('click', () => {
+            alertModal.classList.remove('show');
+        });
+        
+        // Close modal when clicking outside
+        alertModal.addEventListener('click', (e) => {
+            if (e.target === alertModal) {
+                alertModal.classList.remove('show');
+            }
+        });
+        
+        // Real-time validation as user types
+        document.querySelectorAll('input, textarea').forEach(input => {
+            input.addEventListener('input', function() {
+                const errorId = this.id + 'Error';
+                const errorElement = document.getElementById(errorId);
+                
+                if (errorElement) {
+                    errorElement.classList.remove('show');
+                    this.classList.remove('invalid');
+                }
+            });
+        });
+    });
+</script>
+
 </body>
 </html>
