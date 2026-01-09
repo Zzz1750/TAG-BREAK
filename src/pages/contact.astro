@@ -117,11 +117,11 @@ import Footer from '../components/Footer.astro';
 
     <form class="contact-form">
         <div class="row">
-            <input type="text" placeholder="Name *" required>
-            <input type="email" placeholder="Email *" required>
+            <input type="text" id="name" placeholder="Name *" required>
+            <input type="email" id="email" placeholder="Email *" required>
         </div>
 
-        <input type="text" placeholder="Phone number">
+        <input type="text" id="phoneno" placeholder="Phone number">
 
         <textarea rows="5" placeholder="Comment"></textarea>
 
@@ -140,7 +140,8 @@ import Footer from '../components/Footer.astro';
 
         function send_data(){
             var tagId = generateTagId();
-
+ 
+            
             
         }
 

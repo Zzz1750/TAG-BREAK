@@ -22,7 +22,7 @@ const { productsData, setTitle } = Astro.props;
             <img 
               src={product.product_image} 
               alt={product.scarf_name}
-              class="product-image"
+              class="product-image primary-image"
               loading={index < 6 ? "eager" : "lazy"} 
               decoding="async"
               width="600"
@@ -32,6 +32,18 @@ const { productsData, setTitle } = Astro.props;
               onload="this.classList.add('loaded'); this.closest('.product-image-container')?.classList.add('image-loaded');"
               onerror="this.closest('.product-image-container')?.classList.add('image-error');"
             />
+            
+            {product.product_image2 && (
+              <img 
+                src={product.product_image2} 
+                alt={`${product.scarf_name} - Alternate view`}
+                class="product-image hover-image"
+                loading="lazy"
+                decoding="async"
+                width="600"
+                height="600"
+              />
+            )}
             
             <div class="loading-skeleton"></div>
             <div class="product-overlay">
@@ -141,11 +153,30 @@ const { productsData, setTitle } = Astro.props;
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.5s ease, opacity 0.3s ease;
     background: transparent;
-    opacity: 0;
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .primary-image {
+    opacity: 1;
     z-index: 2;
+    transition: opacity 0.4s ease, transform 0.5s ease;
+  }
+
+  .hover-image {
+    opacity: 0;
+    z-index: 3;
+    transition: opacity 0.4s ease, transform 0.5s ease;
+  }
+
+  .product-card:hover .primary-image {
+    opacity: 0;
+  }
+
+  .product-card:hover .hover-image {
+    opacity: 1;
   }
 
   .product-image.loaded {
@@ -161,8 +192,8 @@ const { productsData, setTitle } = Astro.props;
     background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
     background-size: 200% 100%;
     animation: loading 1.5s infinite;
-    z-index: 3;
-    display: none; /* Hide by default, show via JS */
+    z-index: 4;
+    display: none;
   }
 
   .product-image-container:not(.image-loaded):not(.image-error) .loading-skeleton {
@@ -184,13 +215,14 @@ const { productsData, setTitle } = Astro.props;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
     transition: opacity 0.3s ease;
-    z-index: 4;
+    z-index: 5;
+    pointer-events: none;
   }
 
   .product-card:hover .product-overlay {
@@ -208,6 +240,7 @@ const { productsData, setTitle } = Astro.props;
     font-family: "Aldrich", sans-serif;
     font-weight: 300;
     font-size: 0.8rem;
+    pointer-events: auto;
   }
 
   .view-button:hover {
@@ -246,10 +279,9 @@ const { productsData, setTitle } = Astro.props;
 <script>
   // Preload critical images for better performance
   document.addEventListener('DOMContentLoaded', function() {
-    // Preload the first 3 images for immediate display
-    const criticalImages = document.querySelectorAll('img[data-index="0"], img[data-index="1"], img[data-index="2"]');
+    // Preload the first 3 primary images for immediate display
+    const criticalImages = document.querySelectorAll('.primary-image[data-index="0"], .primary-image[data-index="1"], .primary-image[data-index="2"]');
     criticalImages.forEach(img => {
-      // Type guard to ensure we're working with HTMLImageElement
       if (img instanceof HTMLImageElement) {
         const link = document.createElement('link');
         link.rel = 'preload';
@@ -260,12 +292,11 @@ const { productsData, setTitle } = Astro.props;
     });
     
     // Initialize image loading states
-    const images = document.querySelectorAll('img[data-image]');
+    const primaryImages = document.querySelectorAll('.primary-image[data-image]');
     
-    images.forEach(img => {
+    primaryImages.forEach(img => {
       const container = img.closest('.product-image-container');
       
-      // Type guard to ensure we're working with HTMLImageElement
       if (img instanceof HTMLImageElement) {
         // If image is already loaded
         if (img.complete) {
@@ -281,6 +312,22 @@ const { productsData, setTitle } = Astro.props;
             container?.classList.add('image-error');
           });
         }
+      }
+    });
+    
+    // Preload hover images when user hovers near the product
+    const productCards = document.querySelectorAll('.product-card');
+    
+    productCards.forEach(card => {
+      const hoverImage = card.querySelector('.hover-image');
+      
+      if (hoverImage) {
+        card.addEventListener('mouseenter', function() {
+          // Trigger hover image load
+          if (hoverImage instanceof HTMLImageElement && !hoverImage.complete) {
+            hoverImage.loading = 'eager';
+          }
+        }, { once: true });
       }
     });
   });

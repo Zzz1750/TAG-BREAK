@@ -515,6 +515,31 @@ document.addEventListener("DOMContentLoaded", () => {
         set3Button.addEventListener('click', () => {});
     }
 });
+
+
+        function removeVRButton() {
+            const vrButton = document.querySelector('.a-enter-vr-button');
+            if (vrButton) {
+                vrButton.style.display = 'none';
+                vrButton.remove();
+            }
+            
+            const arButton = document.querySelector('.a-enter-ar-button');
+            if (arButton) {
+                arButton.style.display = 'none';
+                arButton.remove();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const scene = document.querySelector('a-scene');
+            if (scene) {
+                scene.addEventListener('loaded', removeVRButton);
+                removeVRButton(); // Also try immediately
+            }
+            
+            setTimeout(removeVRButton, 1000);
+        });
 </script>
 
 <style>
@@ -859,7 +884,7 @@ body{
 </div>
 <div id="vignette"></div>
 
-<a-scene background="color: #d6d6d6" display="none">
+<a-scene background="color: #d6d6d6" display="none"  vr-mode-ui="enabled: false">
     <a-entity light="type: ambient; intensity: 0.55"></a-entity>
     <a-entity a-entity light="intensity: 1.3" position="2 7.30212 2.52619"></a-entity>
     <a-entity light="intensity: 0.9" position="0 7.60557 -1.05818"></a-entity>
