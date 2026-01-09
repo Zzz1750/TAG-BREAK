@@ -29,7 +29,7 @@ import theme5Data from '../../../public/TAG-BREAK/data/theme5_DB.json';
     <div id="set1">
       <Theme1 productsData={theme1Data} setTitle={"Threads of Mind"} />
       <div class="image-container_new">
-        <img src="/TAG-BREAK//images/placeholder.png" alt="Image Space" draggable="false">
+        <img src="/TAG-BREAK//images/poster/poster1.jpg" alt="Image Space" draggable="false">
       </div>
       <Theme1 productsData={theme3Data} setTitle={"Geometric Rhythms"} />
     </div>
@@ -37,7 +37,7 @@ import theme5Data from '../../../public/TAG-BREAK/data/theme5_DB.json';
     <div id="set2" style="display: none;">
       <Theme1 productsData={theme2Data} setTitle={"Raw Manifesto"} />
       <div class="image-container_new">
-        <img src="/TAG-BREAK//images/placeholder.png" alt="Image Space" draggable="false" >
+        <img src="/TAG-BREAK//images/poster/poster2.jpg" alt="Image Space" draggable="false" >
       </div>
       <Theme1 productsData={theme5Data} setTitle={"Celestial Wave"} />
     </div>
@@ -117,7 +117,7 @@ import theme5Data from '../../../public/TAG-BREAK/data/theme5_DB.json';
     }
 
     .image-container_new img {
-      width: 45%;
+      width: 80%;
       height: auto;
       object-fit: contain; 
       display: block;
@@ -151,9 +151,11 @@ import theme5Data from '../../../public/TAG-BREAK/data/theme5_DB.json';
      @media (max-width: 768px) {
 
     .image-container_new img{
-      width: 60%;
+      width: 90%;
     }
-
+    .image-container_new{
+      margin: 0px auto;
+    }
   }
 
 
