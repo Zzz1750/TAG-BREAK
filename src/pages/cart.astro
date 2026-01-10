@@ -1,6 +1,8 @@
 ---
 import Header from '../components/Header_cart.astro';
 import Footer from '../components/Footer.astro';
+import Layout from '../layouts/Layout.astro';
+
 ---
 
 <html lang="en">
@@ -16,13 +18,14 @@ import Footer from '../components/Footer.astro';
   
   </head>
   <body style="background-color: #f2f2f2; font-family: 'Aldrich', sans-serif; color: #000000; min-height: 100vh; margin: 0; padding: 0;">
+    <Layout>
     <Header />
     
     <div id="empty_cart" style="display: none; flex-direction: column; justify-content: center; align-items: center; min-height: 65vh; text-align: center; padding: 2rem; box-sizing: border-box;">
       <img src="/TAG-BREAK/images/icon/black-empty-cart.webp" alt="Empty Cart" style="width: 100px; height: 100px; object-fit: contain; margin-bottom: 20px;">
       <h1 style="margin-bottom: 40px; font-size: 1.25rem; font-weight: 400; padding: 0 1rem;">No tags to break yet.</h1>
       <button onclick="window.location.href='/TAG-BREAK/shop'" id="shop_button" style="padding: 12px 24px; background-color: #f2f2f2
-      ; color: #000000; border: 1px solid #000000; border-radius: 8px; cursor: pointer; font-size: 16px; font-family: 'Aldrich', sans-serif;">Shop</button>
+      ; color: #000000; border: 1px solid #000000; border-radius: 8px; cursor: pointer; font-size: 16px; font-family: 'Aldrich', sans-serif; transition: all 0.3s ease;">Shop</button>
     </div>
     
     <div id="cart_with_items" style="display: none; max-width: 1200px; margin: 0 auto; padding: 1rem; box-sizing: border-box;">
@@ -42,7 +45,7 @@ import Footer from '../components/Footer.astro';
           <div style="font-size: 0.8rem; opacity: 0.8;">Tax and shipping cost included</div>
           <div style="font-size: 1.25rem; font-family: 'Changa', sans-serif;">Total cost: ₹<span id="total_amount">0</span></div>
         </div>
-        <button class="checkout-btn" style="background: #000000; color: #f2f2f2; border: 1px solid #000000; padding: 1rem 2rem; border-radius: 6px; cursor: pointer; font-size: 1.1rem; font-family: 'Aldrich', sans-serif; width: 100%; max-width: 300px; margin: 0 auto;">Checkout</button>
+        <button class="checkout-btn" style="background: #000000; color: #f2f2f2; border: 1px solid #000000; padding: 1rem 2rem; border-radius: 6px; cursor: pointer; font-size: 1.1rem; font-family: 'Aldrich', sans-serif; width: 100%; max-width: 300px; margin: 0 auto; transition: all 0.3s ease;">Checkout</button>
 
         <p id="cart-policy" style="text-align: center; opacity: 0.9; margin-top: 1.5rem; font-size: 0.8rem; line-height: 1.4; padding: 0 0.5rem;">
           By clicking on checkout, you agree to all the Terms and conditions and policies of Tagbreak. Read them in detail before proceeding from here
@@ -135,9 +138,40 @@ import Footer from '../components/Footer.astro';
           totalAmountElement.textContent = totalAmount.toFixed(2);
           attachCartEventListeners();
           addButtonHoverEffects();
+          addCheckoutButtonHover(); // Add hover effect for checkout button
         }
         
-        // Rest of your existing functions remain the same...
+        function addCheckoutButtonHover() {
+          const checkoutBtn = document.querySelector('.checkout-btn');
+          if (checkoutBtn) {
+            // Mouse hover effects
+            checkoutBtn.addEventListener('mouseenter', function() {
+              this.style.background = '#f2f2f2';
+              this.style.color = '#000000';
+              this.style.border = '1px solid #000000';
+            });
+            
+            checkoutBtn.addEventListener('mouseleave', function() {
+              this.style.background = '#000000';
+              this.style.color = '#f2f2f2';
+              this.style.border = '1px solid #000000';
+            });
+            
+            // Touch device support
+            checkoutBtn.addEventListener('touchstart', function() {
+              this.style.background = '#f2f2f2';
+              this.style.color = '#000000';
+              this.style.border = '1px solid #000000';
+            });
+            
+            checkoutBtn.addEventListener('touchend', function() {
+              this.style.background = '#000000';
+              this.style.color = '#f2f2f2';
+              this.style.border = '1px solid #000000';
+            });
+          }
+        }
+        
         function addButtonHoverEffects() {
           document.querySelectorAll('.quantity-btn').forEach(btn => {
             btn.addEventListener('mouseenter', function() {
@@ -191,7 +225,7 @@ import Footer from '../components/Footer.astro';
           }
         }
         
-        // Checkout button and other existing code remains the same...
+        // Checkout button click handler
         const checkoutBtn = document.querySelector('.checkout-btn');
         if (checkoutBtn) {
           checkoutBtn.addEventListener('click', function() {
@@ -219,5 +253,6 @@ import Footer from '../components/Footer.astro';
         loadCart();
       });
     </script>
+    </Layout>
   </body>
 </html>

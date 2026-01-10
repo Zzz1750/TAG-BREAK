@@ -1,5 +1,7 @@
 ---
 import Header from '../components/Header_shop.astro';
+import Layout from '../layouts/Layout.astro';
+
 ---
 
 <html lang="en">
@@ -150,7 +152,8 @@ import Header from '../components/Header_shop.astro';
     }
     
     #form-container button:hover {
-      background-color: #4c4c4c;
+      background-color: #9f9f9f;
+      color: black;
     }
     
     .conditional-field {
@@ -192,6 +195,7 @@ import Header from '../components/Header_shop.astro';
     }
   </style>
   <body>
+    <Layout>
     <Header />
     
     <!-- Error container (initially hidden) -->
@@ -433,5 +437,6 @@ function initializeForm() {
   });
 }
     </script>
+    </Layout>
   </body>
 </html>

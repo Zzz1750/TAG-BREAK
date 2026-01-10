@@ -1,3 +1,7 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -179,6 +183,7 @@
     </style>
 </head>
 <body>
+    <Layout>
     <div class="container">
         <div class="logo-container">
             <svg class="timer-circle" viewBox="0 0 100 100">
@@ -270,5 +275,6 @@
             window.location.href = redirectUrl;
         });
     </script>
+    </Layout>
 </body>
 </html>

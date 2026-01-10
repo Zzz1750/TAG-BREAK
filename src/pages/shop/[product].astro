@@ -2,6 +2,8 @@
 // pages/shop/[product].astro
 import Header from '../../components/Header_shop.astro';
 import Footer from '../../components/Footer.astro';
+import Layout from '../../layouts/Layout.astro';
+
 
 export async function getStaticPaths() {
   const theme1Data = await import('../../../public/TAG-BREAK/data/theme1_DB.json');
@@ -76,6 +78,7 @@ const productImages = [
     <link rel="icon" type="image/svg+xml" href="/TAG-BREAK/images/favicon.svg" />
   </head>
   <body>
+    <Layout>
     <div 
     data-product={JSON.stringify(productData)} 
     style="display: none;"
@@ -1180,5 +1183,6 @@ const productImages = [
   }
 </style>
     <Footer />
+    </Layout>
   </body>
 </html>
