@@ -3,6 +3,7 @@ import Header from '../../components/Header_shop.astro';
 import Theme1 from '../../components/scarf_theme/theme1.astro';
 import Footer from '../../components/Footer.astro';
 
+import Layout from '../../layouts/Layout.astro';
 
 
 import theme1Data from '../../../public/TAG-BREAK/data/theme1_DB.json';
@@ -25,6 +26,7 @@ import theme5Data from '../../../public/TAG-BREAK/data/theme5_DB.json';
     <link rel="icon" type="image/svg+xml" href="/TAG-BREAK/images/favicon.svg" />
   </head>
   <body>
+    <Layout>
     <Header />
     <div id="set1">
       <Theme1 productsData={theme1Data} setTitle={"Threads of Mind"} />
@@ -52,6 +54,7 @@ import theme5Data from '../../../public/TAG-BREAK/data/theme5_DB.json';
       <img src="/TAG-BREAK//images/icon/arrow2.png" alt="next button" id="next_button" class="page_button" draggable="false">
     </div>
     <Footer />
+  </Layout>
   </body>
 
   <script>

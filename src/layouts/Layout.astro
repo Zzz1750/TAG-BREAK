@@ -1,0 +1,16 @@
+---
+import CustomCursor from '../components/CustomCursor.astro';
+---
+
+<html lang="en">
+    <style is:global>
+        html, body, * {
+            cursor: none !important;
+        }
+    </style>
+
+  <body>
+    <CustomCursor />
+    <slot />
+  </body>
+</html>
