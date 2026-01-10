@@ -553,7 +553,7 @@ const productImages = [
       
       // Check if adding this quantity would exceed the limit
       if (!checkQuantityLimit(product.id, product.quantity)) {
-        showCartMessage(`Maximum ${MAX_QUANTITY_PER_PRODUCT} items allowed per product! You already have some in your cart.`, 'warning');
+        showCartMessage(`Maxed out, no restocks`, 'warning');
         return;
       }
       

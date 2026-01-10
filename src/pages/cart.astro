@@ -267,7 +267,7 @@ import Layout from '../layouts/Layout.astro';
       if (cart[index]) {
         // Check if trying to increase beyond max limit
         if (change > 0 && cart[index].quantity >= MAX_QUANTITY_PER_PRODUCT) {
-          showMessage('Maximum 5 items allowed per product!', 'warning');
+          showMessage('Maxed out, no restocks', 'warning');
           return;
         }
         
@@ -292,7 +292,7 @@ import Layout from '../layouts/Layout.astro';
         
         // Show appropriate message
         if (change > 0 && cart[index] && cart[index].quantity === MAX_QUANTITY_PER_PRODUCT) {
-          showMessage('Maximum quantity reached for this product!', 'info');
+          showMessage('Maxed out!', 'info');
         }
       }
     }
