@@ -1,0 +1,233 @@
+---
+import Header from '../components/Header_shop.astro';
+import Footer from '../components/Footer.astro';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+  <html lang="en">
+    <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <meta name="generator" content={Astro.generator} />
+      <title>About Us | Tagbreak</title>
+
+      <!-- Google Fonts -->
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Abel&family=Aldrich&family=Changa:wght@200..800&display=swap"
+        rel="stylesheet"
+      />
+
+      <style>
+        :root {
+          --green: #1E4941;
+          --bg-light: #f2f2f2;
+          --text-dark: #000000;
+          --max-width: 1100px;
+        }
+
+        body {
+          margin: 0;
+          font-family: 'Abel', sans-serif;
+          background-color: var(--bg-light);
+          color: var(--text-dark);
+        }
+
+        .about-wrapper {
+          max-width: var(--max-width);
+          margin: 0 auto;
+          padding: 4rem 1.5rem;
+        }
+
+        /* HERO */
+        .about-hero {
+          text-align: center;
+          margin-bottom: 3rem;
+        }
+
+        .about-hero h1 {
+          font-family: 'Aldrich', sans-serif;
+          letter-spacing: 0.15em;
+          color: var(--text-dark);
+          font-size: clamp(2rem, 5vw, 3rem);
+          margin-bottom: 1rem;
+        }
+
+        .about-hero p {
+          max-width: 750px;
+          margin: 0 auto;
+          font-size: 1.1rem;
+          line-height: 1.8;
+        }
+
+        /* SECTIONS */
+        .about-section {
+          margin-top: 3rem;
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+
+        .about-section.full {
+          grid-template-columns: 1fr;
+        }
+
+        .about-section h2 {
+          font-family: 'Changa', sans-serif;
+          color: var(--text-dark);
+          font-weight: 500;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+
+        .about-section p {
+          font-size: 1.05rem;
+          line-height: 1.9;
+        }
+
+        /* HIGHLIGHT BLOCKS */
+        .highlight-box {
+          background: #ffffff;
+          padding: 2rem;
+          border-left: 6px solid var(--green);
+        }
+
+        /* CONTACT */
+        .contact-box {
+          margin-top: 3rem;
+          text-align: center;
+          padding: 1rem;
+          background: #ffffff;
+          padding-bottom: 2rem;
+        }
+
+        .contact-box p {
+          margin-bottom: 0.5rem;
+        }
+
+        .contact-box a {
+          color: #000000;
+          text-decoration: none;
+          font-weight: 600;
+        }
+
+        .contact-box a:hover {
+          color: var(--green);
+        }
+
+        /* RESPONSIVE */
+        @media (min-width: 768px) {
+          .about-section {
+            grid-template-columns: 1fr 1fr;
+          }
+        }
+      </style>
+    </head>
+
+    <body>
+      <Header />
+
+      <main class="about-wrapper">
+        <!-- HERO -->
+        <section class="about-hero">
+          <h1>ABOUT US</h1>
+          <p>
+            It began with a thought that a scarf could be more than just fabric.
+            That it could hold art, innovation, and emotion within a single fold.
+          </p>
+        </section>
+
+        <!-- STORY -->
+        <section class="about-section">
+          <div>
+            <p>
+              At <strong>Tagbreak</strong>, every scarf tells a story of design,
+              craft, and quiet rebellion against the ordinary. Founded by two
+              21-year-olds driven by detail, discovery, and design, we create
+              limited-edition scarves, only six pieces per design each carrying
+              its own identity within one of five vivid themes.
+            </p>
+
+            <p>
+              Every Tagbreak scarf begins as real artwork, shaped by human
+              imagination and expertise. From hand-drawn illustrations and
+              intricate prints to textures inspired by India's diverse artistry,
+              each element comes together in Bangalore, where every piece takes
+              its final form.
+            </p>
+          </div>
+
+          <div class="highlight-box">
+            <p>
+              The fabric is as thoughtful as the art it holds. Crafted from
+              plant-based Ecotech material, it blends luxury with responsibility -
+              soft, fluid, and enduring. It feels as good as it looks: mindful,
+              yet modern.
+            </p>
+          </div>
+        </section>
+
+        <!-- INNOVATION -->
+        <section class="about-section">
+          <div class="highlight-box">
+            <p>
+              We've reimagined how scarves are worn, replacing traditional knots
+              with a magno-snap system that keeps every edge smooth, every line
+              unbroken, and every gesture refined. The result is elegance that
+              moves effortlessly, preserving the design's natural flow.
+            </p>
+          </div>
+
+          <div>
+            <p>
+              Our world is framed in deep green - a tone that stands for balance,
+              quiet strength, and renewal. It's the soul of Tagbreak, reflected in
+              our designs, our vision, and our commitment to building beauty that
+              lasts.
+            </p>
+
+            <p>
+              Beneath every fold lies a small piece of tomorrow - a QR-linked NFT,
+              your digital certificate of authenticity and ownership. Every
+              Tagbreak scarf exists both in your hands and on the blockchain: a
+              phygital collectible bridging art, fashion, and technology.
+            </p>
+          </div>
+        </section>
+
+        <!-- COMMITMENT -->
+        <section class="about-section full">
+          <h2>Our Commitment</h2>
+          <p>
+            Tagbreak upholds recognized international standards of social and
+            environmental responsibility across all its operations. From
+            selecting and tracing raw materials to designing and crafting our
+            products, we prioritize a circular approach focused on quality and
+            durability.
+          </p>
+
+          <p>
+            Through continuous innovation and optimization of our production
+            processes, we strive to minimize the environmental footprint of our
+            business and supply chain. As part of this commitment, we consciously
+            avoid traditional silk, choosing not to harm silkworms, and instead
+            embrace innovative, plant-based Ecotech fabrics that uphold our
+            cruelty-free, sustainable, and forward-thinking values.
+          </p>
+        </section>
+
+        <!-- CONTACT -->
+        <section class="contact-box">
+          <p>For more information, please contact</p>
+          <a href="mailto:tagbreak.cult@gmail.com">
+            tagbreak.cult@gmail.com
+          </a>
+        </section>
+      </main>
+
+      <Footer />
+    </body>
+  </html>
+</Layout>
