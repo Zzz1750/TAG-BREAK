@@ -1,4 +1,5 @@
 ---
+
 import Layout from '../layouts/Layout.astro';
 
 ---
@@ -16,6 +17,154 @@ import Layout from '../layouts/Layout.astro';
     <script is:inline src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
 
     <script is:inline>
+    /* =========================
+       TEXT ANIMATION MANAGER
+    ========================= */
+    class TextAnimationManager {
+        constructor() {
+            this.visibleElements = new Set();
+            this.setupObservers();
+            this.setupInitialAnimations();
+        }
+
+        setupInitialAnimations() {
+            // Animate theme text on load
+            setTimeout(() => {
+                this.animateIn(document.getElementById('theme_head'));
+                this.animateIn(document.getElementById('theme_name'));
+                this.animateIn(document.getElementById('shop_button'));
+            }, 600);
+        }
+
+        setupObservers() {
+            // Intersection Observer for sidebar elements
+            const sidebarObserver = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            this.animateIn(entry.target);
+                        } else if (this.visibleElements.has(entry.target)) {
+                            this.animateOut(entry.target);
+                        }
+                    });
+                },
+                {
+                    threshold: 0.1,
+                    rootMargin: '50px'
+                }
+            );
+
+            // Observe sidebar elements when they're added to DOM
+            const sidebarElements = [
+                '#scarf_main_name',
+                '#scarf_theme_name',
+                '.info-row',
+                '#view_product_button'
+            ];
+
+            // Watch for sidebar opening
+            const sidebarContainer = document.getElementById('sidebar_container');
+            if (sidebarContainer) {
+                const sidebarObserverCallback = () => {
+                    if (sidebarContainer.style.display === 'block') {
+                        setTimeout(() => {
+                            sidebarElements.forEach(selector => {
+                                const elements = document.querySelectorAll(selector);
+                                elements.forEach(el => {
+                                    sidebarObserver.observe(el);
+                                    // Initially hidden
+                                    el.style.opacity = '0';
+                                    el.style.transform = 'translateY(20px)';
+                                });
+                            });
+                            // Animate sidebar content in sequence
+                            this.animateSidebarSequence();
+                        }, 50);
+                    }
+                };
+
+                // Watch for sidebar display changes
+                const sidebarObserver = new MutationObserver(sidebarObserverCallback);
+                sidebarObserver.observe(sidebarContainer, { 
+                    attributes: true, 
+                    attributeFilter: ['style'] 
+                });
+            }
+        }
+
+        animateSidebarSequence() {
+            const elements = [
+                document.getElementById('scarf_main_name'),
+                document.getElementById('scarf_theme_name'),
+                ...document.querySelectorAll('.info-row'),
+                document.getElementById('view_product_button')
+            ].filter(el => el);
+
+            elements.forEach((el, index) => {
+                setTimeout(() => {
+                    this.animateIn(el);
+                }, 100 + (index * 80));
+            });
+        }
+
+        animateIn(element) {
+            if (!element || this.visibleElements.has(element)) return;
+            
+            this.visibleElements.add(element);
+            
+            // Remove any previous animations
+            element.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            
+            // Reset for animation
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(20px)';
+            
+            // Force reflow
+            element.offsetHeight;
+            
+            // Animate in
+            requestAnimationFrame(() => {
+                element.style.opacity = '1';
+                element.style.transform = 'translateY(0)';
+            });
+        }
+
+        animateOut(element) {
+            if (!element || !this.visibleElements.has(element)) return;
+            
+            this.visibleElements.delete(element);
+            
+            element.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(-10px)';
+            
+            // Reset after animation completes
+            setTimeout(() => {
+                if (!this.visibleElements.has(element)) {
+                    element.style.transform = 'translateY(20px)';
+                }
+            }, 300);
+        }
+
+        animateButton(button, direction = 'in') {
+            if (!button) return;
+            
+            if (direction === 'in') {
+                button.style.transition = 'color 0.3s ease, transform 0.3s ease';
+                button.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    button.style.transform = 'scale(1)';
+                }, 300);
+            } else {
+                button.style.transition = 'color 0.3s ease, transform 0.3s ease';
+                button.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    button.style.transform = 'scale(1)';
+                }, 300);
+            }
+        }
+    }
+
     /* =========================
        MEMORY MONITORING
     ========================= */
@@ -74,9 +223,14 @@ import Layout from '../layouts/Layout.astro';
        CAMERA SLIDER
     ========================= */
     document.addEventListener('DOMContentLoaded', function() {
+      // Initialize text animation manager
+      window.textAnimator = new TextAnimationManager();
 
-      document.getElementById('shop_button').addEventListener('click', ()=>{
-        window.location.href = '/shop';
+      document.getElementById('shop_button').addEventListener('click', () => {
+        window.textAnimator.animateButton(document.getElementById('shop_button'), 'out');
+        setTimeout(() => {
+          window.location.href = '/shop';
+        }, 300);
       });
 
       // Camera movement variables
@@ -111,6 +265,21 @@ import Layout from '../layouts/Layout.astro';
         currentCameraX = LEFT_POSITION;
         updateCameraPosition();
         updateSliderButtonPosition();
+        
+        // Animate slider in
+        setTimeout(() => {
+          const sliderContainer = document.getElementById('camera_slider_container');
+          if (sliderContainer) {
+            sliderContainer.style.opacity = '0';
+            sliderContainer.style.transform = 'translateY(20px)';
+            sliderContainer.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            
+            requestAnimationFrame(() => {
+              sliderContainer.style.opacity = '1';
+              sliderContainer.style.transform = 'translateY(0)';
+            });
+          }
+        }, 1000);
       }
       
       // Update camera position
@@ -139,6 +308,9 @@ import Layout from '../layouts/Layout.astro';
       
       // Move camera by a specific amount
       function moveCamera(amount) {
+        // Animate slider button
+        window.textAnimator.animateButton(cameraSliderBtn, 'in');
+        
         const newX = currentCameraX + amount;
         // Clamp between LEFT_POSITION (0) and RIGHT_LIMIT (2)
         currentCameraX = Math.max(LEFT_POSITION, Math.min(RIGHT_LIMIT, newX));
@@ -165,6 +337,10 @@ import Layout from '../layouts/Layout.astro';
         document.addEventListener('touchmove', doDrag);
         document.addEventListener('mouseup', stopDrag);
         document.addEventListener('touchend', stopDrag);
+        
+        // Animate button on drag start
+        cameraSliderBtn.style.transform = 'scale(1.2)';
+        cameraSliderBtn.style.transition = 'transform 0.2s ease';
       }
       
       function doDrag(e) {
@@ -198,6 +374,9 @@ import Layout from '../layouts/Layout.astro';
         document.removeEventListener('touchmove', doDrag);
         document.removeEventListener('mouseup', stopDrag);
         document.removeEventListener('touchend', stopDrag);
+        
+        // Animate button back
+        cameraSliderBtn.style.transform = 'scale(1)';
       }
       
       // Set up event listeners
@@ -213,6 +392,9 @@ import Layout from '../layouts/Layout.astro';
           const clickX = e.clientX - rect.left;
           const percentage = (clickX - 20) / sliderWidth;
           setCameraPosition(percentage);
+          
+          // Animate button
+          window.textAnimator.animateButton(cameraSliderBtn, 'in');
         });
         
         // Touch support for slider track
@@ -222,8 +404,15 @@ import Layout from '../layouts/Layout.astro';
           const touchX = e.touches[0].clientX - rect.left;
           const percentage = (touchX - 20) / sliderWidth;
           setCameraPosition(percentage);
+          
+          // Animate button
+          window.textAnimator.animateButton(cameraSliderBtn, 'in');
         });
       }
+      
+      // Arrow button listeners
+      document.getElementById('left_arrow').addEventListener('click', () => moveCamera(-0.5));
+      document.getElementById('right_arrow').addEventListener('click', () => moveCamera(0.5));
       
       // Initialize on load
       window.addEventListener('load', initializeSlider);
@@ -279,52 +468,83 @@ import Layout from '../layouts/Layout.astro';
 
 
     document.addEventListener('DOMContentLoaded', function(){
-
       var scarf_main_name = document.getElementById('scarf_main_name');
       var sidebar_image = document.getElementById('sidebar_image');
       var button_location ='';
       var sidebar_container = document.getElementById('sidebar_container');
+      
+      // Animate sidebar close button
+      document.getElementById('sidebar_close').addEventListener('click', ()=>{
+        // Animate sidebar out
+        if (window.textAnimator) {
+          const elements = [
+            document.getElementById('scarf_main_name'),
+            document.getElementById('scarf_theme_name'),
+            ...document.querySelectorAll('.info-row'),
+            document.getElementById('view_product_button')
+          ].filter(el => el);
+          
+          // Animate elements out in reverse order
+          elements.reverse().forEach((el, index) => {
+            setTimeout(() => {
+              window.textAnimator.animateOut(el);
+            }, index * 50);
+          });
+        }
+        
+        // Close sidebar after animations
+        setTimeout(() => {
+          sidebar_container.style.display='none';
+        }, 300);
+      });
 
       document.getElementById('view_product_button').addEventListener('click', ()=>{
-        window.location.href = button_location;
-      })
-
-      document.getElementById('sidebar_close').addEventListener('click', ()=>{
-        sidebar_container.style.display='none'
-      })
+        window.textAnimator.animateButton(document.getElementById('view_product_button'), 'out');
+        setTimeout(() => {
+          window.location.href = button_location;
+        }, 300);
+      });
       
-      document.getElementById('scarf1_plane').addEventListener('click', ()=>{
-        change_sidebar('High Stakes', '/TAG-BREAK/scarf/Visions_in_Motions/high/High_Stakes_.jpg')
-        button_location = '/shop/high-stakes'
-      })
-
-      document.getElementById('scarf2_plane').addEventListener('click', ()=>{
-        change_sidebar('Blue Reverie', '/TAG-BREAK/scarf/Visions_in_Motions/nlue/Blue_Reverie.jpg')
-        button_location = '/shop/blue-reverie'
-      })
-
-      document.getElementById('scarf3_plane').addEventListener('click', ()=>{
-        change_sidebar('Future Gaze', '/TAG-BREAK/scarf/Visions_in_Motions/future/Future_Gaze.jpg')
-        button_location = '/shop/future-gaze'
-      })
-
-      document.getElementById('scarf4_plane').addEventListener('click', ()=>{
-        change_sidebar('Thanos Veil','/TAG-BREAK/scarf/Visions_in_Motions/thanos/Thanos_Veil.jpg')
-        button_location = '/shop/thanos-veil'
-      })
-
-      document.getElementById('scarf5_plane').addEventListener('click', ()=>{
-        change_sidebar('Ignite WIthin', '/TAG-BREAK/scarf/Visions_in_Motions/iginite/Ignite_Within.jpg')
-        button_location = '/shop/ignite-within'
-      })
-
-      function change_sidebar(new_name, new_img_loc){
-
-        sidebar_container.style.display='block'
-        scarf_main_name.innerHTML=new_name;
-        sidebar_image.setAttribute('src', new_img_loc)
+      function setupScarfListener(id, name, imgSrc, link) {
+        document.getElementById(id).addEventListener('click', ()=>{
+          change_sidebar(name, imgSrc);
+          button_location = link;
+        });
       }
       
+      // Setup scarf listeners
+      setupScarfListener('scarf1_plane', 'High Stakes', '/TAG-BREAK/scarf/Visions_in_Motions/high/High_Stakes_.jpg', '/shop/high-stakes');
+      setupScarfListener('scarf2_plane', 'Blue Reverie', '/TAG-BREAK/scarf/Visions_in_Motions/blue/Blue_Reverie.jpg', '/shop/blue-reverie');
+      setupScarfListener('scarf3_plane', 'Future Gaze', '/TAG-BREAK/scarf/Visions_in_Motions/future/Future_Gaze.jpg', '/shop/future-gaze');
+      setupScarfListener('scarf4_plane', 'Thanos Veil', '/TAG-BREAK/scarf/Visions_in_Motions/thanos/Thanos_Veil.jpg', '/shop/thanos-veil');
+      setupScarfListener('scarf5_plane', 'Ignite Within', '/TAG-BREAK/scarf/Visions_in_Motions/iginite/Ignite_Within.jpg', '/shop/ignite-within');
+
+      function change_sidebar(new_name, new_img_loc){
+        sidebar_container.style.display='block';
+        
+        // Reset text for animation
+        scarf_main_name.innerHTML = new_name;
+        scarf_main_name.style.opacity = '0';
+        scarf_main_name.style.transform = 'translateY(20px)';
+        
+        // Animate sidebar in
+        setTimeout(() => {
+          sidebar_container.style.opacity = '1';
+          sidebar_container.style.transform = 'translateX(0)';
+        }, 10);
+        
+        sidebar_image.setAttribute('src', new_img_loc);
+        
+        // Animate image in
+        sidebar_image.style.opacity = '0';
+        sidebar_image.style.transform = 'scale(0.9)';
+        sidebar_image.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        
+        setTimeout(() => {
+          sidebar_image.style.opacity = '1';
+          sidebar_image.style.transform = 'scale(1)';
+        }, 200);
+      }
     });
 
 
@@ -503,6 +723,65 @@ setTimeout(() => {
     </script>
     
     <style>
+    /* TEXT ANIMATION STYLES */
+    #theme_head, #theme_name, #shop_button, #camera_slider_container {
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    #theme_name {
+        transition-delay: 0.1s;
+    }
+    
+    #shop_button {
+        transition-delay: 0.2s;
+    }
+    
+    #camera_slider_container {
+        transition-delay: 0.3s;
+    }
+    
+    /* Sidebar animation */
+    #sidebar_container {
+        transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    #sidebar_content > * {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    
+    #sidebar_image_wrapper {
+        transition-delay: 0.1s;
+    }
+    
+    #scarf_main_name {
+        transition-delay: 0.2s;
+    }
+    
+    #scarf_theme_name {
+        transition-delay: 0.25s;
+    }
+    
+    .info-row:nth-child(1) {
+        transition-delay: 0.3s;
+    }
+    
+    .info-row:nth-child(2) {
+        transition-delay: 0.35s;
+    }
+    
+    .info-row:nth-child(3) {
+        transition-delay: 0.4s;
+    }
+    
+    #view_product_button {
+        transition-delay: 0.45s;
+    }
+    
     /* Remove all focus outlines globally */
     *:focus {
         outline: none !important;
@@ -617,7 +896,7 @@ setTimeout(() => {
     margin-top: 15px; 
   }
 
-  #shop_button{
+  #shop_button {
     color: rgba(0, 0, 0, 0.6);
     z-index: 100;
     position: absolute;
@@ -628,16 +907,29 @@ setTimeout(() => {
     font-family: 'aldrich';
     font-weight: 400;
     cursor: pointer;
-  }
-  #shop_button::after {
+    pointer-events: auto;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+#shop_button::after {
     content: '';
     position: absolute;
-    left: 0px;
-    bottom: -3px; 
-    width: 42px; 
-    height: 1px; 
-    background-color: rgba(0, 0, 0, 0.7); 
-  }
+    left: 0;
+    bottom: -3px;
+    width: 0;
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.7);
+    transition: width 0.3s ease;
+}
+
+/* Hover */
+#shop_button:hover {
+    color: rgba(0, 0, 0, 1);
+}
+
+#shop_button:hover::after {
+    width: 42px;
+}
 
   /* Responsive adjustments */
   @media (max-width: 768px) {
@@ -709,17 +1001,19 @@ setTimeout(() => {
       justify-content: center;
       cursor: pointer;
       pointer-events: auto;
-      transition: opacity 0.2s ease;
+      transition: opacity 0.2s ease, transform 0.2s ease;
       user-select: none;
     }
 
     .slider-arrow:hover {
       opacity: 0.8;
+      transform: scale(1.1);
     }
 
     .slider-arrow img {
       width: 100%;
       object-fit: contain;
+      transition: transform 0.2s ease;
     }
 
     #left_arrow {
@@ -744,6 +1038,11 @@ setTimeout(() => {
       cursor: pointer;
       overflow: visible;
       flex: 1;
+      transition: border-color 0.3s ease;
+    }
+
+    #camera_slider:hover {
+      border-color: rgba(0, 0, 0, 0.2);
     }
 
     #camera_slider_btn {
@@ -760,10 +1059,13 @@ setTimeout(() => {
       cursor: grab;
       user-select: none;
       touch-action: none;
+      transition: transform 0.2s ease, border-color 0.2s ease;
     }
 
     #camera_slider_btn:active {
       cursor: grabbing;
+      transform: translate(-50%, -50%) scale(1.2);
+      border-color: rgba(0, 0, 0, 0.8);
     }
 
     #camera_slider_label {
@@ -779,6 +1081,8 @@ setTimeout(() => {
       text-align: center;
       white-space: nowrap;
       pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
 
     /* Slider track indicators */
@@ -868,6 +1172,7 @@ setTimeout(() => {
           border-left: 1px solid rgba(0, 0, 0, 0.1);
           box-shadow: -2px 0 20px rgba(0, 0, 0, 0.08);
           overflow: hidden;
+          opacity: 1;
       }
 
       /* Close button */
@@ -886,6 +1191,11 @@ setTimeout(() => {
           cursor: pointer;
           z-index: 102;
           padding: 0;
+          transition: transform 0.2s ease;
+      }
+
+      #sidebar_close:hover {
+          transform: rotate(90deg);
       }
 
       #sidebar_close::before,
@@ -896,6 +1206,7 @@ setTimeout(() => {
           height: 2px;
           background: rgba(0, 0, 0, 0.7);
           border-radius: 1px;
+          transition: background 0.2s ease;
       }
 
       #sidebar_close::before {
@@ -935,6 +1246,7 @@ setTimeout(() => {
           height: auto;          
           object-fit: contain;  
           display: block;
+          transition: opacity 0.5s ease, transform 0.5s ease;
       }
 
       /* Text content - FLEX COLUMN */
@@ -976,6 +1288,11 @@ setTimeout(() => {
           width: 35px;
           height: 1.5px;
           background: rgba(0, 0, 0, 0.4);
+          transition: width 0.3s ease;
+      }
+
+      #scarf_theme_name:hover::after {
+          width: 100%;
       }
 
       /* Product info - simple layout */
@@ -991,6 +1308,11 @@ setTimeout(() => {
           align-items: center;
           padding: 12px 0;
           border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+          transition: transform 0.3s ease;
+      }
+
+      .info-row:hover {
+          transform: translateX(5px);
       }
 
       .info-row:last-child {
@@ -1002,17 +1324,27 @@ setTimeout(() => {
           color: rgba(0, 0, 0, 0.55);
           text-transform: uppercase;
           letter-spacing: 0.5px;
+          transition: color 0.3s ease;
+      }
+
+      .info-row:hover .info-label {
+          color: rgba(0, 0, 0, 0.8);
       }
 
       .info-value {
           font-size: 1rem;
           color: #000000;
           font-weight: 500;
+          transition: color 0.3s ease;
       }
 
       .info-value.price {
           font-size: 1.4rem;
           font-weight: 700;
+      }
+
+      .info-row:hover .info-value {
+          color: rgba(0, 0, 0, 0.8);
       }
 
       /* Single action button - ALWAYS AT BOTTOM */
@@ -1033,13 +1365,32 @@ setTimeout(() => {
           align-items: center;
           justify-content: center;
           gap: 10px;
-          transition: all 0.2s ease;
+          transition: all 0.3s ease;
           margin-top: auto; /* This pushes it to the bottom */
           flex-shrink: 0; /* Prevent button from shrinking */
+          position: relative;
+          overflow: hidden;
+      }
+
+      #view_product_button::before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 0;
+          height: 0;
+          border-radius: 50%;
+          background: #000000;
+          transform: translate(-50%, -50%);
+          transition: width 0.6s ease, height 0.6s ease;
+      }
+
+      #view_product_button:hover::before {
+          width: 300px;
+          height: 300px;
       }
 
       #view_product_button:hover {
-          background: #000000;
           color: #ffffff;
       }
 
@@ -1050,6 +1401,18 @@ setTimeout(() => {
       #view_product_button svg {
           width: 18px;
           height: 18px;
+          position: relative;
+          z-index: 1;
+          transition: transform 0.3s ease;
+      }
+
+      #view_product_button:hover svg {
+          transform: scale(1.1);
+      }
+
+      #view_product_button span {
+          position: relative;
+          z-index: 1;
       }
 
       /* Mobile responsive */
@@ -1062,6 +1425,7 @@ setTimeout(() => {
               top: auto;
               border-left: none;
               border-top: 1px solid rgba(0, 0, 0, 0.1);
+              transform: translateY(100%);
           }
           
           #sidebar_close {
@@ -1155,7 +1519,7 @@ setTimeout(() => {
     }
     #loading_asset1{
       position: absolute;
-      width: 50px;
+      width: 100px;
       top: 43%;
       left: 50%;
       transform: translate(-50%, -50%) rotate(-45deg);
@@ -1164,7 +1528,7 @@ setTimeout(() => {
       position: absolute;
       top: 43%;
       left: 50%;
-      width: 300px;
+      width: 280px;
       transform: translate(-50%, -50%);
       display: none;
     }
@@ -1217,7 +1581,7 @@ setTimeout(() => {
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                     <circle cx="12" cy="12" r="3"></circle>
                 </svg>
-                View Product
+                <span>View Product</span>
             </button>
         </div>
     </div>
