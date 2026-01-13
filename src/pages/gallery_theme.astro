@@ -294,28 +294,28 @@ import Layout from '../layouts/Layout.astro';
       })
       
       document.getElementById('scarf1_plane').addEventListener('click', ()=>{
-        change_sidebar('High Stakes', '/TAG-BREAK/TAG-BREAK/scarf/Visions_in_Motions/High_Stakes_.jpg')
-        button_location = '/TAG-BREAK/shop/high-stakes'
+        change_sidebar('High Stakes', '/TAG-BREAK/scarf/Visions_in_Motions/high/High_Stakes_.jpg')
+        button_location = '/shop/high-stakes'
       })
 
       document.getElementById('scarf2_plane').addEventListener('click', ()=>{
-        change_sidebar('Blue Reverie', '/TAG-BREAK/TAG-BREAK/scarf/Visions_in_Motions/Blue_Reverie.jpg')
-        button_location = '/TAG-BREAK/shop/blue-reverie'
+        change_sidebar('Blue Reverie', '/TAG-BREAK/scarf/Visions_in_Motions/nlue/Blue_Reverie.jpg')
+        button_location = '/shop/blue-reverie'
       })
 
       document.getElementById('scarf3_plane').addEventListener('click', ()=>{
-        change_sidebar('Future Gaze', '/TAG-BREAK/TAG-BREAK/scarf/Visions_in_Motions/Future_Gaze.jpg')
-        button_location = '/TAG-BREAK/shop/future-gaze'
+        change_sidebar('Future Gaze', '/TAG-BREAK/scarf/Visions_in_Motions/future/Future_Gaze.jpg')
+        button_location = '/shop/future-gaze'
       })
 
       document.getElementById('scarf4_plane').addEventListener('click', ()=>{
-        change_sidebar('Thanos Veil','/TAG-BREAK/TAG-BREAK/scarf/Visions_in_Motions/Thanos_Veil.jpg')
-        button_location = '/TAG-BREAK/shop/thanos-veil'
+        change_sidebar('Thanos Veil','/TAG-BREAK/scarf/Visions_in_Motions/thanos/Thanos_Veil.jpg')
+        button_location = '/shop/thanos-veil'
       })
 
       document.getElementById('scarf5_plane').addEventListener('click', ()=>{
-        change_sidebar('Ignite WIthin', '/TAG-BREAK/TAG-BREAK/scarf/Visions_in_Motions/Ignite_Within.jpg')
-        button_location = '/TAG-BREAK/shop/ignite-within'
+        change_sidebar('Ignite WIthin', '/TAG-BREAK/scarf/Visions_in_Motions/iginite/Ignite_Within.jpg')
+        button_location = '/shop/ignite-within'
       })
 
       function change_sidebar(new_name, new_img_loc){
@@ -1146,8 +1146,8 @@ setTimeout(() => {
 <body>
   <Layout>
   <div id="loading_screen">
-    <img src="/TAG-BREAK//images/logo3.png" id="loading_asset1" alt="">
-    <img src="/TAG-BREAK//images/pink_logo.webp" id="loading_asset2" alt="">
+    <img src="/images/logo3.png" id="loading_asset1" alt="">
+    <img src="/images/pink_logo.webp" id="loading_asset2" alt="">
   </div>
 
   <div id="sidebar_container" style="display: none;">
@@ -1204,7 +1204,7 @@ setTimeout(() => {
     <div id="camera_slider_container">
       <!-- Left Arrow -->
       <div id="left_arrow" class="slider-arrow">
-        <img src="/TAG-BREAK/images/icon/arrow2.png" alt="Left Arrow">
+        <img src="/images/icon/arrow2.png" alt="Left Arrow">
       </div>
       
       <!-- Slider Wrapper -->
@@ -1217,7 +1217,7 @@ setTimeout(() => {
       
       <!-- Right Arrow -->
       <div id="right_arrow" class="slider-arrow">
-        <img src="/TAG-BREAK/images/icon/arrow2.png" alt="Right Arrow">
+        <img src="/images/icon/arrow2.png" alt="Right Arrow">
       </div>
     </div>
 
@@ -1246,11 +1246,11 @@ setTimeout(() => {
 
         <!-- Assets -->
         <a-assets>
-            <a-asset-item id="scarf1" src="/TAG-BREAK/3D-models/VIM/Ignite_Within.glb"></a-asset-item>
-            <a-asset-item id="scarf2" src="/TAG-BREAK/3D-models/VIM/future_gaze.glb"></a-asset-item>
-            <a-asset-item id="scarf3" src="/TAG-BREAK/3D-models/VIM/Blue_Reverie.glb"></a-asset-item>
-            <a-asset-item id="scarf4" src="/TAG-BREAK/3D-models/VIM/High_Stakes_.glb"></a-asset-item>
-            <a-asset-item id="scarf5" src="/TAG-BREAK/3D-models/VIM/Thanos_Veil.glb"></a-asset-item>
+            <a-asset-item id="scarf1" src="/3D-models/VIM/Ignite_Within.glb"></a-asset-item>
+            <a-asset-item id="scarf2" src="/3D-models/VIM/future_gaze.glb"></a-asset-item>
+            <a-asset-item id="scarf3" src="/3D-models/VIM/Blue_Reverie.glb"></a-asset-item>
+            <a-asset-item id="scarf4" src="/3D-models/VIM/High_Stakes_.glb"></a-asset-item>
+            <a-asset-item id="scarf5" src="/3D-models/VIM/Thanos_Veil.glb"></a-asset-item>
         </a-assets>
 
         <a-entity id="scarf_main_rig" position="0 1 -6" auto-rotate> 
@@ -1258,7 +1258,7 @@ setTimeout(() => {
             <!-- SCARF 4  -->
             <a-entity id="scarf1_container" position="11 1.3 4">
                 <a-entity id="scarf1" gltf-model="#scarf5" rotation="10 -5 -7" position="0 3 0" scale="1.5 1.5 1.5" animation-mixer="clip: *; loop: repeat; timeScale: 0.8">
-                <a-image src="/TAG-BREAK//3D-models/shadow.png" position="-0.03989 -2.41091 0.08217" width="2.3" height="1" material="opacity: 0.4" geometry="" rotation="77.8357435107272 18.44293846746607 18.51283931847203" ></a-image>
+                <a-image src="/3D-models/shadow.png" position="-0.03989 -2.41091 0.08217" width="2.3" height="1" material="opacity: 0.4" geometry="" rotation="77.8357435107272 18.44293846746607 18.51283931847203" ></a-image>
                   </a-entity>
             </a-entity>
 
@@ -1266,7 +1266,7 @@ setTimeout(() => {
             <a-entity id="scarf2_container" position="7.2 0.2 8.5">
                 <a-entity position="0 0 -4">
                     <a-entity id="scarf2" gltf-model="#scarf2" position="0 3 0" scale="1.5 1.5 1.5" animation-mixer="clip: *; loop: repeat; timeScale: 0.8" rotation="10 5 10">
-                    <a-image src="/TAG-BREAK//3D-models/shadow.png" position="-0.12077 -1.69459 -0.06054" width="2.3" height="1" material="transparent: true; opacity: 0.4" geometry="" rotation="78 -48 -44.76175478680044"></a-image>    
+                    <a-image src="/3D-models/shadow.png" position="-0.12077 -1.69459 -0.06054" width="2.3" height="1" material="transparent: true; opacity: 0.4" geometry="" rotation="78 -48 -44.76175478680044"></a-image>    
                     </a-entity>
                     
                 </a-entity>
@@ -1276,7 +1276,7 @@ setTimeout(() => {
             <a-entity id="scarf3_container" position="14.5 -0.5 8">
                 <a-entity position="0 0 -4">
                     <a-entity id="scarf3" gltf-model="#scarf1" position="0 3 0" scale="1.5 1.5 1.5" animation-mixer="clip: *; loop: repeat; timeScale: 0.2" rotation="10 0 10">
-                        <a-image src="/TAG-BREAK//3D-models/shadow.png" position="0 -1.6 -0.05" width="2.3" height="1" material="transparent: true; opacity: 0.4" geometry="" rotation="75 -44 -43"></a-image>    
+                        <a-image src="/3D-models/shadow.png" position="0 -1.6 -0.05" width="2.3" height="1" material="transparent: true; opacity: 0.4" geometry="" rotation="75 -44 -43"></a-image>    
                     </a-entity>
                 </a-entity>
             </a-entity>
@@ -1285,7 +1285,7 @@ setTimeout(() => {
             <a-entity id="scarf4_container" position="3.5 1.5 8.2">
                 <a-entity position="0 0 -4">
                     <a-entity id="scarf4" gltf-model="#scarf3" position="0 3 0" scale="1.5 1.5 1.5" animation-mixer="clip: *; loop: repeat; timeScale: 0.8" rotation="5 0 0">
-                    <a-image src="/TAG-BREAK//3D-models/shadow.png" position="0.044 -2.6 -0.30382" width="2.3" height="1" material="opacity: 0.4" geometry="" rotation="95 11 13.02455"></a-image>                    
+                    <a-image src="/3D-models/shadow.png" position="0.044 -2.6 -0.30382" width="2.3" height="1" material="opacity: 0.4" geometry="" rotation="95 11 13.02455"></a-image>                    
                   </a-entity>
                 </a-entity>
             </a-entity>
@@ -1296,7 +1296,7 @@ setTimeout(() => {
             <a-entity id="scarf5_container" position="0 0.5 7.9">
                 <a-entity position="0 -0.8 -4">
                     <a-entity id="scarf5" gltf-model="#scarf4" position="0 3 0" scale="1.5 1.5 1.5" animation-mixer="clip: *; loop: repeat; timeScale: 0.8" rotation="10 -10 0">
-                        <a-image src="/TAG-BREAK//3D-models/shadow.png" position="0 -1.7 -0.05" width="2.3" height="1" material="transparent: true; opacity: 0.4" geometry="" rotation="90 0 0"></a-image>    
+                        <a-image src="/3D-models/shadow.png" position="0 -1.7 -0.05" width="2.3" height="1" material="transparent: true; opacity: 0.4" geometry="" rotation="90 0 0"></a-image>    
                     </a-entity>
                 </a-entity>
             </a-entity>

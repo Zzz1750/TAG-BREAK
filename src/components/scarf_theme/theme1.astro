@@ -15,7 +15,7 @@ const { productsData, setTitle } = Astro.props;
   <div class="products-container">
     {productsData.map((product, index) => (
       <div class="product-card">
-        <a href={`/TAG-BREAK/shop/${product.scarf_name.toLowerCase().replace(/\s+/g, '-')}`}>
+        <a href={`/shop/${product.scarf_name.toLowerCase().replace(/\s+/g, '-')}`}>
           <div class="product-image-container">
             <div class="image-placeholder"></div>
             
