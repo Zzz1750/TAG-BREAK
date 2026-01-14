@@ -5,11 +5,21 @@
 <script is:inline>
   const cursor = document.getElementById('custom-cursor');
 
-  document.addEventListener('mousemove', (e) => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
-  });
-  
+  // Detect touch device
+  const isTouchDevice =
+    'ontouchstart' in window ||
+    navigator.maxTouchPoints > 0;
+
+  if (!isTouchDevice) {
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+  } else {
+    // Disable cursor on mobile
+    cursor.style.display = 'none';
+    document.body.style.cursor = 'auto';
+  }
 </script>
 
 <style>
@@ -30,4 +40,14 @@
     transform: translate(-50%, -50%);
     z-index: 99999;
   }
+  @media (hover: none) and (pointer: coarse) {
+  #custom-cursor {
+    display: none;
+  }
+
+  body {
+    cursor: auto;
+  }
+}
+
 </style>
