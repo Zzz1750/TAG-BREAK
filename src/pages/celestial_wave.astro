@@ -8,7 +8,7 @@ import Layout from '../layouts/Layout.astro';
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>Geometric Rhythms</title>
+    <title>Celestial Wave</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Aldrich&family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
@@ -296,28 +296,28 @@ import Layout from '../layouts/Layout.astro';
       })
       
       document.getElementById('scarf1_plane').addEventListener('click', ()=>{
-        change_sidebar('Ocean Current', '/TAG-BREAK/scarf/Geometric_Rhythms/ocean_current/Ocean_Currents.jpg')
-        button_location = '/shop/ocean-current'
+        change_sidebar('Mauve Lattice', '/TAG-BREAK/scarf/Celestial_Wave/mauve/Mauve_Lattice.jpg')
+        button_location = '/shop/mauve-lattice'
       })
 
       document.getElementById('scarf2_plane').addEventListener('click', ()=>{
-        change_sidebar('Obsidian Mesh', '/TAG-BREAK/scarf/Geometric_Rhythms/obsidians/Obsidian_Mesh.jpg')
-        button_location = '/shop/obsidian-mesh'
+        change_sidebar('Golden Grid', '/TAG-BREAK/scarf/Celestial_Wave/golden/Golden_Grid.jpg')
+        button_location = '/shop/golden-grid'
       })
 
       document.getElementById('scarf3_plane').addEventListener('click', ()=>{
-        change_sidebar('Heart Construct', '/TAG-BREAK/scarf/Geometric_Rhythms/heart_construct/Heart_Construct.jpg')
-        button_location = '/shop/heart-construct'
+        change_sidebar('Ember Reign', '/TAG-BREAK/scarf/Celestial_Wave/ember/Ember_Reign.jpg')
+        button_location = '/shop/ember-reign'
       })
 
       document.getElementById('scarf4_plane').addEventListener('click', ()=>{
-        change_sidebar('Plum Tesserae','/TAG-BREAK/scarf/Geometric_Rhythms/plum/Plum_Tesserae.jpg')
-        button_location = '/shop/plum-tesserae'
+        change_sidebar('Midnight Pulse','/TAG-BREAK/scarf/Celestial_Wave/midnight/Midnight_Pulse.jpg')
+        button_location = '/shop/midnight-pulse'
       })
 
       document.getElementById('scarf5_plane').addEventListener('click', ()=>{
-        change_sidebar('Crimson Lattice', '/TAG-BREAK/scarf/Geometric_Rhythms/crimson/Crimson_Lattice.jpg')
-        button_location = '/shop/crimson-lattice'
+        change_sidebar('Abyss Mosaic', '/TAG-BREAK/scarf/Celestial_Wave/Abyss/Abyss_Mosaic_.jpg')
+        button_location = '/shop/abyss-mosaic'
       })
 
       function change_sidebar(new_name, new_img_loc){
@@ -1195,7 +1195,7 @@ setTimeout(() => {
         <!-- Text content -->
         <div id="sidebar_text_container">
             <h1 id="scarf_main_name"></h1>
-            <p id="scarf_theme_name"><i>Geometric Rhythms</i></p>
+            <p id="scarf_theme_name"><i>Celestial Wave</i></p>
             
             <!-- Product info -->
             <div class="product-info">
@@ -1226,7 +1226,7 @@ setTimeout(() => {
 </div>
     <div id="theme_container">
       <h1 id="theme_head">THEME</h1>
-      <h1 id="theme_name">Geometric Rhythms</h1>
+      <h1 id="theme_name">Celestial Wave</h1>
     </div>
     <h1 id="shop_button">Shop</h1>
 
@@ -1276,11 +1276,11 @@ setTimeout(() => {
 
         <!-- 3D Assets -->
         <a-assets>
-            <a-asset-item id="scarf1" src="/3D-models/GR/crimson.glb"></a-asset-item>
-            <a-asset-item id="scarf2" src="/3D-models/GR/heart.glb"></a-asset-item>
-            <a-asset-item id="scarf3" src="/3D-models/GR/obsidian.glb"></a-asset-item>
-            <a-asset-item id="scarf4" src="/3D-models/GR/ocean.glb"></a-asset-item>
-            <a-asset-item id="scarf5" src="/3D-models/GR/plum.glb"></a-asset-item>
+            <a-asset-item id="scarf1" src="/3D-models/CW/abyss.glb"></a-asset-item>
+            <a-asset-item id="scarf2" src="/3D-models/CW/ember.glb"></a-asset-item>
+            <a-asset-item id="scarf3" src="/3D-models/CW/golden.glb"></a-asset-item>
+            <a-asset-item id="scarf4" src="/3D-models/CW/mau.glb"></a-asset-item>
+            <a-asset-item id="scarf5" src="/3D-models/CW/midnight.glb"></a-asset-item>
         </a-assets>
 
         <a-entity id="scarf_main_rig" position="0 1 -6" auto-rotate> 

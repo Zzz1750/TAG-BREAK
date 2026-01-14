@@ -1,5 +1,7 @@
 ---
 import Header from '../components/Header_shop.astro';
+import Footer from '../components/Footer.astro';
+
 import Layout from '../layouts/Layout.astro';
 
 ---
@@ -15,12 +17,61 @@ import Layout from '../layouts/Layout.astro';
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Abel&family=Aldrich&display=swap" rel="stylesheet">
+    <style>
+      body{
+        background-color: #f2f2f2;
+      }
+        .content-section {
+          width: 100%;
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 2rem 1rem;
+        }
+
+        .block {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin-bottom: 6rem;
+        }
+
+        .title {
+          font-family: 'Aldrich', sans-serif;
+          text-align: center;
+          margin-bottom: 0rem;
+        }
+
+        .block img {
+          width: 100%;
+          max-width: 800px;
+          height: auto;
+          border-radius: 8px;
+        }
+
+        /* Mobile tweaks */
+        @media (max-width: 600px) {
+          .title {
+            font-size: 1.2rem;
+          }
+        }
+
+    </style>
   </head>
-  <body>
     <Layout>
     <Header />
-    <h1>Something...</h1>
+    <section class="content-section">
+      <div class="block">
+        <h1 class="title">Collabs</h1>
+        <img src="/images/poster/poster4.jpg" alt="First image" />
+      </div>
+
+      <div class="block">
+        <h1 class="title">Corporate Gifting</h1>
+        <img src="/images/poster/poster.jpg" alt="Second image" />
+      </div>
+    </section>
     </Layout>
+  <Footer/>
   </body>
 
 </html>
