@@ -8,10 +8,12 @@ import Layout from '../layouts/Layout.astro';
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>Visions in Motion</title>
+    <title>Raw Manifesto</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Aldrich&family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
     <script is:inline src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script is:inline src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
 
@@ -76,7 +78,7 @@ import Layout from '../layouts/Layout.astro';
     document.addEventListener('DOMContentLoaded', function() {
 
       document.getElementById('shop_button').addEventListener('click', ()=>{
-        window.location.href = '/TAG-BREAK/shop';
+        window.location.href = '/shop';
       });
 
       // Camera movement variables
@@ -294,28 +296,28 @@ import Layout from '../layouts/Layout.astro';
       })
       
       document.getElementById('scarf1_plane').addEventListener('click', ()=>{
-        change_sidebar('High Stakes', '/TAG-BREAK/scarf/Visions_in_Motions/high/High_Stakes_.jpg')
-        button_location = '/shop/high-stakes'
+        change_sidebar('Multitude of Personality', '/TAG-BREAK/scarf/Raw_Manifesto/mutiltude/Multitude_Of_Personality.jpg')
+        button_location = '/shop/multitude-of-personality'
       })
 
       document.getElementById('scarf2_plane').addEventListener('click', ()=>{
-        change_sidebar('Blue Reverie', '/TAG-BREAK/scarf/Visions_in_Motions/blue/Blue_Reverie.jpg')
-        button_location = '/shop/blue-reverie'
+        change_sidebar('Detour', '/TAG-BREAK/scarf/Raw_Manifesto/detour/Detour.jpg')
+        button_location = '/shop/detour'
       })
 
       document.getElementById('scarf3_plane').addEventListener('click', ()=>{
-        change_sidebar('Future Gaze', '/TAG-BREAK/scarf/Visions_in_Motions/future/Future_Gaze.jpg')
-        button_location = '/shop/future-gaze'
+        change_sidebar('Chai Roit', '/TAG-BREAK/scarf/Raw_Manifesto/chai/Chai_Roit.jpg')
+        button_location = '/shop/chai-riot'
       })
 
       document.getElementById('scarf4_plane').addEventListener('click', ()=>{
-        change_sidebar('Thanos Veil','/TAG-BREAK/scarf/Visions_in_Motions/thanos/Thanos_Veil.jpg')
-        button_location = '/shop/thanos-veil'
+        change_sidebar('Equilibrium Noir','/TAG-BREAK/scarf/Raw_Manifesto/noir/Equilibrium_Noir.jpg')
+        button_location = '/shop/equilibrium-noir'
       })
 
       document.getElementById('scarf5_plane').addEventListener('click', ()=>{
-        change_sidebar('Ignite WIthin', '/TAG-BREAK/scarf/Visions_in_Motions/iginite/Ignite_Within.jpg')
-        button_location = '/shop/ignite-within'
+        change_sidebar('The Bold Order', '/TAG-BREAK/scarf/Raw_Manifesto/bold_older/The_Bold_Order.jpg')
+        button_location = '/shop/the-bold-order'
       })
 
       function change_sidebar(new_name, new_img_loc){
@@ -1193,7 +1195,7 @@ setTimeout(() => {
         <!-- Text content -->
         <div id="sidebar_text_container">
             <h1 id="scarf_main_name"></h1>
-            <p id="scarf_theme_name"><i>Visions in Motion</i></p>
+            <p id="scarf_theme_name"><i>Raw Manifesto</i></p>
             
             <!-- Product info -->
             <div class="product-info">
@@ -1224,7 +1226,7 @@ setTimeout(() => {
 </div>
     <div id="theme_container">
       <h1 id="theme_head">THEME</h1>
-      <h1 id="theme_name">Visions in Motion</h1>
+      <h1 id="theme_name">Raw Manifesto</h1>
     </div>
     <h1 id="shop_button">Shop</h1>
 
@@ -1274,11 +1276,11 @@ setTimeout(() => {
 
         <!-- 3D Assets -->
         <a-assets>
-            <a-asset-item id="scarf1" src="/3D-models/VIM/Ignite_Within.glb"></a-asset-item>
-            <a-asset-item id="scarf2" src="/3D-models/VIM/future_gaze.glb"></a-asset-item>
-            <a-asset-item id="scarf3" src="/3D-models/VIM/Blue_Reverie.glb"></a-asset-item>
-            <a-asset-item id="scarf4" src="/3D-models/VIM/High_Stakes_.glb"></a-asset-item>
-            <a-asset-item id="scarf5" src="/3D-models/VIM/Thanos_Veil.glb"></a-asset-item>
+            <a-asset-item id="scarf1" src="/3D-models/RW/bold_order.glb"></a-asset-item>
+            <a-asset-item id="scarf2" src="/3D-models/RW/chai.glb"></a-asset-item>
+            <a-asset-item id="scarf3" src="/3D-models/RW/detour.glb"></a-asset-item>
+            <a-asset-item id="scarf4" src="/3D-models/RW/mul.glb"></a-asset-item>
+            <a-asset-item id="scarf5" src="/3D-models/RW/noir.glb"></a-asset-item>
         </a-assets>
 
         <a-entity id="scarf_main_rig" position="0 1 -6" auto-rotate> 

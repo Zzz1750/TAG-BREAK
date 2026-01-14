@@ -199,7 +199,7 @@ const state = {
     isTransitioning: false,
     hasEnteredGallery: false,
     themes: [
-        "Visions in Motions",
+        "Visions in Motion",
         "Geometric Rhythms",
         "Celestial Wave",
         "Raw Manifesto",
@@ -957,17 +957,17 @@ body{
     </a-entity>
 
     <a-assets>
-        <a-asset-item id="scarf1" src="/3D-models/scarf1.glb"></a-asset-item>
-        <a-asset-item id="scarf2" src="/3D-models/scarf2.glb"></a-asset-item>
-        <a-asset-item id="scarf3" src="/3D-models/scarf3.glb"></a-asset-item>
-        <a-asset-item id="scarf4" src="/3D-models/scarf4.glb"></a-asset-item>
-        <a-asset-item id="scarf5" src="/3D-models/scarf5.glb"></a-asset-item>
+        <a-asset-item id="scarf1" src="/3D-models/scarf1.glb"></a-asset-item> <!-- threads of mind  -->
+        <a-asset-item id="scarf2" src="/3D-models/scarf2.glb"></a-asset-item> <!-- vision in motion  -->
+        <a-asset-item id="scarf3" src="/3D-models/scarf3.glb"></a-asset-item> <!-- Celestial -->
+        <a-asset-item id="scarf4" src="/3D-models/scarf4.glb"></a-asset-item>  <!-- Raw -->
+        <a-asset-item id="scarf5" src="/3D-models/scarf5.glb"></a-asset-item> <!-- Geo Rythms -->
     </a-assets>
 
     <a-entity id="scarf_main_rig" position="0 1 -6" auto-rotate> 
         <a-entity id="scarf_arrangement" position="0 0 0">
             <a-entity id="scarf1_container" position="0 0 -4">
-                <a-entity id="scarf1" gltf-model="#scarf5" rotation="10 0 0" position="0 3 0" scale="1.5 1.5 1.5" animation-mixer="clip: *; loop: repeat; timeScale: 1.5">
+                <a-entity id="scarf1" gltf-model="#scarf5" rotation="10 0 0" position="0 3 0" scale="1.5 1.5 1.5" animation-mixer="clip: *; loop: repeat; timeScale: 0.8">
                     <a-image src="/3D-models/shadow.png" position="0 -1.71397 -0.05" width="2.3" height="1" material="transparent: true; opacity: 0.4" geometry="" rotation="90 0 0"></a-image>    
                 </a-entity>
             </a-entity>
@@ -982,7 +982,7 @@ body{
 
             <a-entity id="scarf3_container" rotation="0 144 0">
                 <a-entity position="0 0 -4">
-                    <a-entity id="scarf3" gltf-model="#scarf1" position="0 3 0" scale="1.5 1.5 1.5"  animation-mixer="clip: *; loop: repeat; timeScale: 0.5" rotation="10 0 0">
+                    <a-entity id="scarf3" gltf-model="#scarf1" position="0 3 0" scale="1.5 1.5 1.5"  animation-mixer="clip: *; loop: repeat; timeScale: 1" rotation="10 0 0">
                         <a-image src="/3D-models/shadow.png" position="0 -1.71397 -0.05" width="2.3" height="1" material="transparent: true; opacity: 0.4" geometry="" rotation="90 0 0"></a-image>    
                     </a-entity>
                 </a-entity>
