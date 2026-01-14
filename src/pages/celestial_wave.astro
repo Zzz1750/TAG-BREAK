@@ -327,6 +327,13 @@ import Layout from '../layouts/Layout.astro';
         sidebar_image.setAttribute('src', new_img_loc)
       }
       
+      document.getElementById('left_arrow_button').addEventListener('click',()=>{
+        window.location.href='/raw_manifesto'
+      })
+      document.getElementById('right_arrow_button').addEventListener('click',()=>{
+        window.location.href='/geometric_rhythms'
+      })
+
     });
 
 
@@ -1234,7 +1241,7 @@ setTimeout(() => {
     <div id="camera_slider_container">
       <!-- Left Arrow -->
       <div id="left_arrow" class="slider-arrow">
-        <img src="/images/icon/arrow2.png" alt="Left Arrow">
+        <img src="/images/icon/arrow2.png" id="left_arrow_button" alt="Left Arrow">
       </div>
       
       <!-- Slider Wrapper -->
@@ -1247,7 +1254,7 @@ setTimeout(() => {
       
       <!-- Right Arrow -->
       <div id="right_arrow" class="slider-arrow">
-        <img src="/images/icon/arrow2.png" alt="Right Arrow">
+        <img src="/images/icon/arrow2.png" id="right_arrow_button" alt="Right Arrow">
       </div>
     </div>
 
