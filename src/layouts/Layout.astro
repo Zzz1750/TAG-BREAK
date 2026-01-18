@@ -1,13 +1,48 @@
 ---
 import CustomCursor from '../components/CustomCursor.astro';
+
+const {
+  title = 'Tagbreak – Premium Scarves with NFTs & Eco-Tech Materials',
+  description = 'Welcome to the official website of Tagbreak .A headscarf brand made from plant-based EcoTech fabric with MagnoSnap and NFT-linked authenticity.',
+  ogImage = 'https://tagbreak.in/images/og.jpg',
+  ogType = 'website',
+} = Astro.props;
+
+const canonical = Astro.url;
 ---
 
 <html lang="en">
-    <style is:global>
-        html, body, * {
-            cursor: none !important;
-        }
-    </style>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <meta name="theme-color" content="#ffffff" />
+  </head>
+
+  <style is:global>
+    html, body, * {
+      cursor: none !important;
+    }
+  </style>
 
   <body>
     <CustomCursor />
